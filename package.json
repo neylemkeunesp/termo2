@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@notionhq/client": "^2.3.0",
+    "cloudinary": "^2.6.0",
+    "express": "^5.1.0",
+    "form-data": "^4.0.2"
+  }
+}

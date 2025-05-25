@@ -1,0 +1,52 @@
+% Slide 6: Visualização do Exemplo 1
+\begin{frame}
+\frametitle{Visualização do Exemplo 1}
+\begin{tikzpicture}[scale=0.6, transform shape]
+% Estilos
+\tikzset{
+    %box/.style={rectangle, draw, thick, minimum height=1.5cm, text width=3.5cm, align=center, font=\small},
+    %population/.style={rectangle, draw, thick, minimum height=5.0cm, minimum width=12cm, fill=blue!10, draw=blue!50},
+    %disease/.style={rectangle, draw, thick, fill=red!30, draw=red!50},
+    %no_disease/.style={rectangle, draw, thick, fill=green!30, draw=green!50},
+    %true_positive/.style={rectangle, draw, thick, fill=red!60, draw=red!80},
+    %false_negative/.style={rectangle, draw, thick, fill=red!20, draw=red!40},
+    %false_positive/.style={rectangle, draw, thick, fill=green!50, draw=green!70},
+    %true_negative/.style={rectangle, draw, thick, fill=green!20, draw=green!40}
+}
+
+% Parâmetros
+\def\prevalencia{0.01}
+\def\sensibilidade{0.95}
+\def\especificidade{0.90}
+\def\larguraTotal{12}
+\def\alturaTotal{5}
+
+% Cálculos derivados
+\pgfmathsetmacro{\doenca}{\prevalencia}
+\pgfmathsetmacro{\semDoenca}{1-\prevalencia}
+\pgfmathsetmacro{\larguraDoenca}{\larguraTotal*\doenca}
+\pgfmathsetmacro{\larguraSemDoenca}{\larguraTotal*\semDoenca}
+\pgfmathsetmacro{\larguraVP}{\larguraDoenca*\sensibilidade}
+\pgfmathsetmacro{\larguraFN}{\larguraDoenca*(1-\sensibilidade)}
+\pgfmathsetmacro{\larguraVN}{\larguraSemDoenca*\especificidade}
+\pgfmathsetmacro{\larguraFP}{\larguraSemDoenca*(1-\especificidade)}
+
+% População total
+\node[population] at (\larguraTotal/2, \alturaTotal/2) {};
+
+% Com doença
+\node[disease, minimum width=\larguraDoenca cm, minimum height=\alturaTotal cm, anchor=west] at (0,0) {};
+\node[true_positive, minimum width=\larguraVP cm, minimum height=\alturaTotal/2 cm, anchor=north west] at (0,\alturaTotal) {};
+\node[false_negative, minimum width=\larguraFN cm, minimum height=\alturaTotal/2 cm, anchor=south west] at (\larguraVP,0) {};
+
+% Sem doença
+\node[no_disease, minimum width=\larguraSemDoenca cm, minimum height=\alturaTotal cm, anchor=west] at (\larguraDoenca,0) {};
+\node[false_positive, minimum width=\larguraFP cm, minimum height=\alturaTotal/2 cm, anchor=north west] at (\larguraDoenca,\alturaTotal) {};
+\node[true_negative, minimum width=\larguraVN cm, minimum height=\alturaTotal/2 cm, anchor=south west] at (\larguraDoenca+\larguraFP,0) {};
+
+%% Anotações
+\node[font=\bfseries] at (6,6.2) {Visualização do Teorema de Bayes: Teste Médico};
+\node[font=\small] at (6,5.5) {Prevalência: 1\%, Sensibilidade: 95\%, Especificidade: 90\%};
+
+\end{tikzpicture}
+\end{frame}

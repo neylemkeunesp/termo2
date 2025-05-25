@@ -1,0 +1,241 @@
+\documentclass[11pt]{beamer}
+\date{\today}
+
+\usetheme{Darmstadt}
+
+\usepackage{times}
+\usefonttheme{structurebold}
+
+\usepackage[brazilian]{babel}
+\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
+\usepackage{amsmath,amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+\setbeamercovered{dynamic}
+
+\title{Demonstração da Distribuição de Boltzmann}
+\author{Ney Lemke}
+\institute[IBB-UNESP]{%
+    Departamento de Biofísica e Farmacologia}
+\date{\today}                                
+
+\colorlet{redshaded}{red!25!bg}
+\colorlet{shaded}{black!25!bg}
+\colorlet{shadedshaded}{black!10!bg}
+\colorlet{blackshaded}{black!40!bg}
+
+\colorlet{darkred}{red!80!black}
+\colorlet{darkblue}{blue!80!black}
+\colorlet{darkgreen}{green!80!black}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\section{Introdução}
+
+\frame{\frametitle{Entropia de Boltzmann}
+  \begin{itemize}
+  \item A entropia de Boltzmann é definida como:
+  \end{itemize}
+  
+  \begin{equation}
+    S = k \log W
+  \end{equation}
+  
+  \begin{itemize}
+  \item Onde $k = 1.380662 \times 10^{-25}$ J/K (constante de Boltzmann)
+  \item $W$ é a multiplicidade do sistema
+  \item Na perspectiva probabilística, a entropia pode ser expressa como:
+  \end{itemize}
+  
+  \begin{equation}
+    \frac{S}{k} = -\sum_{j=1}^t p_j \ln p_j
+  \end{equation}
+  
+  \begin{itemize}
+  \item Onde $p_j$ é a probabilidade do sistema estar no estado $j$
+  \end{itemize}
+}
+
+\section{Maximização da Entropia}
+
+\frame{\frametitle{Distribuição de Boltzmann}
+  \begin{itemize}
+  \item Para encontrar a distribuição de Boltzmann, precisamos maximizar a entropia:
+  \end{itemize}
+  
+  \begin{equation}
+    \frac{S}{k} = -\sum_{j=1}^t p_j \ln p_j
+  \end{equation}
+  
+  \begin{itemize}
+  \item Sujeita a dois vínculos fundamentais:
+  \end{itemize}
+  
+  \begin{equation}
+    \sum_{j=1}^t p_j = 1
+  \end{equation}
+  
+  \begin{itemize}
+  \item (Normalização das probabilidades)
+  \end{itemize}
+  
+  \begin{equation}
+    \sum_{j=1}^t E_j p_j = U
+  \end{equation}
+  
+  \begin{itemize}
+  \item (Energia média do sistema)
+  \end{itemize}
+}
+
+\frame{\frametitle{Método dos Multiplicadores de Lagrange}
+  \begin{itemize}
+  \item Utilizamos o método dos multiplicadores de Lagrange para maximizar a entropia com restrições
+  \item Definimos a função de Lagrange:
+  \end{itemize}
+  
+  \begin{equation}
+    L = -\sum_{j=1}^t p_j \ln p_j - \alpha \left(\sum_{j=1}^t p_j - 1\right) - \beta \left(\sum_{j=1}^t E_j p_j - U\right)
+  \end{equation}
+  
+  \begin{itemize}
+  \item Onde $\alpha$ e $\beta$ são os multiplicadores de Lagrange
+  \item Para maximizar, derivamos em relação a cada $p_i$ e igualamos a zero:
+  \end{itemize}
+  
+  \begin{equation}
+    \frac{\partial L}{\partial p_i} = -\ln p_i - 1 - \alpha - \beta E_i = 0
+  \end{equation}
+}
+
+\frame{\frametitle{Resolução do Sistema}
+  \begin{itemize}
+  \item Da equação anterior, temos:
+  \end{itemize}
+  
+  \begin{equation}
+    -\ln p_i - 1 - \alpha - \beta E_i = 0
+  \end{equation}
+  
+  \begin{equation}
+    \ln p_i = -1 - \alpha - \beta E_i
+  \end{equation}
+  
+  \begin{equation}
+    p_i = e^{-1-\alpha-\beta E_i} = e^{-1-\alpha} \cdot e^{-\beta E_i}
+  \end{equation}
+  
+  \begin{itemize}
+  \item Definindo $e^{-1-\alpha} = \frac{1}{Z}$, onde $Z$ é a função de partição, temos:
+  \end{itemize}
+  
+  \begin{equation}
+    p_i = \frac{e^{-\beta E_i}}{Z}
+  \end{equation}
+}
+
+\frame{\frametitle{Função de Partição}
+  \begin{itemize}
+  \item Aplicando a condição de normalização:
+  \end{itemize}
+  
+  \begin{equation}
+    \sum_{j=1}^t p_j = 1
+  \end{equation}
+  
+  \begin{equation}
+    \sum_{j=1}^t \frac{e^{-\beta E_j}}{Z} = 1
+  \end{equation}
+  
+  \begin{equation}
+    \frac{1}{Z} \sum_{j=1}^t e^{-\beta E_j} = 1
+  \end{equation}
+  
+  \begin{itemize}
+  \item Portanto, a função de partição é:
+  \end{itemize}
+  
+  \begin{equation}
+    Z = \sum_{j=1}^t e^{-\beta E_j}
+  \end{equation}
+}
+
+\frame{\frametitle{Distribuição de Boltzmann}
+  \begin{itemize}
+  \item A distribuição de Boltzmann é, portanto:
+  \end{itemize}
+  
+  \begin{equation}
+    p_j = \frac{e^{-\beta E_j}}{Z}
+  \end{equation}
+  
+  \begin{equation}
+    Z = \sum_{j=1}^t e^{-\beta E_j}
+  \end{equation}
+  
+  \begin{itemize}
+  \item A razão entre as probabilidades de dois estados é:
+  \end{itemize}
+  
+  \begin{equation}
+    \frac{p_i}{p_j} = \frac{e^{-\beta E_i}}{e^{-\beta E_j}} = e^{-\beta(E_i-E_j)}
+  \end{equation}
+  
+  \begin{itemize}
+  \item Onde $\beta = \frac{1}{kT}$, sendo $T$ a temperatura absoluta
+  \end{itemize}
+}
+
+\frame{\frametitle{Significado Físico de $\beta$}
+  \begin{itemize}
+  \item Para identificar $\beta$, analisamos a energia livre de Helmholtz:
+  \end{itemize}
+  
+  \begin{equation}
+    F = U - TS
+  \end{equation}
+  
+  \begin{itemize}
+  \item Podemos mostrar que:
+  \end{itemize}
+  
+  \begin{equation}
+    F = -kT\ln Z
+  \end{equation}
+  
+  \begin{itemize}
+  \item E que:
+  \end{itemize}
+  
+  \begin{equation}
+    \beta = \frac{1}{kT}
+  \end{equation}
+  
+  \begin{itemize}
+  \item Portanto, a distribuição de Boltzmann relaciona a probabilidade de ocupação de um estado com sua energia e a temperatura do sistema
+  \end{itemize}
+}
+
+\frame{\frametitle{Consequências da Distribuição de Boltzmann}
+  \begin{itemize}
+  \item Estados de menor energia são mais prováveis
+  \item A temperatura determina a dispersão das probabilidades:
+    \begin{itemize}
+    \item $T \rightarrow 0$: apenas o estado fundamental é ocupado
+    \item $T \rightarrow \infty$: todos os estados são igualmente prováveis
+    \end{itemize}
+  \item Aplicações:
+    \begin{itemize}
+    \item Distribuição barométrica da atmosfera
+    \item Distribuição de velocidades moleculares
+    \item Equilíbrio químico
+    \item Transições de fase
+    \item Colapso de polímeros
+    \end{itemize}
+  \end{itemize}
+}
+
+\end{document}

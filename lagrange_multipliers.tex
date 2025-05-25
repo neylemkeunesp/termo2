@@ -1,0 +1,288 @@
+% $Header: /cvsroot/latex-beamer/latex-beamer/examples/beamerexample5.tex,v 1.22 2004/10/08 14:02:33 tantau Exp $
+
+\documentclass[11pt]{beamer}
+
+\usetheme{Darmstadt}
+
+\usepackage{times}
+\usefonttheme{structurebold}
+
+%\usepackage[english]{babel}
+\usepackage[brazilian]{babel}
+\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
+\usepackage{amsmath,amssymb}
+\usepackage[utf8]{inputenc}
+%\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{cancel}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\setbeamercovered{dynamic}
+
+\newcommand{\Lang}[1]{\operatorname{\text{\textsc{#1}}}}
+
+\newcommand{\Class}[1]{\operatorname{\mathchoice
+  {\text{\sf \small #1}}
+  {\text{\sf \small #1}}
+  {\text{\sf #1}}
+  {\text{\sf #1}}}}
+
+\newcommand{\NumSAT}      {\text{\small\#SAT}}
+\newcommand{\NumA}        {\#_{\!A}}
+
+\newcommand{\barA}        {\,\bar{\!A}}
+
+\newcommand{\Nat}{\mathbb{N}}
+\newcommand{\Set}[1]{\{#1\}}
+
+\pgfdeclaremask{tu}{beamer-tu-logo-mask}
+\pgfdeclaremask{computer}{beamer-computer-mask}
+\pgfdeclareimage[interpolate=true,mask=computer,height=2cm]{computerimage}{beamer-computer}
+\pgfdeclareimage[interpolate=true,mask=computer,height=2cm]{computerworkingimage}{beamer-computerred}
+\pgfdeclareimage[mask=tu,height=.5cm]{logo}{logounesp}
+
+\logo{\pgfuseimage{logo}}
+
+\title{Técnica dos Multiplicadores de Lagrange}
+\author{Apresentação Gerada por IA}
+\date{\today}
+
+\colorlet{redshaded}{red!25!bg}
+\colorlet{shaded}{black!25!bg}
+\colorlet{shadedshaded}{black!10!bg}
+\colorlet{blackshaded}{black!40!bg}
+
+\colorlet{darkred}{red!80!black}
+\colorlet{darkblue}{blue!80!black}
+\colorlet{darkgreen}{green!80!black}
+
+\def\radius{0.96cm}
+\def\innerradius{0.85cm}
+
+\def\softness{0.4}
+\definecolor{softred}{rgb}{1,\softness,\softness}
+\definecolor{softgreen}{rgb}{\softness,1,\softness}
+\definecolor{softblue}{rgb}{\softness,\softness,1}
+
+\definecolor{softrg}{rgb}{1,1,\softness}
+\definecolor{softrb}{rgb}{1,\softness,1}
+\definecolor{softgb}{rgb}{\softness,1,1}
+
+\newcommand{\Bandshaded}[2]{
+  \color{shadedshaded}
+  \pgfmoveto{\pgfxy(-0.5,0)}
+  \pgflineto{\pgfxy(-0.6,0.1)}
+  \pgflineto{\pgfxy(-0.4,0.2)}
+  \pgflineto{\pgfxy(-0.6,0.3)}
+  \pgflineto{\pgfxy(-0.4,0.4)}
+  \pgflineto{\pgfxy(-0.5,0.5)}
+  \pgflineto{\pgfxy(4,0.5)}
+  \pgflineto{\pgfxy(4.1,0.4)}
+  \pgflineto{\pgfxy(3.9,0.3)}
+  \pgflineto{\pgfxy(4.1,0.2)}
+  \pgflineto{\pgfxy(3.9,0.1)}
+  \pgflineto{\pgfxy(4,0)}
+  \pgfclosepath
+  \pgffill
+
+  \color{black}  
+  \pgfputat{\pgfxy(0,0.7)}{\pgfbox[left,base]{#1}}
+  \pgfputat{\pgfxy(0,-0.1)}{\pgfbox[left,top]{#2}}
+}
+
+\newcommand{\Band}[2]{
+  \color{shaded}
+  \pgfmoveto{\pgfxy(-0.5,0)}
+  \pgflineto{\pgfxy(-0.6,0.1)}
+  \pgflineto{\pgfxy(-0.4,0.2)}
+  \pgflineto{\pgfxy(-0.6,0.3)}
+  \pgflineto{\pgfxy(-0.4,0.4)}
+  \pgflineto{\pgfxy(-0.5,0.5)}
+  \pgflineto{\pgfxy(4,0.5)}
+  \pgflineto{\pgfxy(4.1,0.4)}
+  \pgflineto{\pgfxy(3.9,0.3)}
+  \pgflineto{\pgfxy(4.1,0.2)}
+  \pgflineto{\pgfxy(3.9,0.1)}
+  \pgflineto{\pgfxy(4,0)}
+  \pgfclosepath
+  \pgffill
+
+  \color{black}  
+  \pgfputat{\pgfxy(0,0.7)}{\pgfbox[left,base]{#1}}
+  \pgfputat{\pgfxy(0,-0.1)}{\pgfbox[left,top]{#2}}
+}
+
+\newcommand{\BaenderNormal}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Band{input tapes}{}}
+  \pgfputat{\pgfxy(0.35,4.6)}{\pgfbox[center,base]{$\vdots$}}
+  \pgfputat{\pgfxy(0,4)}{\Band{}{}}
+
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$w_1$}}
+
+  \pgfxyline(0,4)(0,4.5)
+  \pgfxyline(1.8,4)(1.8,4.5)        
+  \pgfputat{\pgfxy(0.25,4.25)}{\pgfbox[left,center]{$w_n$}}
+  \ignorespaces}
+
+\newcommand{\BaenderZweiNormal}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Band{Zwei Eingabebänder}{}}
+  \pgfputat{\pgfxy(0,4.25)}{\Band{}{}}
+
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$u$}}
+
+  \pgfxyline(0,4.25)(0,4.75)
+  \pgfxyline(1.8,4.25)(1.8,4.75)        
+  \pgfputat{\pgfxy(0.25,4.5)}{\pgfbox[left,center]{$v$}}
+  \ignorespaces}
+
+\newcommand{\BaenderHell}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Bandshaded{input tapes}{}}
+  \color{shaded}
+  \pgfputat{\pgfxy(0.35,4.6)}{\pgfbox[center,base]{$\vdots$}}
+  \pgfputat{\pgfxy(0,4)}{\Bandshaded{}{}}
+
+  \color{blackshaded}
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$w_1$}}
+
+  \pgfxyline(0,4)(0,4.5)
+  \pgfxyline(1.8,4)(1.8,4.5)        
+  \pgfputat{\pgfxy(0.25,4.25)}{\pgfbox[left,center]{$w_n$}}
+  \ignorespaces}
+
+\newcommand{\BaenderZweiHell}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Bandshaded{Zwei Eingabebänder}{}}%
+  \color{blackshaded}
+  \pgfputat{\pgfxy(0,4.25)}{\Bandshaded{}{}}
+  \pgfputat{\pgfxy(0.25,4.5)}{\pgfbox[left,center]{$v$}}
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$u$}}%
+
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+
+  \pgfxyline(0,4.25)(0,4.75)
+  \pgfxyline(1.8,4.25)(1.8,4.75)        
+  \ignorespaces}
+
+\newcommand{\Slot}[1]{%
+  \begin{pgftranslate}{\pgfpoint{#1}{0pt}}%
+    \pgfsetlinewidth{0.6pt}%
+    \color{structure}%
+    \pgfmoveto{\pgfxy(-0.1,5.5)}%
+    \pgfbezier{\pgfxy(-0.1,5.55)}{\pgfxy(-0.05,5.6)}{\pgfxy(0,5.6)}%
+    \pgfbezier{\pgfxy(0.05,5.6)}{\pgfxy(0.1,5.55)}{\pgfxy(0.1,5.5)}%
+    \pgflineto{\pgfxy(0.1,4.0)}%
+    \pgfbezier{\pgfxy(0.1,3.95)}{\pgfxy(0.05,3.9)}{\pgfxy(0,3.9)}%
+    \pgfbezier{\pgfxy(-0.05,3.9)}{\pgfxy(-0.1,3.95)}{\pgfxy(-0.1,4.0)}%
+    \pgfclosepath%
+    \pgfstroke%
+  \end{pgftranslate}\ignorespaces}
+
+\newcommand{\SlotZwei}[1]{%
+  \begin{pgftranslate}{\pgfpoint{#1}{0pt}}%
+    \pgfsetlinewidth{0.6pt}%
+    \color{structure}%
+    \pgfmoveto{\pgfxy(-0.1,5.5)}%
+    \pgfbezier{\pgfxy(-0.1,5.55)}{\pgfxy(-0.05,5.6)}{\pgfxy(0,5.6)}%
+    \pgfbezier{\pgfxy(0.05,5.6)}{\pgfxy(0.1,5.55)}{\pgfxy(0.1,5.5)}%
+    \pgflineto{\pgfxy(0.1,4.25)}%
+    \pgfbezier{\pgfxy(0.1,4.25)}{\pgfxy(0.05,4.15)}{\pgfxy(0,4.15)}%
+    \pgfbezier{\pgfxy(-0.05,4.15)}{\pgfxy(-0.1,4.2)}{\pgfxy(-0.1,4.25)}%
+    \pgfclosepath%
+    \pgfstroke%
+  \end{pgftranslate}\ignorespaces}
+
+\newcommand{\ClipSlot}[1]{%
+  \pgfrect[clip]{\pgfrelative{\pgfxy(-0.1,0)}{\pgfpoint{#1}{4cm}}}{\pgfxy(0.2,1.5)}\ignorespaces}
+
+\newcommand{\ClipSlotZwei}[1]{%
+  \pgfrect[clip]{\pgfrelative{\pgfxy(-0.1,0)}{\pgfpoint{#1}{4.25cm}}}{\pgfxy(0.2,1.25)}\ignorespaces}
+
+
+\AtBeginSection[]{\frame{\frametitle{Outline}\tableofcontents[current]}}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+\frametitle{Introdução}
+\begin{itemize}
+    \item Os multiplicadores de Lagrange são uma técnica poderosa para otimização com restrições
+    \item Desenvolvida por Joseph-Louis Lagrange no século XVIII
+    \item Amplamente utilizada em física, engenharia e economia
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{O Problema de Otimização com Restrições}
+\begin{itemize}
+    \item Objetivo: Maximizar ou minimizar uma função $f(x,y)$
+    \item Sujeito a uma restrição $g(x,y) = c$
+    \item Exemplo: Maximizar a área de um retângulo com perímetro fixo
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{A Técnica dos Multiplicadores de Lagrange}
+\begin{enumerate}
+    \item Definir a função Lagrangiana: $L(x,y,\lambda) = f(x,y) - \lambda(g(x,y) - c)$
+    \item Calcular as derivadas parciais e igualá-las a zero:
+        \begin{align*}
+        \frac{\partial L}{\partial x} &= 0 \\
+        \frac{\partial L}{\partial y} &= 0 \\
+        \frac{\partial L}{\partial \lambda} &= 0
+        \end{align*}
+    \item Resolver o sistema de equações
+    \item Verificar os pontos críticos encontrados
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exemplo: Maximização da Área de um Retângulo}
+\begin{itemize}
+    \item Função objetivo: $f(x,y) = xy$ (área)
+    \item Restrição: $g(x,y) = 2x + 2y = P$ (perímetro)
+    \item Lagrangiana: $L(x,y,\lambda) = xy - \lambda(2x + 2y - P)$
+    \item Solução: $x = y = P/4$ (quadrado)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Aplicações}
+\begin{itemize}
+    \item Física: Princípio do trabalho virtual, mecânica analítica
+    \item Engenharia: Otimização de design, controle de sistemas
+    \item Economia: Maximização de utilidade sob restrições orçamentárias
+    \item Aprendizado de máquina: Otimização de funções de perda com regularização
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Conclusão}
+\begin{itemize}
+    \item Os multiplicadores de Lagrange são uma ferramenta versátil para otimização com restrições
+    \item Permitem transformar problemas com restrições em problemas sem restrições
+    \item Amplamente aplicáveis em diversos campos da ciência e engenharia
+    \item Compreender esta técnica é fundamental para abordar problemas complexos de otimização
+\end{itemize}
+\end{frame}
+
+\end{document}

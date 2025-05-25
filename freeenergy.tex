@@ -1,0 +1,530 @@
+% $Header: /cvsroot/latex-beamer/latex-beamer/examples/beamerexample5.tex,v 1.22 2004/10/08 14:02:33 tantau Exp $
+
+\documentclass[11pt]{beamer}
+
+\usetheme{Darmstadt}
+
+\usepackage{times}
+\usefonttheme{structurebold}
+
+%\usepackage[english]{babel}
+\usepackage[portuges]{babel}
+\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
+\usepackage{amsmath,amssymb}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+
+\setbeamercovered{dynamic}
+
+\newcommand{\Lang}[1]{\operatorname{\text{\textsc{#1}}}}
+
+\newcommand{\Class}[1]{\operatorname{\mathchoice
+  {\text{\sf \small #1}}
+  {\text{\sf \small #1}}
+  {\text{\sf #1}}
+  {\text{\sf #1}}}}
+
+\newcommand{\NumSAT}      {\text{\small\#SAT}}
+\newcommand{\NumA}        {\#_{\!A}}
+
+\newcommand{\barA}        {\,\bar{\!A}}
+
+\newcommand{\Nat}{\mathbb{N}}
+\newcommand{\Set}[1]{\{#1\}}
+
+\pgfdeclaremask{tu}{beamer-tu-logo-mask}
+\pgfdeclaremask{computer}{beamer-computer-mask}
+\pgfdeclareimage[interpolate=true,mask=computer,height=2cm]{computerimage}{beamer-computer}
+\pgfdeclareimage[interpolate=true,mask=computer,height=2cm]{computerworkingimage}{beamer-computerred}
+\pgfdeclareimage[mask=tu,height=.5cm]{logo}{logounesp}
+
+\logo{\pgfuseimage{logo}}
+
+\title{Energia Livre}
+\author{Ney Lemke}
+\institute[IBB-UNESP]{%
+    Departamento de Física e Biofísica}
+\date{ 2011}                                
+
+\colorlet{redshaded}{red!25!bg}
+\colorlet{shaded}{black!25!bg}
+\colorlet{shadedshaded}{black!10!bg}
+\colorlet{blackshaded}{black!40!bg}
+
+\colorlet{darkred}{red!80!black}
+\colorlet{darkblue}{blue!80!black}
+\colorlet{darkgreen}{green!80!black}
+
+\def\radius{0.96cm}
+\def\innerradius{0.85cm}
+
+\def\softness{0.4}
+\definecolor{softred}{rgb}{1,\softness,\softness}
+\definecolor{softgreen}{rgb}{\softness,1,\softness}
+\definecolor{softblue}{rgb}{\softness,\softness,1}
+
+\definecolor{softrg}{rgb}{1,1,\softness}
+\definecolor{softrb}{rgb}{1,\softness,1}
+\definecolor{softgb}{rgb}{\softness,1,1}
+
+\newcommand{\Bandshaded}[2]{
+  \color{shadedshaded}
+  \pgfmoveto{\pgfxy(-0.5,0)}
+  \pgflineto{\pgfxy(-0.6,0.1)}
+  \pgflineto{\pgfxy(-0.4,0.2)}
+  \pgflineto{\pgfxy(-0.6,0.3)}
+  \pgflineto{\pgfxy(-0.4,0.4)}
+  \pgflineto{\pgfxy(-0.5,0.5)}
+  \pgflineto{\pgfxy(4,0.5)}
+  \pgflineto{\pgfxy(4.1,0.4)}
+  \pgflineto{\pgfxy(3.9,0.3)}
+  \pgflineto{\pgfxy(4.1,0.2)}
+  \pgflineto{\pgfxy(3.9,0.1)}
+  \pgflineto{\pgfxy(4,0)}
+  \pgfclosepath
+  \pgffill
+
+  \color{black}  
+  \pgfputat{\pgfxy(0,0.7)}{\pgfbox[left,base]{#1}}
+  \pgfputat{\pgfxy(0,-0.1)}{\pgfbox[left,top]{#2}}
+}
+
+\newcommand{\Band}[2]{
+  \color{shaded}
+  \pgfmoveto{\pgfxy(-0.5,0)}
+  \pgflineto{\pgfxy(-0.6,0.1)}
+  \pgflineto{\pgfxy(-0.4,0.2)}
+  \pgflineto{\pgfxy(-0.6,0.3)}
+  \pgflineto{\pgfxy(-0.4,0.4)}
+  \pgflineto{\pgfxy(-0.5,0.5)}
+  \pgflineto{\pgfxy(4,0.5)}
+  \pgflineto{\pgfxy(4.1,0.4)}
+  \pgflineto{\pgfxy(3.9,0.3)}
+  \pgflineto{\pgfxy(4.1,0.2)}
+  \pgflineto{\pgfxy(3.9,0.1)}
+  \pgflineto{\pgfxy(4,0)}
+  \pgfclosepath
+  \pgffill
+
+  \color{black}  
+  \pgfputat{\pgfxy(0,0.7)}{\pgfbox[left,base]{#1}}
+  \pgfputat{\pgfxy(0,-0.1)}{\pgfbox[left,top]{#2}}
+}
+
+\newcommand{\BaenderNormal}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Band{input tapes}{}}
+  \pgfputat{\pgfxy(0.35,4.6)}{\pgfbox[center,base]{$\vdots$}}
+  \pgfputat{\pgfxy(0,4)}{\Band{}{}}
+
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$w_1$}}
+
+  \pgfxyline(0,4)(0,4.5)
+  \pgfxyline(1.8,4)(1.8,4.5)        
+  \pgfputat{\pgfxy(0.25,4.25)}{\pgfbox[left,center]{$w_n$}}
+  \ignorespaces}
+
+\newcommand{\BaenderZweiNormal}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Band{Zwei Eingabebänder}{}}
+  \pgfputat{\pgfxy(0,4.25)}{\Band{}{}}
+
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$u$}}
+
+  \pgfxyline(0,4.25)(0,4.75)
+  \pgfxyline(1.8,4.25)(1.8,4.75)        
+  \pgfputat{\pgfxy(0.25,4.5)}{\pgfbox[left,center]{$v$}}
+  \ignorespaces}
+
+\newcommand{\BaenderHell}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Bandshaded{input tapes}{}}
+  \color{shaded}
+  \pgfputat{\pgfxy(0.35,4.6)}{\pgfbox[center,base]{$\vdots$}}
+  \pgfputat{\pgfxy(0,4)}{\Bandshaded{}{}}
+
+  \color{blackshaded}
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$w_1$}}
+
+  \pgfxyline(0,4)(0,4.5)
+  \pgfxyline(1.8,4)(1.8,4.5)        
+  \pgfputat{\pgfxy(0.25,4.25)}{\pgfbox[left,center]{$w_n$}}
+  \ignorespaces}
+
+\newcommand{\BaenderZweiHell}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Bandshaded{Zwei Eingabebänder}{}}%
+  \color{blackshaded}
+  \pgfputat{\pgfxy(0,4.25)}{\Bandshaded{}{}}
+  \pgfputat{\pgfxy(0.25,4.5)}{\pgfbox[left,center]{$v$}}
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$u$}}%
+
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+
+  \pgfxyline(0,4.25)(0,4.75)
+  \pgfxyline(1.8,4.25)(1.8,4.75)        
+  \ignorespaces}
+
+\newcommand{\Slot}[1]{%
+  \begin{pgftranslate}{\pgfpoint{#1}{0pt}}%
+    \pgfsetlinewidth{0.6pt}%
+    \color{structure}%
+    \pgfmoveto{\pgfxy(-0.1,5.5)}%
+    \pgfbezier{\pgfxy(-0.1,5.55)}{\pgfxy(-0.05,5.6)}{\pgfxy(0,5.6)}%
+    \pgfbezier{\pgfxy(0.05,5.6)}{\pgfxy(0.1,5.55)}{\pgfxy(0.1,5.5)}%
+    \pgflineto{\pgfxy(0.1,4.0)}%
+    \pgfbezier{\pgfxy(0.1,3.95)}{\pgfxy(0.05,3.9)}{\pgfxy(0,3.9)}%
+    \pgfbezier{\pgfxy(-0.05,3.9)}{\pgfxy(-0.1,3.95)}{\pgfxy(-0.1,4.0)}%
+    \pgfclosepath%
+    \pgfstroke%
+  \end{pgftranslate}\ignorespaces}
+
+\newcommand{\SlotZwei}[1]{%
+  \begin{pgftranslate}{\pgfpoint{#1}{0pt}}%
+    \pgfsetlinewidth{0.6pt}%
+    \color{structure}%
+    \pgfmoveto{\pgfxy(-0.1,5.5)}%
+    \pgfbezier{\pgfxy(-0.1,5.55)}{\pgfxy(-0.05,5.6)}{\pgfxy(0,5.6)}%
+    \pgfbezier{\pgfxy(0.05,5.6)}{\pgfxy(0.1,5.55)}{\pgfxy(0.1,5.5)}%
+    \pgflineto{\pgfxy(0.1,4.25)}%
+    \pgfbezier{\pgfxy(0.1,4.25)}{\pgfxy(0.05,4.15)}{\pgfxy(0,4.15)}%
+    \pgfbezier{\pgfxy(-0.05,4.15)}{\pgfxy(-0.1,4.2)}{\pgfxy(-0.1,4.25)}%
+    \pgfclosepath%
+    \pgfstroke%
+  \end{pgftranslate}\ignorespaces}
+
+\newcommand{\ClipSlot}[1]{%
+  \pgfrect[clip]{\pgfrelative{\pgfxy(-0.1,0)}{\pgfpoint{#1}{4cm}}}{\pgfxy(0.2,1.5)}\ignorespaces}
+
+\newcommand{\ClipSlotZwei}[1]{%
+  \pgfrect[clip]{\pgfrelative{\pgfxy(-0.1,0)}{\pgfpoint{#1}{4.25cm}}}{\pgfxy(0.2,1.25)}\ignorespaces}
+
+
+\AtBeginSection[]{\frame{\frametitle{Outline}\tableofcontents[current]}}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%\section*{Outline}
+
+\part{Parte I}
+\frame{\frametitle{Outline}\tableofcontents[part=1]}
+\section{Energia Livre de Helmholtz}
+
+
+\frame{\frametitle{Motivação}
+A entropia é maximizada quando a Energia é conservada. O maior problema
+é que em geral não conseguimos controlar a energia, apenas temperatura
+e a pressão. Neste caso que quantidade é otimizada?
+}
+
+\frame{\frametitle{Banho Térmico}
+Para controlar $T$ ou $p$ mantemos o nosso sistema em contato 
+com um sistema muito maior, chamado de ``banho térmico''. Dependendo 
+do sistema este sistema pode trocar energia, partículas ou um sistema 
+pode realizar tabalho sobre o outro. Mas em todos os casos 
+assumimos que $U_T=$cte. Estes sistemas modelam o ambiente. 
+
+}
+
+\frame{\frametitle{Energia livre de Helmholtz}
+Considere um sistema em contato com um reservatório. Mas com $V$=cte e 
+$N$=cte. Para o sistema combinado:
+$$dS=dS_B+dS_{sistema}\geq0$$
+$$dU_B+dU_{sistema}=0$$
+$$dS_B=\frac{dU_B}{T}=-\frac{dU_{sistema}}{T}$$
+$$dS_{sistema}-\frac{dU_{sistema}}{T}\geq 0$$
+
+}
+
+\frame{\frametitle{Energia livre de Helmholtz}
+$$dU_{sistema}-TdS_{sistema}\leq 0$$
+$$d(U_{sistema}-TS_{sistema})\leq 0$$
+$$F=U-TS$$
+$F$ é minima no equilíbrio pois $dF=0$
+}
+
+\frame{\frametitle{Dimerização}
+\begin{tabular}{c c}
+    \begin{minipage}{0.45\textwidth}
+$$F_{dimero}=U_{dimero}-TS_{dimero}$$
+$$F_{dimero}=-\epsilon-kT\ln (V-1)$$
+$$F_{mono}=$$
+$$-kT\ln\left[\left(\frac{V}{2}-1\right)(V-1)\right]$$
+    \end{minipage}&
+    \begin{minipage}{0.45\textwidth}
+      \begin{center}
+      \includegraphics[scale=0.6]{dimero}
+      \end{center}
+    \end{minipage}
+  \end{tabular}
+}
+
+\frame{\frametitle{Dimerização}
+  \begin{center}
+         \includegraphics[scale=0.6]{energialivredimero}
+  \end{center}
+$$T_o=\frac{\epsilon}{k \ln ((V/2)-1)}$$
+}
+
+
+ \frame{\frametitle{Colapso Polimérico}
+ \begin{tabular}{c c}
+     \begin{minipage}{0.45\textwidth}
+ $$F_{C}=U_{dimero}-TS_{dimero}$$
+ $$F_{C}=-\epsilon$$
+ $$F_{O}=-kT\ln 4$$
+
+     \end{minipage}&
+     \begin{minipage}{0.45\textwidth}
+       \includegraphics[scale=0.4]{colapsopolimero}
+     \end{minipage}
+   \end{tabular}
+ }
+
+ \frame{\frametitle{Colpso Polimérico}
+   \begin{center}
+          \includegraphics[scale=0.4]{energialivrecolapso}
+   \end{center}
+
+ $$T_o=\frac{\epsilon}{k \ln 4 }$$
+ $$\Delta F_{colapso}=-\epsilon+kT\ln 4$$
+ $$\Delta U_{colapso}=-\epsilon$$
+ $$\Delta S_{colapso}=-k\ln 4$$
+ }
+
+
+ \frame{\frametitle{Equações Fundamentais Energia Livre}
+ $$dF=d(U-TS)=dU-TdS-SdT$$
+ $$dF=-SdT-pdV+\sum_{j=1}^M\mu_j dN_j$$
+  $$dF=\left(\frac{\partial F}{\partial T}\right)_{V,N}d T
+      +\left(\frac{\partial F}{\partial V}\right)_{T,N}d V
+      +\sum_{j=1}^M\left(\frac{\partial F}{\partial N}\right)_{V,N_{i,i\neq j}}d N_j
+$$
+  $$S=-\left(\frac{\partial F}{\partial T}\right)_{V,N}, \quad
+    p=-\left(\frac{\partial F}{\partial V}\right)_{T,N}, \quad
+    \mu_j=\left(\frac{\partial F}{\partial N_j}\right)_{V,N_{i,i\neq j}}$$
+ }
+
+\section{Transformada de Legendre}
+
+\frame{\frametitle{Transformadas de Legendre}
+
+Objetivo caracterizar uma função pela sua Envoltória (conjunto de retas tangentes).
+       \includegraphics[scale=0.4]{legendre}
+$$y=y(x)$$
+$$c(x)=y^\prime$$
+$b(x)$ é a transformada de Legendre.
+}
+
+\frame{\frametitle{Transformadas de Legendre}
+Da eq. da reta:
+$$c(x)=\frac{y-b(x)}{x-0}$$
+$$b(c)=y(c)-c*x(c)$$
+$$db=-x dc$$
+Outra maneira de dizer:
+$$b=\min_x (y(x)-c(x)x )$$
+}
+
+\frame{\frametitle{Legendre: Exemplo}
+
+$$y(x)=3 x^2+5$$
+$$b(c)=y(c)-c*x(c)$$
+$$c=6 x$$
+$$b(c)=-\frac{c^2}{12}+5$$
+}
+
+\frame{\frametitle{Legendre Revisitada}
+
+$$F(U,T,N)=\min_S (U-TS)$$
+$$\frac{\partial U}{\partial S}-T=0$$
+ 
+}
+
+
+
+\section{Entalpia}
+\frame{\frametitle{Entalpia}
+
+$$H=H(S,p,N)=U+pV$$
+
+$$dH=T dS-p dV+\sum_{j=1}^M\mu_jdN_J+pdV+VdP$$
+
+$$dH=TdS+Vdp+\sum_{j=1}^M\mu_jdN_J$$
+
+
+$$T=\left(\frac{\partial H}{\partial S}\right)_{p,N} \quad 
+  V=  \left(\frac{\partial H}{\partial p}\right)_{T,N} \quad
+  \mu_j=   \left(\frac{\partial H}{\partial N_j}\right)_{p,T,N_{i,i\neq j}}
+$$
+}
+\section{Energia Livre de Gibbs}
+
+
+\frame{\frametitle {Energia Livre de Gibbs}
+
+
+$$G=G(T,p,N)=H-TS$$
+
+$$dG=dH - T dS -SdT$$
+
+$$d G = -SdT+Vdp+\sum_{j=1}^M\mu_jdN_J$$
+
+$$d G=\left(\frac{\partial G}{\partial T}\right)_{p,N}dT+
+      \left(\frac{\partial G}{\partial p}\right)_{T,N}dp+
+      \sum_{j=1}^M\left(\frac{\partial G}{\partial N_j}\right)_{p,T,N_{i,i\neq j}}dN_j
+$$
+
+$$S=- \left(\frac{\partial G}{\partial T}\right)_{p,N} \quad 
+  V=  \left(\frac{\partial G}{\partial p}\right)_{T,N} \quad
+  \mu_j=   \left(\frac{\partial G}{\partial N_j}\right)_{p,T,N_{i,i\neq j}}
+$$
+}
+
+\frame{\frametitle{Tabela Comparativa}
+\begin{table}
+\begin{tabular}{c c c}\hline
+Fun\c{c}ão   &  Equa\c{c}ão Fundamental     & Defini\c{c}ão \\ \hline
+             &                                  &            \\
+$U(S,V,N)$   &  $dU=TdS - pdV +\sum_{j=1}^M\mu_jdN_j$&  \\
+             &                                  &            \\
+$S(U,V,N)$   &  $dS=\frac{1}{T}dS + \frac{p}{T}dV +\sum_{j=1}^M\mu_jdN_j$&  \\
+             &                                  &            \\
+$H(S,p,N)$   &  $dH=TdS + Vdp +\sum_{j=1}^M\mu_jdN_j$& $H=U+pV$ \\  
+             &                                  &            \\
+$F(T,V,N)$   &  $dF=-SdT -pdV +\sum_{j=1}^M\mu_jdN_j$& $F=U-TS$ \\ 
+             &                                  &            \\ 
+$G(T,p,N)$   &  $dG=-SdT + Vdp +\sum_{j=1}^M\mu_jdN_j$& $H=H-TS$ \\ 
+             &                                  &            \\\hline
+\end{tabular}
+\end{table}
+}
+\section{Métodos para Cálculo de Funções Termodinâmicas}
+
+
+
+\frame{\frametitle{Calor Específico-Butano}
+
+  \begin{center}
+    \includegraphics[scale=0.4]{cp.png}
+  \end{center}
+
+}
+\frame{\frametitle{Calor Específico a Volume Constante}
+
+$$C_V=\left( \frac{\delta q}{\partial T}\right)_V
+      =\left( \frac{\partial U}{\partial T}\right)_V
+      =T\left( \frac{\partial S}{\partial T}\right)_V
+$$
+
+$$\Delta U=\int_{T_A}^{T_B}C_V(T) dT$$
+Também temos que:
+
+$$\Delta S=\int_{T_A}^{T_B}\frac{C_V(T)}{T} dT$$
+e
+$$\Delta F=\Delta U-T\Delta S$$
+}
+
+\frame{\frametitle{Calor Específico a Pressão Constante}
+
+$$d H =d(U+pV)=dU+dpV+Vdp=\delta q+\delta w+p dV+V dp$$
+
+Para processos quasi-estáticos a pressão constante temos que:
+$$d H =\delta q$$
+
+$$C_p=\left( \frac{\delta q}{\partial T}\right)_p
+      =\left( \frac{\partial H}{\partial T}\right)_p
+      =T\left( \frac{\partial S}{\partial T}\right)_p
+$$
+$$\Delta H=\int_{T_A}^{T_B}C_p(T) dT$$
+
+}
+
+\frame{\frametitle {Temperatura de Equilíbrio}
+
+Considere dois objetos com $C_V$ constante inicialmente 
+nas temperaturas $T_A$ e $T_B$. Queremos saber a temperatura de
+equilíbrio. 
+
+$$\Delta U_A+\Delta U_B=0$$
+$$\Delta U_A=\int_{T_A}^{T_B}C_V(T) dT=C_A(T-T_A)$$
+$$C_A(T-T_A)+C_B(T-T_B)$$
+$$T=\frac{C_AT_A+C_BT_B}{C_A+C_B}$$
+}
+
+\frame{\frametitle{Ciclos Termodinâmicos}
+Podemos usar o fato que as variáveis de estado não variam 
+ao longo de um ciclo para determinar relações entre quantidades de interesse.
+}
+
+\frame{\frametitle {Expansão adiabática Gás Ideal}
+$$dU=\left( \frac{\partial U}{\partial V}\right)_TdV+
+     \left( \frac{\partial U}{\partial T}\right)_VdT
+$$
+
+Para um gás ideal sabemos experimentalmente que $U=U(T)$.
+$$dU=\left( \frac{\partial U}{\partial T}\right)_VdT=C_VdT
+$$
+Além disso em uma expansão adiabática $dU=-pdV$, logo:
+
+$$C_VdT=-\frac{NkT}{V}dV$$
+}
+
+\frame{\frametitle {Expansão adiabática Gás Ideal}
+Integrando tempos:
+
+$$C_V\ln \frac{T_2}{T_1}=-Nk\ln \frac{V_2}{V_1}$$
+
+$$\frac{T_2}{T_1}=\left(\frac{V_1}{V_2}\right)^{NK/C_V}$$
+}
+
+\frame{\frametitle{Motor de Combustão}
+ \begin{tabular}{c c}
+    \begin{minipage}{0.45\textwidth}
+      \begin{enumerate}
+      \item[(a)] Ignição
+      \item[(b)] Explosão: $w_b=0$ e $q_b=C_V(T_2-T_1)$
+      \item[(c)] Expansão: $w_c=C_V(T_3-T_2)$ $q_c=0$
+      \item[(d)] Exaustão: $w\neq0$ e $q\neq 0$
+      \item[(e)] Entrada de Combustível: $w_{de}=0$ e $q_{de}=C_V(T_4-T_3)$
+      \item[(f)] Compressão: $w_f=C_v(T_1-T_4)$ e  $q_f=0$
+      \end{enumerate}
+    \end{minipage}&
+    \begin{minipage}{0.45\textwidth}
+  \begin{center}
+    \includegraphics[scale=0.3]{combustao}
+  \end{center}
+    \end{minipage}
+  \end{tabular}
+}
+\frame{\frametitle{Motor de Combustão}
+Eficiência:
+
+$$\eta=\frac{-(w_f+w_c)}{q_b}=1-\frac{T_3-T_4}{T_2-T_1}$$
+
+mas temos que:
+
+$$\frac{T_3}{T_2}=\left(\frac{V_2}{V_3}\right)^{NK/C_V} \quad \mbox{e}\quad 
+ \frac{T_4}{T_1}=\left(\frac{V_1}{V_4}\right)^{NK/C_V}$$
+$$T_3-T_4=(T_2-T_1)\left(\frac{V_1}{V_2}\right)^{NK/C_V}$$
+$$\eta=1-\left(\frac{V_1}{V_2}\right)^{NK/C_V}$$
+}
+\end{document}
+
+

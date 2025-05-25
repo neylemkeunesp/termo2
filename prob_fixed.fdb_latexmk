@@ -1,0 +1,12 @@
+# Fdb version 3
+["pdflatex"] 1742163757 "/home/lemke/termo/prob_fixed.tex" "prob_fixed.pdf" "prob_fixed" 1742163757
+  "/etc/texmf/web2c/texmf.cnf" 1679919007 475 c0e671620eb5563b2130f56340a5fde8 ""
+  "/home/lemke/termo/prob_fixed.tex" 1742163756 322 9127df18cbdc42f2941ca97c97bf80d6 ""
+  "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1644012257 39432 7155514e09a3d69036fac785183a21c2 ""
+  "/usr/share/texmf/web2c/texmf.cnf" 1644012257 39432 7155514e09a3d69036fac785183a21c2 ""
+  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1728149331 2798568 5ac7276d74d58de03af22cfb7b64aff2 ""
+  "prob_fixed.aux" 1742163757 32 3985256e7290058c681f74d7a3565a19 ""
+  "prob_fixed.tex" 1742163756 322 9127df18cbdc42f2941ca97c97bf80d6 ""
+  (generated)
+  "prob_fixed.log"
+  "prob_fixed.pdf"

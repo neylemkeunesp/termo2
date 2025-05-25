@@ -1,0 +1,655 @@
+% $Header: /cvsroot/latex-beamer/latex-beamer/examples/beamerexample5.tex,v 1.22 2004/10/08 14:02:33 tantau Exp $
+
+\documentclass[11pt]{beamer}
+
+\usetheme{Darmstadt}
+
+\usepackage{times}
+\usefonttheme{structurebold}
+
+%\usepackage[english]{babel}
+\usepackage[portuges]{babel}
+\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
+\usepackage{amsmath,amssymb}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+
+\setbeamercovered{dynamic}
+
+\newcommand{\Lang}[1]{\operatorname{\text{\textsc{#1}}}}
+
+\newcommand{\Class}[1]{\operatorname{\mathchoice
+  {\text{\sf \small #1}}
+  {\text{\sf \small #1}}
+  {\text{\sf #1}}
+  {\text{\sf #1}}}}
+
+\newcommand{\NumSAT}      {\text{\small\#SAT}}
+\newcommand{\NumA}        {\#_{\!A}}
+
+\newcommand{\barA}        {\,\bar{\!A}}
+
+\newcommand{\Nat}{\mathbb{N}}
+\newcommand{\Set}[1]{\{#1\}}
+
+\pgfdeclaremask{tu}{beamer-tu-logo-mask}
+\pgfdeclaremask{computer}{beamer-computer-mask}
+\pgfdeclareimage[interpolate=true,mask=computer,height=2cm]{computerimage}{beamer-computer}
+\pgfdeclareimage[interpolate=true,mask=computer,height=2cm]{computerworkingimage}{beamer-computerred}
+\pgfdeclareimage[mask=tu,height=.5cm]{logo}{logounesp}
+
+\logo{\pgfuseimage{logo}}
+
+\title{Calor, Trabalho e energia}
+\author{Ney Lemke}
+\institute[IBB-UNESP]{%
+    Departamento de Física e Biofísica}
+\date{ 2007}                                
+
+\colorlet{redshaded}{red!25!bg}
+\colorlet{shaded}{black!25!bg}
+\colorlet{shadedshaded}{black!10!bg}
+\colorlet{blackshaded}{black!40!bg}
+
+\colorlet{darkred}{red!80!black}
+\colorlet{darkblue}{blue!80!black}
+\colorlet{darkgreen}{green!80!black}
+
+\def\radius{0.96cm}
+\def\innerradius{0.85cm}
+
+\def\softness{0.4}
+\definecolor{softred}{rgb}{1,\softness,\softness}
+\definecolor{softgreen}{rgb}{\softness,1,\softness}
+\definecolor{softblue}{rgb}{\softness,\softness,1}
+
+\definecolor{softrg}{rgb}{1,1,\softness}
+\definecolor{softrb}{rgb}{1,\softness,1}
+\definecolor{softgb}{rgb}{\softness,1,1}
+
+\newcommand{\Bandshaded}[2]{
+  \color{shadedshaded}
+  \pgfmoveto{\pgfxy(-0.5,0)}
+  \pgflineto{\pgfxy(-0.6,0.1)}
+  \pgflineto{\pgfxy(-0.4,0.2)}
+  \pgflineto{\pgfxy(-0.6,0.3)}
+  \pgflineto{\pgfxy(-0.4,0.4)}
+  \pgflineto{\pgfxy(-0.5,0.5)}
+  \pgflineto{\pgfxy(4,0.5)}
+  \pgflineto{\pgfxy(4.1,0.4)}
+  \pgflineto{\pgfxy(3.9,0.3)}
+  \pgflineto{\pgfxy(4.1,0.2)}
+  \pgflineto{\pgfxy(3.9,0.1)}
+  \pgflineto{\pgfxy(4,0)}
+  \pgfclosepath
+  \pgffill
+
+  \color{black}  
+  \pgfputat{\pgfxy(0,0.7)}{\pgfbox[left,base]{#1}}
+  \pgfputat{\pgfxy(0,-0.1)}{\pgfbox[left,top]{#2}}
+}
+
+\newcommand{\Band}[2]{
+  \color{shaded}
+  \pgfmoveto{\pgfxy(-0.5,0)}
+  \pgflineto{\pgfxy(-0.6,0.1)}
+  \pgflineto{\pgfxy(-0.4,0.2)}
+  \pgflineto{\pgfxy(-0.6,0.3)}
+  \pgflineto{\pgfxy(-0.4,0.4)}
+  \pgflineto{\pgfxy(-0.5,0.5)}
+  \pgflineto{\pgfxy(4,0.5)}
+  \pgflineto{\pgfxy(4.1,0.4)}
+  \pgflineto{\pgfxy(3.9,0.3)}
+  \pgflineto{\pgfxy(4.1,0.2)}
+  \pgflineto{\pgfxy(3.9,0.1)}
+  \pgflineto{\pgfxy(4,0)}
+  \pgfclosepath
+  \pgffill
+
+  \color{black}  
+  \pgfputat{\pgfxy(0,0.7)}{\pgfbox[left,base]{#1}}
+  \pgfputat{\pgfxy(0,-0.1)}{\pgfbox[left,top]{#2}}
+}
+
+\newcommand{\BaenderNormal}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Band{input tapes}{}}
+  \pgfputat{\pgfxy(0.35,4.6)}{\pgfbox[center,base]{$\vdots$}}
+  \pgfputat{\pgfxy(0,4)}{\Band{}{}}
+
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$w_1$}}
+
+  \pgfxyline(0,4)(0,4.5)
+  \pgfxyline(1.8,4)(1.8,4.5)        
+  \pgfputat{\pgfxy(0.25,4.25)}{\pgfbox[left,center]{$w_n$}}
+  \ignorespaces}
+
+\newcommand{\BaenderZweiNormal}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Band{Zwei Eingabebänder}{}}
+  \pgfputat{\pgfxy(0,4.25)}{\Band{}{}}
+
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$u$}}
+
+  \pgfxyline(0,4.25)(0,4.75)
+  \pgfxyline(1.8,4.25)(1.8,4.75)        
+  \pgfputat{\pgfxy(0.25,4.5)}{\pgfbox[left,center]{$v$}}
+  \ignorespaces}
+
+\newcommand{\BaenderHell}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Bandshaded{input tapes}{}}
+  \color{shaded}
+  \pgfputat{\pgfxy(0.35,4.6)}{\pgfbox[center,base]{$\vdots$}}
+  \pgfputat{\pgfxy(0,4)}{\Bandshaded{}{}}
+
+  \color{blackshaded}
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$w_1$}}
+
+  \pgfxyline(0,4)(0,4.5)
+  \pgfxyline(1.8,4)(1.8,4.5)        
+  \pgfputat{\pgfxy(0.25,4.25)}{\pgfbox[left,center]{$w_n$}}
+  \ignorespaces}
+
+\newcommand{\BaenderZweiHell}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Bandshaded{Zwei Eingabebänder}{}}%
+  \color{blackshaded}
+  \pgfputat{\pgfxy(0,4.25)}{\Bandshaded{}{}}
+  \pgfputat{\pgfxy(0.25,4.5)}{\pgfbox[left,center]{$v$}}
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$u$}}%
+
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+
+  \pgfxyline(0,4.25)(0,4.75)
+  \pgfxyline(1.8,4.25)(1.8,4.75)        
+  \ignorespaces}
+
+\newcommand{\Slot}[1]{%
+  \begin{pgftranslate}{\pgfpoint{#1}{0pt}}%
+    \pgfsetlinewidth{0.6pt}%
+    \color{structure}%
+    \pgfmoveto{\pgfxy(-0.1,5.5)}%
+    \pgfbezier{\pgfxy(-0.1,5.55)}{\pgfxy(-0.05,5.6)}{\pgfxy(0,5.6)}%
+    \pgfbezier{\pgfxy(0.05,5.6)}{\pgfxy(0.1,5.55)}{\pgfxy(0.1,5.5)}%
+    \pgflineto{\pgfxy(0.1,4.0)}%
+    \pgfbezier{\pgfxy(0.1,3.95)}{\pgfxy(0.05,3.9)}{\pgfxy(0,3.9)}%
+    \pgfbezier{\pgfxy(-0.05,3.9)}{\pgfxy(-0.1,3.95)}{\pgfxy(-0.1,4.0)}%
+    \pgfclosepath%
+    \pgfstroke%
+  \end{pgftranslate}\ignorespaces}
+
+\newcommand{\SlotZwei}[1]{%
+  \begin{pgftranslate}{\pgfpoint{#1}{0pt}}%
+    \pgfsetlinewidth{0.6pt}%
+    \color{structure}%
+    \pgfmoveto{\pgfxy(-0.1,5.5)}%
+    \pgfbezier{\pgfxy(-0.1,5.55)}{\pgfxy(-0.05,5.6)}{\pgfxy(0,5.6)}%
+    \pgfbezier{\pgfxy(0.05,5.6)}{\pgfxy(0.1,5.55)}{\pgfxy(0.1,5.5)}%
+    \pgflineto{\pgfxy(0.1,4.25)}%
+    \pgfbezier{\pgfxy(0.1,4.25)}{\pgfxy(0.05,4.15)}{\pgfxy(0,4.15)}%
+    \pgfbezier{\pgfxy(-0.05,4.15)}{\pgfxy(-0.1,4.2)}{\pgfxy(-0.1,4.25)}%
+    \pgfclosepath%
+    \pgfstroke%
+  \end{pgftranslate}\ignorespaces}
+
+\newcommand{\ClipSlot}[1]{%
+  \pgfrect[clip]{\pgfrelative{\pgfxy(-0.1,0)}{\pgfpoint{#1}{4cm}}}{\pgfxy(0.2,1.5)}\ignorespaces}
+
+\newcommand{\ClipSlotZwei}[1]{%
+  \pgfrect[clip]{\pgfrelative{\pgfxy(-0.1,0)}{\pgfpoint{#1}{4.25cm}}}{\pgfxy(0.2,1.25)}\ignorespaces}
+
+
+\AtBeginSection[]{\frame{\frametitle{Outline}\tableofcontents[current]}}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%\section*{Outline}
+
+\part{Parte I}
+
+\frame{\frametitle{Outline}\tableofcontents[part=1]}
+
+
+
+\section{Princípios de Extremização}
+
+
+\frame{\frametitle{Definição:}
+
+
+
+}
+
+
+\frame{\frametitle{Exemplo:}
+
+Bola em um potencial:
+
+$$V(x)=kx^2$$
+
+$$\left. \frac{d V}{d x}\right|_{x^*}=0$$
+
+$$x^*=0$$
+\begin{center}
+\includegraphics[scale=0.5]{potencial}
+\end{center}
+}
+
+
+\frame{\frametitle {Graus de Liberdade e Vinculos}
+\begin{description}
+\item[Graus de Liberdade] São as variáveis de um determinado
+  problema, no exemplo anterior $x$.
+\item[Vínculos] São restrições as variáveis, por
+  exemplo considere duas partículas presas a um cabo rígido.
+\end{description}
+
+}
+
+
+\section{Tipos de equilíbrio}
+
+
+
+\frame{\frametitle{Equilíbrio Estável}
+
+
+$$\frac{d V}{d X}=0 \quad \frac{d^2 V}{d x^2}>0$$
+
+\begin{center}
+\includegraphics[scale=0.5]{estavel}
+\end{center}
+}
+
+\frame{\frametitle{Equilíbrio Neutro}
+
+$$\frac{d V}{d X}=0 \quad \frac{d^2 V}{d x^2}=0$$
+\begin{center}
+\includegraphics[scale=0.5]{neutro}
+\end{center}
+}
+
+\frame{\frametitle{Equilíbrio Instável}
+
+$$\frac{d V}{d X}=0 \quad \frac{d^2 V}{d x^2}>0$$
+
+\begin{center}
+\includegraphics[scale=0.5]{instavel}
+\end{center}
+}
+
+\frame{\frametitle{Meta-estável}
+
+O ponto de extremo é um ponto de extremo local mas não global.
+\begin{center}
+\includegraphics[scale=0.5]{meta}
+\end{center}
+}
+
+\section{Segundo Princípio}
+
+\frame{\frametitle{Enunciado}
+A maximização da multiplicidade prevê o resultado mais provável
+}
+
+ \frame{\frametitle{Exemplo}
+
+ Considere $n$ lançamentos de uma moeda não viciada qual é a 
+ fração de caras mais provável? 
+
+ $$W(n,m)=\frac{n!}{m! (n-m)!}$$
+
+ Usando a aproximação de Stirling concluímos que:
+
+ $$\log W=n\log n -n - m \log m +m -(n-m)\log (n-m)+(n-m)$$
+
+ $$\frac{d \log W}{d m}=0$$ 
+
+ implica que $m^*=n/2$ 
+ }
+
+\frame{\frametitle{Pressão de um gás}
+
+$$W(N,M)=\frac{N!}{M! (N-M)!}$$
+\begin{center}
+\includegraphics[scale=0.5]{pressao}
+\end{center}
+}
+
+\frame{\frametitle{Potencial Químico}
+
+$$W(N,M)=\frac{N!}{M! (N-M)!}\times \frac{N!}{M! (N-M)!}$$
+\begin{center}
+\includegraphics[scale=0.5]{potquimico}
+\end{center}
+}
+
+\frame{\frametitle{Elasticidade}
+
+\begin{center}
+\includegraphics[scale=0.5]{elasticidade}
+\end{center}
+}
+
+
+
+
+\end{document}
+
+\frame{ \frametitle{I Lei} Um corpo permanece em movimento
+  retílineo uniforme a menos que atuem forças sobre ele.
+
+\vspace{1 cm}
+  Interpretação:
+  \begin{itemize}
+  \item Definição de referenciais inerciais.
+  \item Definição do tempo para tornar o movimento simples.
+  \item Dificuldade de observação direta.
+  \item Não é uma lei do universo é uma definição.
+  \end{itemize}
+}
+
+\frame{ \frametitle{II Lei} A Força que atua em um corpo é igual
+  a variação do momento linear.
+
+$$\vec{F}=\frac{d\vec{p}}{dt}$$
+
+onde $\vec{p}=m\vec{v}$.  }
+
+\frame{ \frametitle{Comentários}
+  \begin{itemize}
+  \item De acordo com Marion a segunda Lei de Newton é a
+    definição de Força, não sendo portanto uma lei da
+    natureza, mas sim uma definição.
+  \item A definição é válida para referenciais inerciais.
+  \item Observe que nos casos em que $m=cte$ recaímos na
+    tradicional $\vec{F}= m\vec{a}$.
+  \item De acordo com outras interpretações, Força é
+    conceito antropomorfico, e a segunda lei é de fato um enunciado
+    sobre a natureza.
+
+\end{itemize}
+}
+
+\frame{ \frametitle{III Lei}
+
+  Se dois corpos exercem forças um sobre o outro, as forças
+  são iguais em módulo e direção mas opostas em sentido.
+
+  Comentários:
+
+  \begin{itemize}
+  \item ``Para toda força de ação existe uma força de
+    reação'', imagem popular nem sempre corresponde ao enunciado
+    físico.
+  \item Momento total é conservado. III Lei é uma lei de
+    conservação.
+  \item De acordo com Marion, a III Lei é a única que possui
+    conteúdo físico.
+  \item Definição de massa.
+  \end{itemize}
+}
+
+\frame{ \frametitle{Massa Inercial e Gravitacional}
+  \begin{itemize}
+  \item Massa Inercial originária da III Lei.
+  \item Massa Gravitacional originária da Lei da Gravitação
+    Universal.
+  \item Princípio do Correspondência: Massa Gravitacional=Massa
+    Inercial.
+  \end{itemize}
+}
+
+
+\frame{ \frametitle{ReferenciaL Inercial}
+
+  {\bf Def.:} Se existe um Referencial Inercial, um corpo sob o qual
+  não atuem forças deve possuir velocidade constante em
+  relação a este referencial.  }
+
+\frame{
+Exemplos:
+
+\begin{itemize}
+\item Estrelas Distantes.
+\item Sob certas condições a Terra (velocidades baixas e
+  distâncias curtas).
+\end{itemize}
+
+}
+\frame{
+
+  \frametitle{Eq. de Movimento de uma Partícula}
+
+$$\vec{F}=m\ddot{\vec{r}}$$
+
+$$\vec{F}=\vec{F}(\vec{r},\vec{v},t)$$
+}
+
+\frame{
+
+  \frametitle{Técnicas de Resolução de Problemas}
+  \begin{itemize}
+  \item Faça um esquema do problema.
+  \item Escreva as quantidades fornecidas.
+  \item Escreva as equações úteis.
+  \item Manipule as equações.
+  \item Aplique os valores dados nas equações obtidas para
+    determinar as equações buscadas.
+  \end{itemize}
+}
+
+\frame{ 
+\frametitle{Técnicas para testar os resultados}
+
+  \begin{itemize}
+  \item Não acredite em ninguém, especialmente em você mesmo.
+    Chegar nas respostas é mais fácil do que ter certeza que
+    elas estão corretas.
+  \item Teste as unidades.
+  \item Teste os limites do problema. O que ocorre quando
+    $t\to\infty$, $m\to 0$ ou outros casos em que conhecemos a
+    resposta.
+  \item Compare seus resultados com simulações em computador. 
+  \end{itemize}
+}
+\section{Aplicações}
+
+\frame{ \frametitle{Exemplo 2-1}
+  \includegraphics[scale=0.5]{planoinclinadoa}
+  \begin{itemize}
+  \item Qual é a aceleração do bloco?
+  \item Determine $\vec{v}$ em função de $x$.
+  \end{itemize}
+}
+
+\frame{ \frametitle{Exemplo 2-1}
+  \includegraphics[scale=0.5]{planoinclinadob}
+
+  \begin{itemize}
+  \item Se o coeficiente de atrito entre o bloco e o plano é
+    $\mu=0.4$ em que ângulo o plano começa a deslizar?
+  \end{itemize}
+}
+
+
+\frame{ \frametitle{Forças de Atrito}
+$$f\sim v^n$$
+Exemplo: Queda Livre
+$$\vec{F}=m\vec{g}-mkv^n\frac{\vec{v}}{v}$$
+\begin{description}
+\item[$n\sim 1$] se $v<24$ m/s. Resolvido por Newton no Principia
+\item[$n\sim 2$] se $v<330$ m/s. Resolvido por John Bernouilli para o
+  caso geral
+\end{description}
+}
+
+\frame{ \frametitle{Forças de atrito}
+  \includegraphics[scale=0.3]{atrito1}
+$$W=\frac{1}{2}c_W\rho A v^2 $$
+}
+
+\frame{ \frametitle{Forças de atrito}
+  \begin{center}
+    \includegraphics[scale=0.3]{atrito2}
+  \end{center}
+}
+
+
+\frame{\fremtitle{Leis de Conservação}
+
+  Quantidades físicas são conservadas em determinadas
+  situações:
+
+  \begin{itemize}
+  \item Energia se o sistema for conservativo,
+  \item Momento Linear se não agirem forças externas e
+  \item Momento Angular se não agir torque externo.
+  \end{itemize}
+
+}
+
+\frame{\frametitle{Calor?}  O Calor será uma quantidade conservada?
+
+}
+
+
+\frame{\frametitle{Trabalho e energia}
+
+
+  Trabalho:
+
+$$W=-\int_a^b \vec{F(x)}.d\vec{x}$$
+
+
+{\bf Def.} Forças Conservativas:
+
+Se a força é conservativa o trabalho não depende do caminho.
+}
+
+
+\frame{\frametitle{Energia Mecânica}
+
+  {\bf Def.} Energia Cinética:
+
+$$K=\frac{1}{2}m v^2$$
+
+{\bf Def.} Energia Potencial: Se $F$ é conservativa então:
+
+$$\int_\infty^x \vec{F(x^\prime)}.d\vec{x^\prime}$$
+
+
+{\bf Def. Energia Mecânica}
+
+$$E=U+V$$
+
+}
+
+\frame{\frametitle{História do Calor} O calor era pensado como uma
+  quantidade conservada.
+
+  Problemas:
+
+  \begin{itemize}
+  \item Mesma quantidade de calor aumentava a temperatura de forma
+    diferente. Calor Específico.
+  \item O Calor não podia ser inteiramente reaproveitado.
+    Experimento de Ericsson em 1853.
+  \item Calor por irradiação.
+  \item Trabalho pode ser convertido em Calor.
+  \end{itemize}
+
+}
+
+
+\frame{\frametitle{1^{a} Lei da Termodinâmica} A energia interna de
+  um sistema:
+
+$$U=q+w$$
+
+onde $q$ é o calor trocado e $w$ o trabalho realizado é
+conservada.
+
+(Meyer 1842)
+
+}
+
+
+\frame{\frametitle{Teoria Cinética dos Gases}
+
+
+  Os átomos possuem graus de liberdade que podem ser utilizados
+  para armazenar energia. A teoria cinética consegue prever o
+  comportamento de gases precisamente além de permitir interpretar
+  a temperatura:
+
+$$\frac{3}{2}kT=\frac{m\langle v^2 \rangle}{2}$$
+
+$k$ constante de Boltzmann.  }
+
+
+\frame{\frametitle{Teoria Quântica}
+
+  A Teoria Quântica prvê que os níveis de energia que um
+  sistema fechado pode possuir são discretos. Esta
+  constatação tem importantes consequências para a
+  Termodinâmica.
+
+$$U=\sum_i N_i \epsilon_i$$
+}
+
+
+\frame{\frametitle{Por que o Calor Flui?}
+
+
+  Em primeiro lugar quanto maior for a energia de um sistema, maior o
+  número de estados acessíveis.
+
+  {\bf Def. } Considere um sistema com $N$ partículas e com 3
+  níveis possíveis de energia: $\epsilon=\epsilon_o,
+  2\epsilon_o, 3\epsilon_o$.Suponha agora que temos 3 partículas e
+  um valor de energia total de $3 \epsilon$. Quanto vale a
+  multiplicidade $W$ deste sistema. E para o caso $W=6\epsilon_o$?
+
+
+
+  \frame{\frametitle{Fluxo de Energia}
+
+    A energia se distribui igualmente pois isto maximiza a
+    multiplicidade. Considere dois sub-sistemas formado cada um por 3
+    partículas e uma energia interna de $12\epsilon_o$. Calcule as
+    multiplicidades para o caso em que a energia se distribui de forma
+    simetrica e para o caso em que isto não ocorre. Se convença
+    que a multiplicidade do primeiro caso é maior.  }
+
+
+
+  \frame{\frametitle{Observações}
+    \begin{itemize}
+    \item O fluxo de energia maximiza a multiplicidade, mas nem sempre
+      equaliza as energias.
+    \item A tempertura é que acaba por ser igualada em quaisquer
+      sistemas em contato. Sistemas em contato termico tendem a
+      possuir a mesma temperatura,
+    \end{itemize}
+  }
+
+\end{document}

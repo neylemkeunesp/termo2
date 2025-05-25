@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Boids Simulation</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #000;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    const numBoids = 100;
+    const boids = [];
+    const predator = {
+      x: Math.random() * width,
+      y: Math.random() * height,
+      color: 'red',
+      radius: 10,
+      speed: 3
+    };
+
+    // Boid class
+    class Boid {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 5;
+        this.vy = (Math.random() - 0.5) * 5;
+        this.color = 'white';
+        this.radius = 3;
+        this.maxSpeed = 5;
+        this.maxForce = 0.2;
+      }
+
+      update() {
+        let alignment = this.align(boids);
+        let cohesion = this.cohesion(boids);
+        let separation = this.separation(boids);
+        let avoid = this.avoid(predator);
+
+        alignment = this.limit(alignment);
+        cohesion = this.limit(cohesion);
+        separation = this.limit(separation);
+        avoid = this.limit(avoid);
+
+        this.vx += alignment.x + cohesion.x + separation.x + avoid.x;
+        this.vy += alignment.y + cohesion.y + separation.y + avoid.y;
+
+        this.vx = this.constrain(this.vx, -this.maxSpeed, this.maxSpeed);
+        this.vy = this.constrain(this.vy, -this.maxSpeed, this.maxSpeed);
+
+        this.x += this.vx;
+        this.y += this.vy;
+
+        this.edges();
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
+      }
+
+      align(boids) {
+        let sumX = 0;
+        let sumY = 0;
+        let count = 0;
+        for (let i = 0; i < boids.length; i++) {
+          let other = boids[i];
+          let distance = Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+          if (other !== this && distance < 50) {
+            sumX += other.vx;
+            sumY += other.vy;
+            count++;
+          }
+        }
+        if (count > 0) {
+          sumX /= count;
+          sumY /= count;
+          return this.createVector(sumX, sumY);
+        } else {
+          return this.createVector(0, 0);
+        }
+      }
+
+      cohesion(boids) {
+        let sumX = 0;
+        let sumY = 0;
+        let count = 0;
+        for (let i = 0; i < boids.length; i++) {
+          let other = boids[i];
+          let distance = Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+          if (other !== this && distance < 50) {
+            sumX += other.x;
+            sumY += other.y;
+            count++;
+          }
+        }
+        if (count > 0) {
+          sumX /= count;
+          sumY /= count;
+          return this.seek(sumX, sumY);
+        } else {
+          return this.createVector(0, 0);
+        }
+      }
+
+      separation(boids) {
+        let sumX = 0;
+        let sumY = 0;
+        let count = 0;
+        for (let i = 0; i < boids.length; i++) {
+          let other = boids[i];
+          let distance = Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+          if (other !== this && distance < 25) {
+            let diffX = this.x - other.x;
+            let diffY = this.y - other.y;
+            sumX += diffX / distance;
+            sumY += diffY / distance;
+            count++;
+          }
+        }
+        if (count > 0) {
+          sumX /= count;
+          sumY /= count;
+          return this.createVector(sumX, sumY);
+        } else {
+          return this.createVector(0, 0);
+        }
+      }
+
+      avoid(predator) {
+        let distance = Math.sqrt(Math.pow(this.x - predator.x, 2) + Math.pow(this.y - predator.y, 2));
+        if (distance < 75) {
+          let diffX = this.x - predator.x;
+          let diffY = this.y - predator.y;
+          return this.createVector(diffX / distance * 5, diffY / distance * 5);
+        } else {
+          return this.createVector(0, 0);
+        }
+      }
+
+      seek(x, y) {
+        let vector = this.createVector(x - this.x, y - this.y);
+        vector.normalize();
+        vector.multiply(this.maxSpeed);
+        return vector;
+      }
+
+      createVector(x, y) {
+        return { x: x, y: y };
+      }
+
+      limit(vector) {
+        let magnitude = Math.sqrt(Math.pow(vector.x, 2) + Math.pow(vector.y, 2));
+        if (magnitude > this.maxForce) {
+          vector.x = (vector.x / magnitude) * this.maxForce;
+          vector.y = (vector.y / magnitude) * this.maxForce;
+        }
+        return vector;
+      }
+
+      constrain(value, min, max) {
+        return Math.max(min, Math.min(value, max));
+      }
+
+      edges() {
+        if (this.x < 0) this.x = width;
+        if (this.x > width) this.x = 0;
+        if (this.y < 0) this.y = height;
+        if (this.y > height) this.y = 0;
+      }
+    }
+
+    // Initialize boids
+    for (let i = 0; i < numBoids; i++) {
+      boids.push(new Boid());
+    }
+
+    // Predator movement
+    function movePredator() {
+      let boidsNearby = [];
+      for(let i = 0; i < boids.length; i++) {
+        let distance = Math.sqrt(Math.pow(predator.x - boids[i].x, 2) + Math.pow(predator.y - boids[i].y, 2));
+        if(distance < 100) {
+          boidsNearby.push(boids[i]);
+        }
+      }
+
+      if (boidsNearby.length > 0) {
+        let closestBoid = boidsNearby[0];
+        let minDistance = Math.sqrt(Math.pow(predator.x - closestBoid.x, 2) + Math.pow(predator.y - closestBoid.y, 2));
+        for(let i = 1; i < boidsNearby.length; i++) {
+          let distance = Math.sqrt(Math.pow(predator.x - boidsNearby[i].x, 2) + Math.pow(predator.y - boidsNearby[i].y, 2));
+          if(distance < minDistance) {
+            closestBoid = boidsNearby[i];
+            minDistance = distance;
+          }
+        }
+
+        let dx = closestBoid.x - predator.x;
+        let dy = closestBoid.y - predator.y;
+        predator.vx = (dx / minDistance) * predator.speed;
+        predator.vy = (dy / minDistance) * predator.speed;
+      } else {
+        predator.vx = (Math.random() - 0.5) * predator.speed;
+        predator.vy = (Math.random() - 0.5) * predator.speed;
+      }
+
+      predator.x += predator.vx;
+      predator.y += predator.vy;
+      predator.edges();
+    }
+
+    function predatorEdges() {
+      if (predator.x < 0) predator.x = width;
+      if (predator.x > width) predator.x = 0;
+      if (predator.y < 0) predator.y = height;
+      if (predator.y > height) predator.y = 0;
+    }
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+
+      ctx.clearRect(0, 0, width, height);
+
+      movePredator();
+      predatorEdges();
+
+      // Draw predator
+      ctx.beginPath();
+      ctx.arc(predator.x, predator.y, predator.radius, 0, Math.PI * 2);
+      ctx.fillStyle = predator.color;
+      ctx.fill();
+      ctx.closePath();
+
+
+      for (let i = 0; i < numBoids; i++) {
+        boids[i].update();
+        boids[i].draw();
+      }
+    }
+
+    animate();
+
+    window.addEventListener('resize', function() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    });
+
+  </script>
+</body>
+</html>

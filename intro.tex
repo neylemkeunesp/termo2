@@ -1,0 +1,316 @@
+% $Header: /cvsroot/latex-beamer/latex-beamer/examples/beamerexample5.tex,v 1.22 2004/10/08 14:02:33 tantau Exp $
+
+\documentclass[11pt]{beamer}
+
+\usetheme{Darmstadt}
+
+\usepackage{times}
+\usefonttheme{structurebold}
+
+%\usepackage[english]{babel}
+\usepackage[portuges]{babel}
+\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
+\usepackage{amsmath,amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+\setbeamercovered{dynamic}
+
+\newcommand{\Lang}[1]{\operatorname{\text{\textsc{#1}}}}
+
+\newcommand{\Class}[1]{\operatorname{\mathchoice
+  {\text{\sf \small #1}}
+  {\text{\sf \small #1}}
+  {\text{\sf #1}}
+  {\text{\sf #1}}}}
+
+\newcommand{\NumSAT}      {\text{\small\#SAT}}
+\newcommand{\NumA}        {\#_{\!A}}
+
+\newcommand{\barA}        {\,\bar{\!A}}
+
+\newcommand{\Nat}{\mathbb{N}}
+\newcommand{\Set}[1]{\{#1\}}
+
+\pgfdeclaremask{tu}{beamer-tu-logo-mask}
+\pgfdeclaremask{computer}{beamer-computer-mask}
+\pgfdeclareimage[interpolate=true,mask=computer,height=2cm]{computerimage}{beamer-computer}
+\pgfdeclareimage[interpolate=true,mask=computer,height=2cm]{computerworkingimage}{beamer-computerred}
+\pgfdeclareimage[mask=tu,height=.5cm]{logo}{logounesp}
+
+\logo{\pgfuseimage{logo}}
+
+\title{Introdução}
+\author{Ney Lemke}
+\institute[IBB-UNESP]{%
+    Biofísica e Farmacologia}
+\date{ \today }                                
+
+\colorlet{redshaded}{red!25!bg}
+\colorlet{shaded}{black!25!bg}
+\colorlet{shadedshaded}{black!10!bg}
+\colorlet{blackshaded}{black!40!bg}
+
+\colorlet{darkred}{red!80!black}
+\colorlet{darkblue}{blue!80!black}
+\colorlet{darkgreen}{green!80!black}
+
+\def\radius{0.96cm}
+\def\innerradius{0.85cm}
+
+\def\softness{0.4}
+\definecolor{softred}{rgb}{1,\softness,\softness}
+\definecolor{softgreen}{rgb}{\softness,1,\softness}
+\definecolor{softblue}{rgb}{\softness,\softness,1}
+
+\definecolor{softrg}{rgb}{1,1,\softness}
+\definecolor{softrb}{rgb}{1,\softness,1}
+\definecolor{softgb}{rgb}{\softness,1,1}
+
+\newcommand{\Bandshaded}[2]{
+  \color{shadedshaded}
+  \pgfmoveto{\pgfxy(-0.5,0)}
+  \pgflineto{\pgfxy(-0.6,0.1)}
+  \pgflineto{\pgfxy(-0.4,0.2)}
+  \pgflineto{\pgfxy(-0.6,0.3)}
+  \pgflineto{\pgfxy(-0.4,0.4)}
+  \pgflineto{\pgfxy(-0.5,0.5)}
+  \pgflineto{\pgfxy(4,0.5)}
+  \pgflineto{\pgfxy(4.1,0.4)}
+  \pgflineto{\pgfxy(3.9,0.3)}
+  \pgflineto{\pgfxy(4.1,0.2)}
+  \pgflineto{\pgfxy(3.9,0.1)}
+  \pgflineto{\pgfxy(4,0)}
+  \pgfclosepath
+  \pgffill
+
+  \color{black}  
+  \pgfputat{\pgfxy(0,0.7)}{\pgfbox[left,base]{#1}}
+  \pgfputat{\pgfxy(0,-0.1)}{\pgfbox[left,top]{#2}}
+}
+
+\newcommand{\Band}[2]{
+  \color{shaded}
+  \pgfmoveto{\pgfxy(-0.5,0)}
+  \pgflineto{\pgfxy(-0.6,0.1)}
+  \pgflineto{\pgfxy(-0.4,0.2)}
+  \pgflineto{\pgfxy(-0.6,0.3)}
+  \pgflineto{\pgfxy(-0.4,0.4)}
+  \pgflineto{\pgfxy(-0.5,0.5)}
+  \pgflineto{\pgfxy(4,0.5)}
+  \pgflineto{\pgfxy(4.1,0.4)}
+  \pgflineto{\pgfxy(3.9,0.3)}
+  \pgflineto{\pgfxy(4.1,0.2)}
+  \pgflineto{\pgfxy(3.9,0.1)}
+  \pgflineto{\pgfxy(4,0)}
+  \pgfclosepath
+  \pgffill
+
+  \color{black}  
+  \pgfputat{\pgfxy(0,0.7)}{\pgfbox[left,base]{#1}}
+  \pgfputat{\pgfxy(0,-0.1)}{\pgfbox[left,top]{#2}}
+}
+
+\newcommand{\BaenderNormal}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Band{input tapes}{}}
+  \pgfputat{\pgfxy(0.35,4.6)}{\pgfbox[center,base]{$\vdots$}}
+  \pgfputat{\pgfxy(0,4)}{\Band{}{}}
+
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$w_1$}}
+
+  \pgfxyline(0,4)(0,4.5)
+  \pgfxyline(1.8,4)(1.8,4.5)        
+  \pgfputat{\pgfxy(0.25,4.25)}{\pgfbox[left,center]{$w_n$}}
+  \ignorespaces}
+
+\newcommand{\BaenderZweiNormal}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Band{Zwei Eingabebänder}{}}
+  \pgfputat{\pgfxy(0,4.25)}{\Band{}{}}
+
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$u$}}
+
+  \pgfxyline(0,4.25)(0,4.75)
+  \pgfxyline(1.8,4.25)(1.8,4.75)        
+  \pgfputat{\pgfxy(0.25,4.5)}{\pgfbox[left,center]{$v$}}
+  \ignorespaces}
+
+\newcommand{\BaenderHell}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Bandshaded{input tapes}{}}
+  \color{shaded}
+  \pgfputat{\pgfxy(0.35,4.6)}{\pgfbox[center,base]{$\vdots$}}
+  \pgfputat{\pgfxy(0,4)}{\Bandshaded{}{}}
+
+  \color{blackshaded}
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$w_1$}}
+
+  \pgfxyline(0,4)(0,4.5)
+  \pgfxyline(1.8,4)(1.8,4.5)        
+  \pgfputat{\pgfxy(0.25,4.25)}{\pgfbox[left,center]{$w_n$}}
+  \ignorespaces}
+
+\newcommand{\BaenderZweiHell}
+{%
+  \pgfsetlinewidth{0.4pt}
+  \color{black}
+  \pgfputat{\pgfxy(0,5)}{\Bandshaded{Zwei Eingabebnder}{}}%
+  \color{blackshaded}
+  \pgfputat{\pgfxy(0,4.25)}{\Bandshaded{}{}}
+  \pgfputat{\pgfxy(0.25,4.5)}{\pgfbox[left,center]{$v$}}
+  \pgfputat{\pgfxy(0.25,5.25)}{\pgfbox[left,center]{$u$}}%
+
+  \pgfxyline(0,5)(0,5.5)
+  \pgfxyline(1.2,5)(1.2,5.5)
+
+  \pgfxyline(0,4.25)(0,4.75)
+  \pgfxyline(1.8,4.25)(1.8,4.75)        
+  \ignorespaces}
+
+\newcommand{\Slot}[1]{%
+  \begin{pgftranslate}{\pgfpoint{#1}{0pt}}%
+    \pgfsetlinewidth{0.6pt}%
+    \color{structure}%
+    \pgfmoveto{\pgfxy(-0.1,5.5)}%
+    \pgfbezier{\pgfxy(-0.1,5.55)}{\pgfxy(-0.05,5.6)}{\pgfxy(0,5.6)}%
+    \pgfbezier{\pgfxy(0.05,5.6)}{\pgfxy(0.1,5.55)}{\pgfxy(0.1,5.5)}%
+    \pgflineto{\pgfxy(0.1,4.0)}%
+    \pgfbezier{\pgfxy(0.1,3.95)}{\pgfxy(0.05,3.9)}{\pgfxy(0,3.9)}%
+    \pgfbezier{\pgfxy(-0.05,3.9)}{\pgfxy(-0.1,3.95)}{\pgfxy(-0.1,4.0)}%
+    \pgfclosepath%
+    \pgfstroke%
+  \end{pgftranslate}\ignorespaces}
+
+\newcommand{\SlotZwei}[1]{%
+  \begin{pgftranslate}{\pgfpoint{#1}{0pt}}%
+    \pgfsetlinewidth{0.6pt}%
+    \color{structure}%
+    \pgfmoveto{\pgfxy(-0.1,5.5)}%
+    \pgfbezier{\pgfxy(-0.1,5.55)}{\pgfxy(-0.05,5.6)}{\pgfxy(0,5.6)}%
+    \pgfbezier{\pgfxy(0.05,5.6)}{\pgfxy(0.1,5.55)}{\pgfxy(0.1,5.5)}%
+    \pgflineto{\pgfxy(0.1,4.25)}%
+    \pgfbezier{\pgfxy(0.1,4.25)}{\pgfxy(0.05,4.15)}{\pgfxy(0,4.15)}%
+    \pgfbezier{\pgfxy(-0.05,4.15)}{\pgfxy(-0.1,4.2)}{\pgfxy(-0.1,4.25)}%
+    \pgfclosepath%
+    \pgfstroke%
+  \end{pgftranslate}\ignorespaces}
+
+\newcommand{\ClipSlot}[1]{%
+  \pgfrect[clip]{\pgfrelative{\pgfxy(-0.1,0)}{\pgfpoint{#1}{4cm}}}{\pgfxy(0.2,1.5)}\ignorespaces}
+
+\newcommand{\ClipSlotZwei}[1]{%
+  \pgfrect[clip]{\pgfrelative{\pgfxy(-0.1,0)}{\pgfpoint{#1}{4.25cm}}}{\pgfxy(0.2,1.25)}\ignorespaces}
+
+
+\AtBeginSection[]{\frame{\frametitle{Outline}\tableofcontents[current]}}
+
+\begin{document}
+
+\frame{\titlepage}
+
+% \section*{Outline}
+
+
+\frame{\frametitle{Bibliografia} Dill, K. A. Bromberg, S. ``Molecular
+  Driving Forces'', Garland Science, (2002).  }
+
+\frame{\frametitle{Esquema do Curso}
+  \begin{itemize}
+  \item Revisão Matemática
+  \item Revisão de Termodinâmica
+  \item Distribuição de Boltzmann
+  \item Gases e Sólidos
+  \end{itemize}
+
+} 
+
+
+\frame{\frametitle{Termodinâmica}
+
+  Termodinâmica é uma ciência que visa caraterizar sistemas Físicos
+  macroscópicos em equilíbrio com o ambiente.  Ao contrário do que o nome 
+indica, situações ``dinâmicas'' não estão no escopo da teoria.
+
+}
+
+\frame{\frametitle{Conceitos Chave}
+  \begin{itemize}
+  \item Energia
+  \item Entropia
+  \item Temperatura
+  \end{itemize}
+}
+
+\frame{\frametitle{``3'' Leis da Termodinâmica}
+  \begin{itemize}
+  \item Considere três corpos $A$, $B$ e $C$. Se $A$ e $B$ estão 
+em equilíbrio, assim como $B$ e $C$ então $A$ e $C$ estão em equilíbrio.
+\item A energia é conservada.
+\item A entropia de um sistema isolado nunca diminui. Não é possível transferir
+calor de um corpo frio para um corpo quente. Não existe ``free-lunch''.
+\item A entropia tende a zero quando T tende a zero. 
+  \end{itemize}
+}
+
+\frame{\frametitle{Mecânica Estatística}
+O objetivo original da Mecânica Estatística era fornecer um subsidio Mecânico 
+para as leis da Termodinâmica. Nos primórdios a esperança era usar 
+as Leis de Newton para derivar as Leis da Termodinâmica. Hoje sabe-se que 
+as leis da Termodinâmica são mais gerais que as teorias microscópicas. 
+}
+
+\begin{frame}{Introdução à Mecânica Estatística}
+  \begin{itemize}
+    \item Conexão entre propriedades microscópicas e comportamentos macroscópicos.
+    \item Aplicações em processos biológicos e em técnicas de imagem médica.
+    \item Conceitos-chave: entropia, probabilidade e distribuição de Boltzmann.
+  \end{itemize}
+\end{frame}
+
+% Slide dos Princípios Fundamentais
+\begin{frame}{Princípios Fundamentais}
+  \begin{itemize}
+    \item \textbf{Probabilidade e Entropia}: Medem a dispersão dos estados de um sistema.
+    \item \textbf{Distribuição de Boltzmann}: Descreve a probabilidade de ocupação dos estados de energia.
+    \item \textbf{Função de Partição}: Conecta o comportamento microscópico com as propriedades termodinâmicas.
+  \end{itemize}
+\end{frame}
+
+% Slide sobre Aplicações em Imagens Médicas
+\begin{frame}{Aplicações em Imagens Médicas}
+  \begin{itemize}
+    \item \textbf{Reconstrução de Imagens}:  
+      Métodos estatísticos, como os algoritmos iterativos, ajudam na reconstrução de imagens em CT e PET, modelando ruído e incertezas.
+    \item \textbf{Redução de Ruído e Artefatos}:  
+      Técnicas baseadas em modelos probabilísticos (inspirados em conceitos como a distribuição de Boltzmann) melhoram a qualidade das imagens.
+    \item \textbf{Segmentação e Análise}:  
+      Algoritmos estatísticos auxiliam na identificação de estruturas anatômicas e regiões de interesse, fundamentais para diagnósticos precisos.
+    \item \textbf{Simulações Monte Carlo}:  
+      Permitem modelar a propagação da radiação nos tecidos, contribuindo para a otimização de técnicas de imagem e dosimetria.
+  \end{itemize}
+\end{frame}
+
+% Slide de Aplicações Gerais em Física Médica
+\begin{frame}{Aplicações em Física Médica}
+  \begin{itemize}
+    \item Modelagem e simulação de processos biológicos.
+    \item Interpretação de dados experimentais em técnicas de imagem.
+    \item Desenvolvimento de novas terapias e otimização de tratamentos com radiação.
+  \end{itemize}
+\end{frame}
+
+
+\end{document}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Plot of ln(x) - x</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="myChart" width="800" height="400"></canvas>
+    <script>
+        // Generate data points
+        function generateData() {
+            const data = [];
+            // We'll plot from x = 0.1 to 5 to show the interesting part of the function
+            for (let x = 0.1; x <= 5; x += 0.1) {
+                data.push({
+                    x: x,
+                    y: Math.log(x) - x
+                });
+            }
+            return data;
+        }
+
+        // Create the chart
+        const ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'ln(x) - x',
+                    data: generateData(),
+                    showLine: true,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgb(75, 192, 192)',
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'x'
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'ln(x) - x'
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Gráfico de ln(x) - x',
+                        font: {
+                            size: 16
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

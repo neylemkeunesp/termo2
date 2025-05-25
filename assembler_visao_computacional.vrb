@@ -1,0 +1,26 @@
+\frametitle{Exemplo: Função em Assembly Chamada de C++}
+
+\begin{lstlisting}[language=C++, basicstyle=\tiny]
+// Declaracao da funcao Assembly externa
+extern "C" {
+    void sobel_edge_asm(unsigned char *src, unsigned char *dst, int width, int height);
+}
+
+// Funcao C++ que utiliza a implementacao em Assembly
+void detectEdges(cv::Mat& input, cv::Mat& output) {
+    // Verificar se a imagem esta em escala de cinza
+    if (input.channels() > 1) {
+        cv::cvtColor(input, input, cv::COLOR_BGR2GRAY);
+    }
+
+    // Garantir que a imagem de saida tenha o formato correto
+    output.create(input.rows, input.cols, CV_8UC1);
+
+    // Chamar a funcao Assembly otimizada
+    sobel_edge_asm(input.data, output.data, input.cols, input.rows);
+
+    // Pos-processamento adicional, se necessario
+    // cv::threshold(output, output, 50, 255, cv::THRESH_BINARY);
+}
+\end{lstlisting}
+

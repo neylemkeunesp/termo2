@@ -1,0 +1,69 @@
+\documentclass[fleqn,a4paper]{exam}
+\addtolength{\headheight}{1\baselineskip}
+\pointsinmargin
+\usepackage[utf8]{inputenc}
+\usepackage[portuges]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{theorem}
+\usepackage{float}
+\usepackage{graphicx}
+\widowpenalty=10000
+\clubpenalty=10000
+\raggedbottom
+\newtheorem{definition}{Def.}
+\theoremstyle{break} \newtheorem{exemplo}{Exemplo}
+\theoremstyle{break} \newtheorem{exercicio}{Exercício}
+\newcommand{\ao}{\~{a}o}
+\newcommand{\cao}{\c{c}\~{a}o}
+\newcommand{\coes}{\c{c}\~{o}es}
+\newcommand{\cc}{\c{c}}
+\newcommand{\ii}{\'{\i}}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\renewcommand{\subsectionmark}[1]{\markright{#1}}
+\lfoot{{\small  DISTRITO DE RUBIÃO JR. S/N C.P. 510 \\
+CEP  18618-000-BOTUCATU-SP }}
+\rfoot{}
+\cfoot{}
+\lhead{{\large UNIVERSIDADE JÚLIO DE MESQUITA FILHO-UNESP} \\
+INSTITUTO DE BIOCIÊNCIAS DE BOTUCATU \\
+DEPARTAMENTO DE FÍSICA E BIOFÍSICA 
+}
+\pagestyle{empty}
+\begin{document}
+
+\begin{center}
+{\large Primeira Verificação}
+
+{\large Mecânica Estatística}
+\end{center}
+\vspace{0.5cm} Nome:\rule{14cm}{0.01cm} \\
+
+\vspace{1 cm}
+{\bf Só serão aceitas respostas devidamente justificadas.}
+\vspace{1 cm}
+
+\begin{questions}
+
+% --- Questão Boltzmann clássica (adaptada de v4/v5) ---
+\question[3.0] O núcleo de um átomo de hidrogênio (um próton) possui um momento magnético.
+Em um campo magnético, o próton possui dois estados de diferentes energias, spin para cima e spin para baixo. Esta é a base da ressonância magnética nuclear para prótons. As populações relativas são dadas pela distribuição de Boltzmann. A diferença de energia entre os dois estados é $\Delta\epsilon =g\mu_B$ onde $g=2.79$ e $\mu=5.05\times 10^{-24}$ J Tesla$^{-1}$. Para um instrumento de ressonância nuclear, $B$=7 Tesla. Considere $T=300$ K.
+\begin{parts}
+  \item Calcule a função partição.
+  \item Calcule a diferença populacional: $$\frac{|N_+-N_-|}{N_++N_-}$$
+\end{parts}
+
+% --- Questão de probabilidade condicional (nova, baseada em prob.tex) ---
+\question[2.0] Dois dados são lançados. Qual é a probabilidade condicional de que a soma seja par, dado que a soma é maior ou igual que 8? Justifique detalhadamente.
+
+
+ --- Questão combinatória (nova, baseada em prob.tex) ---
+\question[2.0] Quantos subconjuntos de 3 elementos podem ser formados a partir de um conjunto com 8 elementos? E quantas listas ordenadas de 3 elementos distintos podem ser formadas? Justifique.
+
+% --- Questão de caminhante aleatório (nova, baseada em prob.tex) ---
+\question[2.0] Um caminhante aleatório dá 10 passos, cada passo pode ser para a direita (probabilidade $p=0,6$) ou para a esquerda ($q=0,4$). Qual a probabilidade de ele dar exatamente 7 passos para a direita? Use a fórmula apropriada e calcule o valor.
+
+\question[1.0] Determine a fórmula para determinar a entropia a partir da função de partição no caso do ensemble canônico. 
+\end{questions}
+
+\end{document}

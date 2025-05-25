@@ -1,0 +1,302 @@
+% $Header: /cvsroot/latex-beamer/latex-beamer/examples/beamerexample5.tex,v 1.22 2004/10/08 14:02:33 tantau Exp $
+
+\documentclass[11pt]{beamer}
+
+\usetheme{Darmstadt}
+
+\usepackage{times}
+\usefonttheme{structurebold}
+
+%\usepackage[english]{babel}
+\usepackage[brazilian]{babel}
+\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
+\usepackage{amsmath,amssymb}
+\usepackage[utf8]{inputenc}
+%\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{cancel}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\setbeamercovered{dynamic}
+
+\newcommand{\Lang}[1]{\operatorname{\text{\textsc{#1}}}}
+
+\newcommand{\Class}[1]{\operatorname{\mathchoice
+  {\text{\sf \small #1}}
+  {\text{\sf \small #1}}
+  {\text{\sf #1}}
+  {\text{\sf #1}}}}
+
+\newcommand{\NumSAT}      {\text{\small\#SAT}}
+\newcommand{\NumA}        {\#_{\!A}}
+
+\newcommand{\barA}        {\,\bar{\!A}}
+
+\newcommand{\Nat}{\mathbb{N}}
+\newcommand{\Set}[1]{\{#1\}}
+
+\pgfdeclaremask{tu}{beamer-tu-logo-mask}
+\pgfdeclaremask{computer}{beamer-computer-mask}
+\pgfdeclareimage[interpolate=true,mask=computer,height=2cm]{computerimage}{beamer-computer}
+\pgfdeclareimage[interpolate=true,mask=computer,height=2cm]{computerworkingimage}{beamer-computerred}
+\pgfdeclareimage[mask=tu,height=.5cm]{logo}{logounesp}
+
+\logo{\pgfuseimage{logo}}
+
+\colorlet{redshaded}{red!25!bg}
+\colorlet{shaded}{black!25!bg}
+\colorlet{shadedshaded}{black!10!bg}
+\colorlet{blackshaded}{black!40!bg}
+
+\colorlet{darkred}{red!80!black}
+\colorlet{darkblue}{blue!80!black}
+\colorlet{darkgreen}{green!80!black}
+\definecolor{lightblue}{RGB}{120, 200, 230}
+\definecolor{darkblue}{RGB}{30, 100, 130}
+\definecolor{darkgray}{RGB}{70, 70, 70}
+\definecolor{lightgray}{RGB}{150, 150, 150}
+
+\def\radius{0.96cm}
+\def\innerradius{0.85cm}
+
+\def\softness{0.4}
+\definecolor{softred}{rgb}{1,\softness,\softness}
+\definecolor{softgreen}{rgb}{\softness,1,\softness}
+\definecolor{softblue}{rgb}{\softness,\softness,1}
+
+\definecolor{softrg}{rgb}{1,1,\softness}
+\definecolor{softrb}{rgb}{1,\softness,1}
+\definecolor{softgb}{rgb}{\softness,1,1}
+
+\title{Técnica dos Multiplicadores de Lagrange}
+\author{Ney Lemke}
+\institute[IBB-UNESP]{%
+    Departamento de Biofísica e Farmacologia}
+\date{\today}
+
+%\AtBeginSection[]{\frame{\frametitle{Outline}\tableofcontents[current]}}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\part{Multiplicadores de Lagrange}
+\frame{\frametitle{Outline}\tableofcontents[part=1]}
+
+\section{Introdução}
+
+\begin{frame}
+\frametitle{Introdução}
+\begin{itemize}
+    \item Os multiplicadores de Lagrange são uma técnica poderosa para otimização com restrições
+    \item Desenvolvida por Joseph-Louis Lagrange no século XVIII
+    \item Amplamente utilizada em física, engenharia e economia
+\end{itemize}
+\end{frame}
+
+\section{O Problema de Otimização}
+
+\begin{frame}
+\frametitle{O Problema de Otimização com Restrições}
+\begin{itemize}
+    \item Objetivo: Maximizar ou minimizar uma função $f(x,y)$
+    \item Sujeito a uma restrição $g(x,y) = c$
+    \item Exemplo: Maximizar a área de um retângulo com perímetro fixo
+\end{itemize}
+\end{frame}
+
+\section{A Técnica}
+
+\begin{frame}
+\frametitle{A Técnica dos Multiplicadores de Lagrange}
+\begin{tikzpicture}[
+  scale=0.1,
+  node distance=.4cm and .3cm,
+  box/.style={rectangle, rounded corners, draw=gray, fill=black!80, text width=10cm, minimum height=.3cm, text centered, font=\small\color{white}},
+  arrow/.style={draw=black, thick, -{Latex[length=3mm, width=2mm]}}
+]
+
+\node[box, font=\bfseries\large\color{cyan}] (title) {Multiplicadores de Lagrange};
+
+\node[box, below=of title] (step1) { Problema: Max/min $f(x, y, \dots)$ sujeito a $g(x, y, \dots) = 0$};
+\node[box, below=of step1] (step2) { Ideia: $\nabla f = \lambda \nabla g$ (tangência das curvas de nível)};
+\node[box, below=of step2] (step3) {
+   Sistema:\\
+  $\nabla f(x, y, \dots) = \lambda \nabla g(x, y, \dots)$\\
+  $g(x, y, \dots) = 0$
+};
+\node[box, below=of step3] (step4) { Solução: $(x, y, \dots, \lambda)$ que satisfazem o sistema};
+\node[box, below=of step4] (step5) { Interpretação de $\lambda$: Sensibilidade de $f$ em relação à restrição $g$};
+
+% Arrows
+\draw[arrow] (title) -- (step1);
+\draw[arrow] (step1) -- (step2);
+\draw[arrow] (step2) -- (step3);
+\draw[arrow] (step3) -- (step4);
+\draw[arrow] (step4) -- (step5);
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\frametitle{A Técnica dos Multiplicadores de Lagrange}
+\begin{enumerate}
+    \item Definir a função Lagrangiana: $L(x,y,\lambda) = f(x,y) - \lambda(g(x,y) - c)$
+    \item Calcular as derivadas parciais e igualá-las a zero:
+        \begin{align*}
+        \frac{\partial L}{\partial x} &= 0 \\
+        \frac{\partial L}{\partial y} &= 0 \\
+        \frac{\partial L}{\partial \lambda} &= 0
+        \end{align*}
+    \item Resolver o sistema de equações
+    \item Verificar os pontos críticos encontrados
+\end{enumerate}
+\end{frame}
+
+\section{Exemplo}
+
+\begin{frame}
+\frametitle{Exemplo: Maximização da Área de um Retângulo}
+\begin{itemize}
+    \item Função objetivo: $f(x,y) = xy$ (área)
+    \item Restrição: $g(x,y) = 2x + 2y = P$ (perímetro)
+    \item Lagrangiana: $L(x,y,\lambda) = xy - \lambda(2x + 2y - P)$
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Desenvolvimento do Exemplo: Passo 1}
+\large
+\begin{block}{Definição do Problema}
+\begin{align*}
+\text{Maximizar: } & f(x,y) = xy \quad \text{(área do retângulo)} \\
+\text{Sujeito a: } & g(x,y) = 2x + 2y = P \quad \text{(perímetro fixo)}
+\end{align*}
+\end{block}
+
+\begin{block}{Função Lagrangiana}
+\begin{align*}
+L(x,y,\lambda) &= f(x,y) - \lambda(g(x,y) - P) \\
+&= xy - \lambda(2x + 2y - P)
+\end{align*}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Desenvolvimento do Exemplo: Passo 2}
+\large
+\begin{block}{Condições de Primeira Ordem}
+Calculamos as derivadas parciais e igualamos a zero:
+\begin{align*}
+\frac{\partial L}{\partial x} &= y - 2\lambda = 0 \\
+\frac{\partial L}{\partial y} &= x - 2\lambda = 0 \\
+\frac{\partial L}{\partial \lambda} &= -(2x + 2y - P) = 0
+\end{align*}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Desenvolvimento do Exemplo: Passo 3}
+\large
+\begin{block}{Resolução do Sistema}
+Da primeira equação: $y = 2\lambda$ \\
+Da segunda equação: $x = 2\lambda$ \\
+\vspace{0.3cm}
+Portanto: $x = y$ (o retângulo é um quadrado)
+\vspace{0.3cm}
+
+Da terceira equação: $2x + 2y = P$ \\
+Substituindo $x = y$: $2x + 2x = P$ \\
+Simplificando: $4x = P$ \\
+Portanto: $x = \frac{P}{4}$
+\end{block}
+
+\begin{block}{Solução}
+$x = y = \frac{P}{4}$ (quadrado)
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Desenvolvimento do Exemplo: Passo 4}
+\large
+\begin{block}{Análise da Matriz Hessiana}
+A matriz Hessiana da Lagrangiana é:
+\begin{align*}
+H(L) = 
+\begin{pmatrix}
+\frac{\partial^2 L}{\partial x^2} & \frac{\partial^2 L}{\partial x \partial y} \\
+\frac{\partial^2 L}{\partial y \partial x} & \frac{\partial^2 L}{\partial y^2}
+\end{pmatrix} =
+\begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix}
+\end{align*}
+\end{block}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Desenvolvimento do Exemplo: Passo 4}
+Para verificar as condições de segunda ordem, analisamos o comportamento de $H(L)$ no espaço tangente à restrição.
+
+\begin{block}{Verificação do Ponto Crítico}
+\begin{itemize}
+\item Determinante: $\det(H) = -1 < 0$, indicando um ponto de sela da Lagrangiana
+\item No espaço tangente à restrição: a forma quadrática é definida negativa
+\item Conclusão: o ponto $(x,y) = (\frac{P}{4}, \frac{P}{4})$ é um máximo local
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Desenvolvimento do Exemplo: Visualização}
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+    % Eixos
+    \draw[->] (0,0) -- (6,0) node[right] {$x$};
+    \draw[->] (0,0) -- (0,6) node[above] {$y$};
+    
+    % Curvas de nível da função objetivo (área)
+    \draw[blue, thick] plot[domain=0.5:5, samples=100] (\x, {1/\x}) node[right] {$xy = 1$};
+    \draw[blue, thick] plot[domain=0.7:5, samples=100] (\x, {2/\x}) node[right] {$xy = 2$};
+    \draw[blue, thick] plot[domain=1:5, samples=100] (\x, {4/\x}) node[right] {$xy = 4$};
+    \draw[blue, thick] plot[domain=1.5:5, samples=100] (\x, {9/\x}) node[right] {$xy = 9$};
+    
+    % Restrição (perímetro constante)
+    \draw[red, thick] plot[domain=0:4, samples=100] (\x, {(8-2*\x)/2}) node[above] {$2x + 2y = 8$};
+    
+    % Ponto ótimo
+    \filldraw[black] (2,2) circle (3pt) node[above right] {$(P/4, P/4)$};
+    
+    % Legenda
+    \node[blue] at (5,5.5) {Curvas de nível $f(x,y) = xy$};
+    \node[red] at (5,5) {Restrição $g(x,y) = 2x + 2y = P$};
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\section{Aplicações}
+
+\begin{frame}
+\frametitle{Aplicações}
+\begin{itemize}
+    \item Física: Princípio do trabalho virtual, mecânica analítica
+    \item Engenharia: Otimização de design, controle de sistemas
+    \item Economia: Maximização de utilidade sob restrições orçamentárias
+    \item Aprendizado de máquina: Otimização de funções de perda com regularização
+\end{itemize}
+\end{frame}
+
+\section{Conclusão}
+
+\begin{frame}
+\frametitle{Conclusão}
+\begin{itemize}
+    \item Os multiplicadores de Lagrange são uma ferramenta versátil para otimização com restrições
+    \item Permitem transformar problemas com restrições em problemas sem restrições
+    \item Amplamente aplicáveis em diversos campos da ciência e engenharia
+    \item Compreender esta técnica é fundamental para abordar problemas complexos de otimização
+\end{itemize}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,884 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     18067,        617]*)
+(*NotebookOutlinePosition[     18717,        640]*)
+(*  CellTagsIndexPosition[     18673,        636]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\( (*\ 
+      Van\ der\ Waals\ *) \)\(\[IndentingNewLine]\)\( (*\ 
+      Equacao\ de\ Estado\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(p[v_, T_] := \(R\ T\)\/\(v - b\) - a\/v\^2;\)\)], "Input"],
+
+Cell[BoxData[
+    \(der1 = D[p[V, T], V]; \  (*\ 
+      Equacoes\ do\ Ponto\ Cr\[IAcute]tico\ *) \[IndentingNewLine]der2 = 
+      D[p[V, T], {V, 2}];\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(soleqcritica = \(Solve[{\((der1 /. {V \
+\[Rule] V\_c, T \[Rule] T\_c})\) \[Equal] 
+              0, \((der2 /. {V \[Rule] V\_c, T \[Rule] T\_c})\) \[Equal] 
+              0}, {V\_c, T\_c}]\)[\([1]\)]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({T\_c \[Rule] \(8\ a\)\/\(27\ b\ R\), V\_c \[Rule] 3\ b}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(soleqcritica\)\(=\)\(Append[soleqcritica, 
+        p\_c -> \((p[V\_c, T\_c] /. soleqcritica)\)]\)\(\ \)\( (*\ 
+        Ponto\ Cr\[IAcute]tico\ *) \)\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({T\_c \[Rule] \(8\ a\)\/\(27\ b\ R\), V\_c \[Rule] 3\ b, 
+      p\_c \[Rule] a\/\(27\ b\^2\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(solcoef\)\(=\)\(Solve[{Tc == \(8\ \
+a\)\/\(27\ b\ R\), Vc == 3\ b, pc == a\/\(27\ b\^2\)}, {a, b, R}]\)\( (*\ 
+        Coef\ em\ termos\ das\ vari\[AAcute]veis\ cr\[IAcute]ticas\ *) \)\)\)\
+\)], "Input"],
+
+Cell[BoxData[
+    \({{a \[Rule] 3\ pc\ Vc\^2, R \[Rule] \(8\ pc\ Vc\)\/\(3\ Tc\), 
+        b \[Rule] Vc\/3}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(solT = Solve[der2 \[Equal] 0, T]\)], "Input"],
+
+Cell[BoxData[
+    \({{T \[Rule] \(-\(\(3\ a\ \((b - V)\)\^3\)\/\(R\ V\^4\)\)\)}}\)], \
+"Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(p[V, T] /. solcoef\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({\(8\ pc\ T\ Vc\)\/\(3\ Tc\ \((V - Vc\/3)\)\) - \(3\ pc\ Vc\^2\)\/V\^2}\
+\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(coef1 = \((1/
+              D[\((\(T /. solT\) /. pc \[Rule] p[Vc, Tc])\) /. solcoef // 
+                  Simplify, {V, 1}] /. {V \[Rule] Vc})\)[\([1, 
+          1]\)]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(2\ Vc\)\/Tc\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Vc + \(\(coef1\)\(*\)\((T - Tc)\)\(\ \)\( (*\ 
+          Expans\[ATilde]o\ do\ volume\ em\ torno\ de\ Tc\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(Vc + \(2\ \((T - Tc)\)\ Vc\)\/Tc\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(coef2 = 
+      D[p[V, T] /. solcoef, T] /. {T \[Rule] Tc, V \[Rule] Vc}\)], "Input"],
+
+Cell[BoxData[
+    \({\(4\ pc\)\/Tc}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(pc + \(\(coef2\)\(*\)\((T - Tc)\)\(\ \)\( (*\ 
+          Expans\[ATilde]o\ de\ p\ em\ torno\ de\ Tc\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(pc + \(4\ pc\ \((T - Tc)\)\)\/Tc\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(A\)\(=\)\(\((\(D[D[p[V, T], V], T] /. solcoef\) /. {V \[Rule] Vc, 
+              T \[Rule] Tc})\)[\([1]\)]\)\(\ \)\( (*\ 
+        Coef . \ A\ do\ Mario\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(6\ pc\)\/\(Tc\ Vc\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(B\)\(=\)\(\((\((\(D[p[V, T], {V, 3}] /. solcoef\) /. {V \[Rule] Vc, 
+                  T \[Rule] Tc})\)/6)\)[\([1]\)]\)\(\ \)\( (*\ 
+        Coef . \ B\ do\ Mario\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(3\ pc\)\/\(2\ Vc\^3\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(p[v_, T_] := \(R\ T\)\/\(v - b\) - a\/v\^2;\)\)], "Input"],
+
+Cell[BoxData[
+    \(der1 = D[p[V, T], V]; \  (*\ 
+      Equacoes\ do\ Ponto\ Cr\[IAcute]tico\ *) \[IndentingNewLine]der2 = 
+      D[p[V, T], {V, 2}];\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(soleqcritica = \(Solve[{\((der1 /. {V \
+\[Rule] V\_c, T \[Rule] T\_c})\) \[Equal] 
+              0, \((der2 /. {V \[Rule] V\_c, T \[Rule] T\_c})\) \[Equal] 
+              0}, {V\_c, T\_c}]\)[\([1]\)]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({T\_c \[Rule] \(8\ a\)\/\(27\ b\ R\), V\_c \[Rule] 3\ b}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(soleqcritica\)\(=\)\(Append[soleqcritica, 
+        p\_c -> \((p[V\_c, T\_c] /. soleqcritica)\)]\)\(\ \)\( (*\ 
+        Ponto\ Cr\[IAcute]tico\ *) \)\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({T\_c \[Rule] \(8\ a\)\/\(27\ b\ R\), V\_c \[Rule] 3\ b, 
+      p\_c \[Rule] a\/\(27\ b\^2\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(solcoef\)\(=\)\(Solve[{Tc == \(8\ \
+a\)\/\(27\ b\ R\), Vc == 3\ b, pc == a\/\(27\ b\^2\)}, {a, b, R}]\)\( (*\ 
+        Coef\ em\ termos\ das\ vari\[AAcute]veis\ cr\[IAcute]ticas\ *) \)\)\)\
+\)], "Input"],
+
+Cell[BoxData[
+    \({{a \[Rule] 3\ pc\ Vc\^2, R \[Rule] \(8\ pc\ Vc\)\/\(3\ Tc\), 
+        b \[Rule] Vc\/3}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(solT = Solve[der2 \[Equal] 0, T]\)], "Input"],
+
+Cell[BoxData[
+    \({{T \[Rule] \(-\(\(3\ a\ \((b - V)\)\^3\)\/\(R\ V\^4\)\)\)}}\)], \
+"Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(p[V, T] /. solcoef\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({\(8\ pc\ T\ Vc\)\/\(3\ Tc\ \((V - Vc\/3)\)\) - \(3\ pc\ Vc\^2\)\/V\^2}\
+\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(coef1 = \((1/
+              D[\((\(T /. solT\) /. pc \[Rule] p[Vc, Tc])\) /. solcoef // 
+                  Simplify, {V, 1}] /. {V \[Rule] Vc})\)[\([1, 
+          1]\)]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(2\ Vc\)\/Tc\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Vc + \(\(coef1\)\(*\)\((T - Tc)\)\(\ \)\( (*\ 
+          Expans\[ATilde]o\ do\ volume\ em\ torno\ de\ Tc\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(Vc + \(2\ \((T - Tc)\)\ Vc\)\/Tc\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(coef2 = 
+      D[p[V, T] /. solcoef, T] /. {T \[Rule] Tc, V \[Rule] Vc}\)], "Input"],
+
+Cell[BoxData[
+    \({\(4\ pc\)\/Tc}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(pc + \(\(coef2\)\(*\)\((T - Tc)\)\(\ \)\( (*\ 
+          Expans\[ATilde]o\ de\ p\ em\ torno\ de\ Tc\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(pc + \(4\ pc\ \((T - Tc)\)\)\/Tc\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(A\)\(=\)\(\((\(D[D[p[V, T], V], T] /. solcoef\) /. {V \[Rule] Vc, 
+              T \[Rule] Tc})\)[\([1]\)]\)\(\ \)\( (*\ 
+        Coef . \ A\ do\ Mario\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(6\ pc\)\/\(Tc\ Vc\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(B\)\(=\)\(\((\((\(D[p[V, T], {V, 3}] /. solcoef\) /. {V \[Rule] Vc, 
+                  T \[Rule] Tc})\)/6)\)[\([1]\)]\)\(\ \)\( (*\ 
+        Coef . \ B\ do\ Mario\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(3\ pc\)\/\(2\ Vc\^3\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\( (*\ 
+      Eq . \ de\ Berthelot\ *) \)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Solve[\((p + \(\(a\)\(\ \)\)\/\(V\^2\ T\))\) \
+\((V - b)\) == R\ T, p]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({{p \[Rule] \(\(-a\)\ b + a\ V - R\ T\^2\ V\^2\)\/\(T\ \((b - V)\)\ \
+V\^2\)}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(p[V_, 
+          T_] := \(\(-a\)\ b + a\ V - R\ T\^2\ V\^2\)\/\(T\ \((b - V)\)\ V\^2\
+\);\)\)], "Input"],
+
+Cell[BoxData[
+    \(der1 = D[p[V, T], V]; \  (*\ 
+      Equacoes\ do\ Ponto\ Cr\[IAcute]tico\ *) \[IndentingNewLine]der2 = 
+      D[p[V, T], {V, 2}];\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(soleqcritica = \(Solve[{\((der1 /. {V \
+\[Rule] V\_c, T \[Rule] T\_c})\) \[Equal] 
+                0, \((der2 /. {V \[Rule] V\_c, T \[Rule] T\_c})\) \[Equal] 
+                0}, {V\_c, T\_c}]\)[\([2]\)];\)\[IndentingNewLine]
+    \(\(soleqcritica\)\(=\)\(Simplify[
+        Append[soleqcritica, 
+          p\_c -> \((p[V\_c, T\_c] /. soleqcritica)\)]]\)\(\ \)\( (*\ 
+        Ponto\ Cr\[IAcute]tico\ *) \)\)\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({T\_c \[Rule] \(2\ \@\(2\/3\)\ \@a\)\/\(3\ \@b\ \@R\), 
+      V\_c \[Rule] 3\ b, 
+      p\_c \[Rule] \(\@a\ \@R\)\/\(6\ \@6\ b\^\(3/2\)\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(solcoef\)\(=\)\(Solve[{Tc == \(2\ \@\(2\/3\
+\)\ \@a\)\/\(3\ \@b\ \@R\), Vc == 3\ b, 
+          pc == \(\@a\ \@R\)\/\(6\ \@6\ b\^\(3/2\)\)}, {a, b, R}]\)\( (*\ 
+        Coef\ em\ termos\ das\ vari\[AAcute]veis\ cr\[IAcute]ticas\ *) \)\)\)\
+\)], "Input"],
+
+Cell[BoxData[
+    \({{a \[Rule] 3\ pc\ Tc\ Vc\^2, b \[Rule] Vc\/3, 
+        R \[Rule] \(8\ pc\ Vc\)\/\(3\ Tc\)}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(solT = \(Solve[der2 \[Equal] 0, T]\)[\([2]\)]\)], "Input"],
+
+Cell[BoxData[
+    \({T \[Rule] \(\@3\ \@\(\(-a\)\ b\^3 + 3\ a\ b\^2\ V - 3\ a\ b\ V\^2 + a\ \
+V\^3\)\)\/\(\@R\ V\^2\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(coef1 = \(PowerExpand[\((1/
+                D[\((\(T /. solT\) /. pc \[Rule] p[Vc, Tc])\) /. solcoef, 
+                  V] /. {V \[Rule] Vc})\)]\)[\([1]\)]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(4\ Vc\)\/Tc\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Vc + \(\(coef1\)\(*\)\((T - Tc)\)\(\ \)\( (*\ 
+          Expans\[ATilde]o\ do\ volume\ em\ torno\ de\ Tc\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(Vc + \(4\ \((T - Tc)\)\ Vc\)\/Tc\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(coef2 = 
+      D[p[V, T] /. solcoef, T] /. {T \[Rule] Tc, V \[Rule] Vc}\)], "Input"],
+
+Cell[BoxData[
+    \({\(7\ pc\)\/Tc}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(pc + \(\(coef2\)\(*\)\((T - Tc)\)\(\ \)\( (*\ 
+          Expans\[ATilde]o\ de\ p\ em\ torno\ de\ Tc\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \({pc + \(7\ pc\ \((T - Tc)\)\)\/Tc}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(A = \(\(\((\(D[D[p[V, T], V], T] /. solcoef\) /. {V \[Rule] Vc, 
+                T \[Rule] Tc})\)[\([1]\)]\)\(\ \)\(*\)\((T - Tc)\)\( (*\ 
+          Coef . \ A\ do\ Mario\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(12\ pc\ \((T - Tc)\)\)\/\(Tc\ Vc\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(B\)\(=\)\(\((\((\(D[p[V, T], {V, 3}] /. solcoef\) /. {V \[Rule] Vc, 
+                  T \[Rule] Tc})\)/6)\)[\([1]\)]\)\(\ \)\( (*\ 
+        Coef . \ B\ do\ Mario\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(3\ pc\)\/\(2\ Vc\^3\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\( (*Eq\ de\ Dieterici\ *) \)\(\[IndentingNewLine]\)\(\
+\[IndentingNewLine]\)\(Solve[
+      p \((V - b)\) == R\ T\ Exp[\(-a\)/\((R\ T\ V)\)], p]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({{p \[Rule] \(\[ExponentialE]\^\(-\(a\/\(R\ T\ V\)\)\)\ R\ \
+T\)\/\(\(-b\) + V\)}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(p[V_, 
+          T_] := \(-\(\(\[ExponentialE]\^\(-\(a\/\(R\ T\ V\)\)\)\ R\ T\)\/\(b \
+- V\)\)\);\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(der1 = D[p[V, T], V]\  (*\ 
+      Equacoes\ do\ Ponto\ Cr\[IAcute]tico\ *) \), "\[IndentingNewLine]", 
+    \(der2 = D[p[V, T], {V, 2}]\)}], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(\[ExponentialE]\^\(-\(a\/\(R\ T\ V\)\)\)\ R\ T\)\/\((b - V)\)\^2\
+\)\) - \(a\ \[ExponentialE]\^\(-\(a\/\(R\ T\ V\)\)\)\)\/\(\((b - V)\)\ V\^2\)\
+\)], "Output"],
+
+Cell[BoxData[
+    \(\(-\(\(2\ \[ExponentialE]\^\(-\(a\/\(R\ T\ V\)\)\)\ R\ T\)\/\((b - V)\)\
+\^3\)\) + \(R\ T\ \((\(-\(\(a\^2\ \[ExponentialE]\^\(-\(a\/\(R\ T\ \
+V\)\)\)\)\/\(R\^2\ T\^2\ V\^4\)\)\) + \(2\ a\ \[ExponentialE]\^\(-\(a\/\(R\ T\
+\ V\)\)\)\)\/\(R\ T\ V\^3\))\)\)\/\(b - V\) - \(2\ a\ \[ExponentialE]\^\(-\(a\
+\/\(R\ T\ V\)\)\)\)\/\(\((b - V)\)\^2\ V\^2\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(soleqcritica = \(Solve[{\((der1 /. {V \
+\[Rule] V\_c, T \[Rule] T\_c})\) \[Equal] 
+              0, \((der2 /. {V \[Rule] V\_c, T \[Rule] T\_c})\) \[Equal] 
+              0}, {V\_c, T\_c}]\)[\([1]\)]\[IndentingNewLine]
+    \(\(soleqcritica\)\(=\)\(Simplify[
+        Append[soleqcritica, 
+          p\_c -> \((p[V\_c, T\_c] /. soleqcritica)\)]]\)\(\ \)\( (*\ 
+        Ponto\ Cr\[IAcute]tico\ *) \)\)\)\)\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Solve::"ifun"\), \(\(:\)\(\ \)\), "\<\"Inverse functions are \
+being used by \\!\\(Solve\\), so some solutions may not be found; use Reduce \
+for complete solution information. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"Solve::ifun\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \({T\_c \[Rule] a\/\(4\ b\ R\), V\_c \[Rule] 2\ b}\)], "Output"],
+
+Cell[BoxData[
+    \({T\_c \[Rule] a\/\(4\ b\ R\), V\_c \[Rule] 2\ b, 
+      p\_c \[Rule] a\/\(4\ b\^2\ \[ExponentialE]\^2\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(solcoef\)\(=\)\(Solve[{Tc == 
+            a\/\(4\ b\ R\), Vc \[Equal] 2\ b, 
+          pc == a\/\(4\ b\^2\ \[ExponentialE]\^2\)}, {a, b, R}]\)\( (*\ 
+        Coef\ em\ termos\ das\ vari\[AAcute]veis\ cr\[IAcute]ticas\ *) \)\)\)\
+\)], "Input"],
+
+Cell[BoxData[
+    \({{a \[Rule] \[ExponentialE]\^2\ pc\ Vc\^2, 
+        R \[Rule] \(\[ExponentialE]\^2\ pc\ Vc\)\/\(2\ Tc\), 
+        b \[Rule] Vc\/2}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(p[V, T] /. {a \[Rule] \[ExponentialE]\^2\ pc\ Vc\^2, 
+        R \[Rule] \(\[ExponentialE]\^2\ pc\ Vc\)\/\(2\ Tc\), 
+        b \[Rule] Vc\/2}\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(\[ExponentialE]\^\(2 - \(2\ Tc\ Vc\)\/\(T\ V\)\)\ pc\ T\ \
+Vc\)\/\(2\ Tc\ \((\(-V\) + Vc\/2)\)\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(p[V, 
+        T] /. {a \[Rule] \[ExponentialE]\^2\ pc\ Vc\^2, 
+        R \[Rule] \(\[ExponentialE]\^2\ pc\ Vc\)\/\(2\ Tc\), 
+        b \[Rule] Vc\/2}\)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(solT = \(Solve[der2 \[Equal] 0, T]\)[\([2]\)]\)], "Input"],
+
+Cell[BoxData[
+    \({T \[Rule] \(2\ a\ b\^2\ R\ V - 6\ a\ b\ R\ V\^2 + 4\ a\ R\ V\^3 + \@\(\
+\(-8\)\ R\^2\ V\^4\ \((a\^2\ b\^2 - 2\ a\^2\ b\ V + a\^2\ V\^2)\) + \((\(-2\)\
+\ a\ b\^2\ R\ V + 6\ a\ b\ R\ V\^2 - 4\ a\ R\ V\^3)\)\^2\)\)\/\(4\ R\^2\ V\^4\
+\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(coef1 = \(PowerExpand[\((1/
+                D[\((\(T /. solT\) /. pc \[Rule] p[Vc, Tc])\) /. solcoef, 
+                  V] /. {V \[Rule] Vc})\)]\)[\([1]\)]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(Vc\/Tc\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Vc + \(\(coef1\)\(*\)\((T - Tc)\)\(\ \)\( (*\ 
+          Expans\[ATilde]o\ do\ volume\ em\ torno\ de\ Tc\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(Vc + \(\((T - Tc)\)\ Vc\)\/Tc\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(coef2 = 
+      D[p[V, T] /. solcoef, T] /. {T \[Rule] Tc, V \[Rule] Vc}\)], "Input"],
+
+Cell[BoxData[
+    \({\(3\ pc\)\/Tc}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(pc + \(\(coef2\)\(*\)\((T - Tc)\)\(\ \)\( (*\ 
+          Expans\[ATilde]o\ de\ p\ em\ torno\ de\ Tc\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \({pc + \(3\ pc\ \((T - Tc)\)\)\/Tc}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(A = \(\(\((\(D[D[p[V, T], V], T] /. solcoef\) /. {V \[Rule] Vc, 
+                T \[Rule] Tc})\)[\([1]\)]\)\(\ \)\(*\)\((T - Tc)\)\( (*\ 
+          Coef . \ A\ do\ Mario\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(2\ pc\ \((T - Tc)\)\)\/\(Tc\ Vc\)\)\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(B\)\(=\)\(\((\((\(D[p[V, T], {V, 3}] /. solcoef\) /. {V \[Rule] Vc, 
+                  T \[Rule] Tc})\)/6)\)[\([1]\)]\)\(\ \)\( (*\ 
+        Coef . \ B\ do\ Mario\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(\(2\ pc\)\/\(3\ Vc\^3\)\)\)\)], "Output"]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 1280}, {0, 800}},
+WindowSize->{1269, 714},
+WindowMargins->{{0, Automatic}, {Automatic, 26}},
+ShowSelection->True
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 159, 3, 78, "Input"],
+Cell[1916, 56, 80, 1, 58, "Input"],
+Cell[1999, 59, 162, 3, 55, "Input"],
+
+Cell[CellGroupData[{
+Cell[2186, 66, 263, 4, 55, "Input"],
+Cell[2452, 72, 90, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2579, 78, 214, 3, 55, "Input"],
+Cell[2796, 83, 127, 2, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2960, 90, 252, 4, 85, "Input"],
+Cell[3215, 96, 122, 2, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3374, 103, 65, 1, 32, "Input"],
+Cell[3442, 106, 96, 2, 55, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3575, 113, 82, 1, 55, "Input"],
+Cell[3660, 116, 107, 2, 63, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3804, 123, 232, 4, 55, "Input"],
+Cell[4039, 129, 47, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4123, 135, 146, 2, 32, "Input"],
+Cell[4272, 139, 66, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4375, 145, 104, 2, 32, "Input"],
+Cell[4482, 149, 49, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4568, 155, 141, 2, 32, "Input"],
+Cell[4712, 159, 66, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4815, 165, 197, 3, 32, "Input"],
+Cell[5015, 170, 64, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5116, 176, 208, 3, 32, "Input"],
+Cell[5327, 181, 66, 1, 52, "Output"]
+}, Open  ]],
+Cell[5408, 185, 80, 1, 58, "Input"],
+Cell[5491, 188, 162, 3, 55, "Input"],
+
+Cell[CellGroupData[{
+Cell[5678, 195, 263, 4, 55, "Input"],
+Cell[5944, 201, 90, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6071, 207, 214, 3, 55, "Input"],
+Cell[6288, 212, 127, 2, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6452, 219, 252, 4, 85, "Input"],
+Cell[6707, 225, 122, 2, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6866, 232, 65, 1, 32, "Input"],
+Cell[6934, 235, 96, 2, 55, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7067, 242, 82, 1, 55, "Input"],
+Cell[7152, 245, 107, 2, 63, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7296, 252, 232, 4, 55, "Input"],
+Cell[7531, 258, 47, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7615, 264, 146, 2, 32, "Input"],
+Cell[7764, 268, 66, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7867, 274, 104, 2, 32, "Input"],
+Cell[7974, 278, 49, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8060, 284, 141, 2, 32, "Input"],
+Cell[8204, 288, 66, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8307, 294, 197, 3, 32, "Input"],
+Cell[8507, 299, 64, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8608, 305, 208, 3, 32, "Input"],
+Cell[8819, 310, 66, 1, 52, "Output"]
+}, Open  ]],
+Cell[8900, 314, 101, 2, 55, "Input"],
+
+Cell[CellGroupData[{
+Cell[9026, 320, 134, 2, 81, "Input"],
+Cell[9163, 324, 112, 2, 58, "Output"]
+}, Open  ]],
+Cell[9290, 329, 126, 3, 67, "Input"],
+Cell[9419, 334, 162, 3, 55, "Input"],
+
+Cell[CellGroupData[{
+Cell[9606, 341, 471, 8, 78, "Input"],
+Cell[10080, 351, 172, 3, 71, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[10289, 359, 301, 5, 165, "Input"],
+Cell[10593, 366, 126, 2, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[10756, 373, 78, 1, 32, "Input"],
+Cell[10837, 376, 132, 2, 65, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11006, 383, 220, 3, 55, "Input"],
+Cell[11229, 388, 47, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11313, 394, 146, 2, 32, "Input"],
+Cell[11462, 398, 66, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11565, 404, 104, 2, 32, "Input"],
+Cell[11672, 408, 49, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11758, 414, 141, 2, 32, "Input"],
+Cell[11902, 418, 68, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12007, 424, 212, 3, 32, "Input"],
+Cell[12222, 429, 79, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12338, 435, 208, 3, 32, "Input"],
+Cell[12549, 440, 66, 1, 52, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12652, 446, 183, 3, 78, "Input"],
+Cell[12838, 451, 116, 2, 56, "Output"]
+}, Open  ]],
+Cell[12969, 456, 134, 3, 64, "Input"],
+
+Cell[CellGroupData[{
+Cell[13128, 463, 169, 3, 55, "Input"],
+Cell[13300, 468, 186, 3, 61, "Output"],
+Cell[13489, 473, 379, 5, 73, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13905, 483, 462, 8, 78, "Input"],
+Cell[14370, 493, 368, 6, 20, "Message"],
+Cell[14741, 501, 82, 1, 47, "Output"],
+Cell[14826, 504, 138, 2, 47, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[15001, 511, 291, 5, 81, "Input"],
+Cell[15295, 518, 165, 3, 55, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[15497, 526, 173, 3, 64, "Input"],
+Cell[15673, 531, 141, 2, 66, "Output"]
+}, Open  ]],
+Cell[15829, 536, 213, 4, 90, "Input"],
+
+Cell[CellGroupData[{
+Cell[16067, 544, 78, 1, 32, "Input"],
+Cell[16148, 547, 268, 4, 64, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[16453, 556, 220, 3, 55, "Input"],
+Cell[16676, 561, 40, 1, 50, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[16753, 567, 146, 2, 32, "Input"],
+Cell[16902, 571, 63, 1, 50, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[17002, 577, 104, 2, 32, "Input"],
+Cell[17109, 581, 49, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[17195, 587, 141, 2, 32, "Input"],
+Cell[17339, 591, 68, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[17444, 597, 212, 3, 32, "Input"],
+Cell[17659, 602, 78, 1, 51, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[17774, 608, 208, 3, 32, "Input"],
+Cell[17985, 613, 66, 1, 52, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

@@ -1,0 +1,662 @@
+\documentclass[11pt]{beamer}
+
+\usetheme{Darmstadt}
+
+\usepackage{times}
+\usefonttheme{structurebold}
+
+\usepackage[brazilian]{babel}
+\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
+\usepackage{amsmath,amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\usetikzlibrary{arrows.meta, positioning, calc}
+\setbeamercovered{dynamic}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Linguagem Assembly e Aplicações em Visão Computacional}
+\author{Curso de Engenharia Elétrica}
+\institute[UNESP]{Departamento de Engenharia Elétrica}
+\date{\today}
+
+\AtBeginSection[]{\frame{\frametitle{Conteúdo}\tableofcontents[current]}}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\section{Introdução à Linguagem Assembly}
+
+\begin{frame}
+\frametitle{Introdução à Linguagem Assembly}
+
+A Linguagem Assembly (ou Linguagem de Montagem) é uma linguagem de programação de baixo nível que representa uma forma intermediária entre a linguagem de máquina (código binário) e as linguagens de alto nível (como C, Python, Java). Cada instrução em Assembly geralmente corresponde a uma única instrução de máquina, oferecendo controle direto sobre o hardware do computador.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Características Principais}
+
+\begin{itemize}
+    \item \textbf{Proximidade ao hardware}: Permite acesso direto aos registradores do processador, memória e dispositivos de entrada/saída.
+    \item \textbf{Eficiência}: Programas em Assembly podem ser extremamente eficientes quando bem otimizados.
+    \item \textbf{Especificidade}: Cada família de processadores possui seu próprio conjunto de instruções Assembly.
+    \item \textbf{Controle preciso}: Permite controle bit a bit e ciclo a ciclo da execução.
+    \item \textbf{Complexidade}: Requer conhecimento detalhado da arquitetura do processador.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Relevância para Engenheiros Elétricos}
+
+Para estudantes de Engenharia Elétrica, a linguagem Assembly é particularmente relevante pelos seguintes motivos:
+
+\begin{itemize}
+    \item Desenvolvimento de sistemas embarcados e microcontroladores
+    \item Programação de FPGAs e ASICs
+    \item Otimização de algoritmos críticos em termos de desempenho
+    \item Desenvolvimento de drivers de dispositivos
+    \item Compreensão profunda da interface hardware-software
+    \item Implementação de algoritmos de processamento de sinais em tempo real
+\end{itemize}
+
+\end{frame}
+
+\section{Fundamentos da Linguagem Assembly}
+
+\begin{frame}
+\frametitle{Componentes Básicos}
+
+\begin{itemize}
+    \item \textbf{Registradores}: Pequenas unidades de memória dentro do processador
+    \item \textbf{Instruções}: Comandos que o processador pode executar
+    \item \textbf{Operandos}: Dados ou endereços manipulados pelas instruções
+    \item \textbf{Diretivas}: Comandos para o montador (assembler), não geram código de máquina
+    \item \textbf{Rótulos (Labels)}: Identificadores para posições na memória
+    \item \textbf{Comentários}: Anotações no código para documentação
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Tipos de Instruções}
+
+\begin{itemize}
+    \item \textbf{Transferência de dados}: MOV, LOAD, STORE
+    \item \textbf{Operações aritméticas}: ADD, SUB, MUL, DIV
+    \item \textbf{Operações lógicas}: AND, OR, XOR, NOT
+    \item \textbf{Controle de fluxo}: JMP, CALL, RET, CMP
+    \item \textbf{Manipulação de bits}: SHL, SHR, ROL, ROR
+    \item \textbf{Entrada/Saída}: IN, OUT
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Exemplo de Código Assembly (x86)}
+
+\begin{lstlisting}[language={[x86masm]Assembler}, basicstyle=\tiny]
+section .data
+    num1 dd 10      ; Primeiro numero (32 bits)
+    num2 dd 20      ; Segundo numero (32 bits)
+    resultado dd 0  ; Variavel para armazenar o resultado
+
+section .text
+    global _start
+
+_start:
+    mov eax, [num1]     ; Carrega o primeiro numero em EAX
+    add eax, [num2]     ; Adiciona o segundo numero a EAX
+    mov [resultado], eax ; Armazena o resultado
+    
+    ; Codigo para finalizar o programa
+    mov eax, 1          ; Syscall para exit
+    xor ebx, ebx        ; Codigo de retorno 0
+    int 0x80            ; Interrupcao do sistema
+\end{lstlisting}
+
+\end{frame}
+
+\section{Assembly em Sistemas Embarcados}
+
+\begin{frame}
+\frametitle{Assembly em Sistemas Embarcados}
+
+Os engenheiros elétricos frequentemente trabalham com sistemas embarcados, onde a programação em Assembly oferece vantagens significativas:
+
+\begin{itemize}
+    \item \textbf{AVR}: Utilizado em placas Arduino
+    \item \textbf{PIC}: Fabricados pela Microchip
+    \item \textbf{ARM}: Amplamente utilizado em dispositivos móveis e sistemas embarcados
+    \item \textbf{ESP32/ESP8266}: Para aplicações IoT
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Exemplo de Código para ARM}
+
+\begin{lstlisting}[language={[x86masm]Assembler}, basicstyle=\tiny]
+.global _start
+
+_start:
+    LDR R0, =0x20200000  @ Endereco base do GPIO
+    MOV R1, #1           @ Valor para configurar o pino como saida
+    LSL R1, #18          @ Deslocar para a posicao correta
+    STR R1, [R0, #4]     @ Configurar o pino 6 como saida
+
+loop:
+    MOV R1, #1           @ Valor para ligar o LED
+    LSL R1, #6           @ Deslocar para o pino 6
+    STR R1, [R0, #28]    @ Ligar o LED
+
+    @ Delay
+    LDR R2, =0x3F0000
+delay1:
+    SUBS R2, R2, #1
+    BNE delay1
+
+    MOV R1, #1           @ Valor para desligar o LED
+    LSL R1, #6           @ Deslocar para o pino 6
+    STR R1, [R0, #40]    @ Desligar o LED
+
+    @ Delay
+    LDR R2, =0x3F0000
+delay2:
+    SUBS R2, R2, #1
+    BNE delay2
+
+    B loop               @ Voltar ao inicio do loop
+\end{lstlisting}
+
+\end{frame}
+
+\section{Visão Computacional e Assembly}
+
+\begin{frame}
+\frametitle{Por que Assembly em Visão Computacional?}
+
+A visão computacional é uma área que demanda alto desempenho computacional, especialmente em aplicações de tempo real. O uso de Assembly neste contexto oferece:
+
+\begin{itemize}
+    \item \textbf{Processamento em tempo real}: Crucial para aplicações como sistemas de assistência ao motorista, robótica e automação industrial.
+    \item \textbf{Otimização de algoritmos críticos}: Partes específicas de algoritmos de processamento de imagem podem ser otimizadas.
+    \item \textbf{Acesso a instruções SIMD}: Instruções de processamento paralelo como SSE, AVX e NEON.
+    \item \textbf{Controle preciso de memória}: Importante para manipulação eficiente de grandes volumes de dados de imagem.
+    \item \textbf{Implementação em hardware limitado}: Sistemas embarcados com restrições de recursos.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Instruções SIMD para Processamento de Imagens}
+
+As instruções SIMD (Single Instruction, Multiple Data) permitem processar múltiplos pixels simultaneamente, acelerando significativamente operações de processamento de imagem:
+
+\begin{itemize}
+    \item \textbf{x86}: MMX, SSE, AVX
+    \item \textbf{ARM}: NEON
+    \item \textbf{MIPS}: MDMX, MSA
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Exemplo: Conversão de RGB para Escala de Cinza com SSE}
+
+\begin{lstlisting}[language={[x86masm]Assembler}, basicstyle=\tiny]
+; Funcao para converter uma linha de pixels RGB para escala de cinza
+; void rgb_to_gray_sse(unsigned char *src, unsigned char *dst, int width);
+; src - ponteiro para os dados RGB (formato RGBRGBRGB...)
+; dst - ponteiro para o buffer de destino em escala de cinza
+; width - largura da imagem em pixels
+
+global rgb_to_gray_sse
+section .text
+
+rgb_to_gray_sse:
+    push ebp
+    mov ebp, esp
+    push ebx
+    
+    mov eax, [ebp+8]     ; src
+    mov ebx, [ebp+12]    ; dst
+    mov ecx, [ebp+16]    ; width
+    
+    ; Coeficientes para conversao RGB->Gray (formato ponto fixo)
+    ; Y = 0.299*R + 0.587*G + 0.114*B
+    movdqa xmm7, [r_coef] ; 0.299 em formato de ponto fixo
+    movdqa xmm6, [g_coef] ; 0.587 em formato de ponto fixo
+    movdqa xmm5, [b_coef] ; 0.114 em formato de ponto fixo
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Exemplo: Conversão de RGB para Escala de Cinza com SSE (cont.)}
+
+\begin{lstlisting}[language={[x86masm]Assembler}, basicstyle=\tiny]    
+process_loop:
+    cmp ecx, 4           ; Processar 4 pixels por vez
+    jl remaining
+    
+    ; Carregar 4 pixels (12 bytes)
+    movdqu xmm0, [eax]   ; Carregar RGBRGBRGBRGB
+    
+    ; Separar componentes R, G, B
+    movdqa xmm1, xmm0
+    movdqa xmm2, xmm0
+    movdqa xmm3, xmm0
+    
+    ; Mascara para extrair componentes
+    pand xmm1, [r_mask]  ; Extrair componente R
+    pand xmm2, [g_mask]  ; Extrair componente G
+    pand xmm3, [b_mask]  ; Extrair componente B
+    
+    ; Deslocar G e B para a posicao correta
+    psrld xmm2, 8        ; Deslocar G
+    psrld xmm3, 16       ; Deslocar B
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Exemplo: Conversão de RGB para Escala de Cinza com SSE (cont.)}
+
+\begin{lstlisting}[language={[x86masm]Assembler}, basicstyle=\tiny]    
+    ; Multiplicar pelos coeficientes
+    pmulld xmm1, xmm7    ; R * 0.299
+    pmulld xmm2, xmm6    ; G * 0.587
+    pmulld xmm3, xmm5    ; B * 0.114
+    
+    ; Somar os componentes
+    paddd xmm1, xmm2
+    paddd xmm1, xmm3
+    
+    ; Deslocar para obter o valor final (remover parte fracionaria)
+    psrld xmm1, 16
+    
+    ; Empacotar os resultados
+    packusdw xmm1, xmm1  ; Empacotar para words
+    packuswb xmm1, xmm1  ; Empacotar para bytes
+    
+    ; Armazenar os 4 pixels resultantes
+    movd [ebx], xmm1
+    
+    ; Atualizar ponteiros e contador
+    add eax, 12          ; 3 bytes por pixel * 4 pixels
+    add ebx, 4           ; 1 byte por pixel * 4 pixels
+    sub ecx, 4
+    jmp process_loop
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Exemplo: Conversão de RGB para Escala de Cinza com SSE (cont.)}
+
+\begin{lstlisting}[language={[x86masm]Assembler}, basicstyle=\tiny]    
+remaining:
+    ; Processar pixels restantes (menos de 4)
+    test ecx, ecx
+    jz done
+    
+    ; Processar um pixel por vez
+single_pixel:
+    movzx edx, byte [eax]    ; R
+    imul edx, 299
+    movzx esi, byte [eax+1]  ; G
+    imul esi, 587
+    add edx, esi
+    movzx esi, byte [eax+2]  ; B
+    imul esi, 114
+    add edx, esi
+    
+    ; Dividir por 1000 e armazenar
+    add edx, 500             ; Arredondar
+    shr edx, 10              ; Dividir por 1000 (aproximadamente)
+    mov [ebx], dl
+    
+    ; Atualizar ponteiros
+    add eax, 3
+    inc ebx
+    dec ecx
+    jnz single_pixel
+    
+done:
+    pop ebx
+    pop ebp
+    ret
+
+section .data
+align 16
+r_coef: dd 0x00004C8B, 0x00004C8B, 0x00004C8B, 0x00004C8B ; 0.299 * 65536
+g_coef: dd 0x00009646, 0x00009646, 0x00009646, 0x00009646 ; 0.587 * 65536
+b_coef: dd 0x00001D2F, 0x00001D2F, 0x00001D2F, 0x00001D2F ; 0.114 * 65536
+r_mask: dd 0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF
+g_mask: dd 0x0000FF00, 0x0000FF00, 0x0000FF00, 0x0000FF00
+b_mask: dd 0x00FF0000, 0x00FF0000, 0x00FF0000, 0x00FF0000
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Aplicações Práticas em Visão Computacional}
+
+\begin{itemize}
+    \item \textbf{Filtros de imagem}: Implementação otimizada de filtros como Sobel, Gaussian, etc.
+    \item \textbf{Detecção de bordas}: Algoritmos como Canny podem ter partes críticas implementadas em Assembly.
+    \item \textbf{Transformações geométricas}: Rotação, escala, translação de imagens.
+    \item \textbf{Compressão/descompressão de imagens}: Partes do JPEG, PNG, etc.
+    \item \textbf{Reconhecimento de padrões}: Aceleração de algoritmos como SIFT, SURF, ORB.
+    \item \textbf{Processamento de vídeo em tempo real}: Detecção de movimento, rastreamento de objetos.
+\end{itemize}
+
+\end{frame}
+
+\section{Sistemas de Visão Embarcados}
+
+\begin{frame}
+\frametitle{Sistemas de Visão Embarcados}
+
+Os sistemas de visão embarcados são cada vez mais comuns em aplicações como:
+
+\begin{itemize}
+    \item \textbf{Sistemas avançados de assistência ao motorista (ADAS)}
+    \item \textbf{Robôs autônomos e drones}
+    \item \textbf{Sistemas de inspeção industrial}
+    \item \textbf{Dispositivos médicos de imagem}
+    \item \textbf{Câmeras de segurança inteligentes}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Uso de Assembly em Sistemas Embarcados}
+
+Nesses sistemas, o Assembly é frequentemente utilizado para:
+
+\begin{itemize}
+    \item \textbf{Rotinas de processamento críticas}: Partes do código que precisam ser extremamente eficientes
+    \item \textbf{Drivers de câmera}: Controle direto do hardware de aquisição de imagem
+    \item \textbf{Processamento em tempo real}: Garantir que o processamento ocorra dentro de restrições temporais rígidas
+    \item \textbf{Otimização para hardware específico}: Aproveitar características únicas do processador ou DSP
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Arquitetura de Sistema de Detecção de Objetos}
+
+\begin{center}
+\begin{tikzpicture}[node distance=1.5cm, auto]
+    \node[draw, rectangle, minimum width=3cm, minimum height=1cm] (camera) {Camera};
+    \node[draw, rectangle, minimum width=3cm, minimum height=1cm, below of=camera] (preproc) {Pre-processamento (Assembly)};
+    \node[draw, rectangle, minimum width=3cm, minimum height=1cm, below of=preproc] (feature) {Extracao de Caracteristicas};
+    \node[draw, rectangle, minimum width=3cm, minimum height=1cm, below of=feature] (classify) {Classificacao};
+    \node[draw, rectangle, minimum width=3cm, minimum height=1cm, below of=classify] (output) {Saida/Atuacao};
+    
+    \draw[->] (camera) -- (preproc);
+    \draw[->] (preproc) -- (feature);
+    \draw[->] (feature) -- (classify);
+    \draw[->] (classify) -- (output);
+    
+    \node[right of=preproc, xshift=2cm] (asm) {Otimizado em Assembly};
+    \node[below of=asm, yshift=1.5cm] (asm1) {- Conversao de cores};
+    \node[below of=asm1, yshift=1.8cm] (asm2) {- Filtragem de ruido};
+    \node[below of=asm2, yshift=1.8cm] (asm3) {- Deteccao de bordas};
+    \draw[dashed] (preproc) -- (asm);
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+\section{Integração com Frameworks}
+
+\begin{frame}
+\frametitle{Integração com Frameworks de Alto Nível}
+
+Embora o Assembly seja poderoso para otimizações específicas, na prática, ele é frequentemente usado em conjunto com frameworks de alto nível:
+
+\begin{itemize}
+    \item \textbf{OpenCV}: Biblioteca de visão computacional de código aberto
+    \item \textbf{TensorFlow/PyTorch}: Para aplicações de aprendizado profundo
+    \item \textbf{Bibliotecas específicas para sistemas embarcados}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Abordagem Híbrida}
+
+A abordagem mais comum é usar uma combinação de linguagens:
+
+\begin{itemize}
+    \item \textbf{C/C++}: Para a estrutura geral do programa e algoritmos complexos
+    \item \textbf{Assembly}: Para otimizar funções críticas de desempenho
+    \item \textbf{Python/MATLAB}: Para prototipagem e desenvolvimento inicial
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Arquitetura Híbrida}
+
+\begin{center}
+\begin{tikzpicture}[node distance=1.2cm]
+    \node[draw, rectangle, minimum width=8cm, minimum height=0.8cm] (python) {Python/MATLAB (Prototipagem)};
+    \node[draw, rectangle, minimum width=8cm, minimum height=0.8cm, below of=python] (cpp) {C/C++ (Implementação Principal)};
+    \node[draw, rectangle, minimum width=2.5cm, minimum height=0.8cm, below of=cpp, xshift=-2.5cm] (asm1) {Assembly (Filtros)};
+    \node[draw, rectangle, minimum width=2.5cm, minimum height=0.8cm, below of=cpp] (asm2) {Assembly (Conversão)};
+    \node[draw, rectangle, minimum width=2.5cm, minimum height=0.8cm, below of=cpp, xshift=2.5cm] (asm3) {Assembly (Detecção)};
+    \node[draw, rectangle, minimum width=8cm, minimum height=0.8cm, below of=asm2, yshift=-0.4cm] (hw) {Hardware (Processador/DSP/GPU)};
+    
+    \draw[->] (python) -- (cpp);
+    \draw[->] (cpp) -- (asm1);
+    \draw[->] (cpp) -- (asm2);
+    \draw[->] (cpp) -- (asm3);
+    \draw[->] (asm1) -- (hw);
+    \draw[->] (asm2) -- (hw);
+    \draw[->] (asm3) -- (hw);
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Exemplo: Função em Assembly Chamada de C++}
+
+\begin{lstlisting}[language=C++, basicstyle=\tiny]
+// Declaracao da funcao Assembly externa
+extern "C" {
+    void sobel_edge_asm(unsigned char *src, unsigned char *dst, int width, int height);
+}
+
+// Funcao C++ que utiliza a implementacao em Assembly
+void detectEdges(cv::Mat& input, cv::Mat& output) {
+    // Verificar se a imagem esta em escala de cinza
+    if (input.channels() > 1) {
+        cv::cvtColor(input, input, cv::COLOR_BGR2GRAY);
+    }
+    
+    // Garantir que a imagem de saida tenha o formato correto
+    output.create(input.rows, input.cols, CV_8UC1);
+    
+    // Chamar a funcao Assembly otimizada
+    sobel_edge_asm(input.data, output.data, input.cols, input.rows);
+    
+    // Pos-processamento adicional, se necessario
+    // cv::threshold(output, output, 50, 255, cv::THRESH_BINARY);
+}
+\end{lstlisting}
+
+\end{frame}
+
+\section{Considerações de Desempenho}
+
+\begin{frame}
+\frametitle{Gargalos de Desempenho}
+
+Ao otimizar algoritmos de visão computacional em Assembly, é importante considerar:
+
+\begin{itemize}
+    \item \textbf{Acesso à memória}: Frequentemente o principal gargalo em processamento de imagens
+    \item \textbf{Dependências de dados}: Podem limitar o paralelismo
+    \item \textbf{Ramificações condicionais}: Podem causar falhas de previsão de desvio
+    \item \textbf{Alinhamento de dados}: Crucial para instruções SIMD
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Técnicas de Otimização}
+
+\begin{itemize}
+    \item \textbf{Desenrolamento de loops}: Reduz a sobrecarga de controle de loop
+    \item \textbf{Pré-busca de dados}: Minimiza as penalidades de cache miss
+    \item \textbf{Vetorização}: Uso eficiente de instruções SIMD
+    \item \textbf{Alinhamento de memória}: Garante acesso eficiente aos dados
+    \item \textbf{Redução de ramificações}: Uso de instruções condicionais sem desvio
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Comparação de Desempenho}
+
+\begin{center}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Operação} & \textbf{C/C++} & \textbf{Assembly} & \textbf{Ganho} \\
+\hline
+Conversão RGB para Cinza & 100\% & 20-30\% & 3-5x \\
+\hline
+Filtro Gaussiano 3x3 & 100\% & 25-40\% & 2.5-4x \\
+\hline
+Detecção de Bordas Sobel & 100\% & 30-45\% & 2-3x \\
+\hline
+Limiarização & 100\% & 10-20\% & 5-10x \\
+\hline
+\end{tabular}
+\end{center}
+
+\small{Tempos de execução relativos (menor é melhor)}
+
+\end{frame}
+
+\section{Conclusão}
+
+\begin{frame}
+\frametitle{Conclusão}
+
+A linguagem Assembly continua sendo uma ferramenta valiosa para engenheiros elétricos que trabalham com visão computacional, especialmente em sistemas embarcados e aplicações de tempo real.
+
+\begin{itemize}
+    \item Assembly oferece controle preciso sobre o hardware, permitindo otimizações que não são possíveis em linguagens de alto nível
+    \item As instruções SIMD são particularmente valiosas para processamento de imagens, permitindo operações paralelas em múltiplos pixels
+    \item Uma abordagem híbrida, combinando Assembly com linguagens de alto nível, geralmente oferece o melhor equilíbrio entre produtividade e desempenho
+    \item O conhecimento de Assembly proporciona uma compreensão mais profunda da interface hardware-software, beneficiando engenheiros elétricos em diversas áreas
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercícios Propostos}
+
+\begin{enumerate}
+    \item Implemente um filtro de média 3x3 em Assembly x86 com instruções SSE.
+    \item Otimize o algoritmo de detecção de bordas Sobel apresentado, utilizando instruções AVX.
+    \item Desenvolva uma rotina em Assembly para controlar um sensor de imagem via interface SPI.
+    \item Compare o desempenho de uma implementação de limiarização adaptativa em C++ e em Assembly.
+    \item Projete um sistema embarcado simples que capture imagens de uma câmera, aplique um filtro de detecção de bordas em Assembly e exiba o resultado.
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Referências}
+
+\begin{thebibliography}{9}
+\setbeamertemplate{bibliography item}[text]
+
+\bibitem{intel}
+Intel Corporation, 
+\textit{Intel® 64 and IA-32 Architectures Software Developer's Manual}, 
+2021.
+
+\bibitem{arm}
+ARM Limited, 
+\textit{ARM® Architecture Reference Manual ARMv8, for ARMv8-A architecture profile}, 
+2020.
+
+\bibitem{opencv}
+Bradski, G., 
+\textit{The OpenCV Library}, 
+Dr. Dobb's Journal of Software Tools, 
+2000.
+
+\bibitem{simd}
+Lomont, C., 
+\textit{Introduction to Intel Advanced Vector Extensions}, 
+Intel White Paper, 
+2011.
+
+\end{thebibliography}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Referências (cont.)}
+
+\begin{thebibliography}{9}
+\setbeamertemplate{bibliography item}[text]
+
+\bibitem{embedded}
+Yiu, J., 
+\textit{The Definitive Guide to ARM® Cortex®-M3 and Cortex®-M4 Processors}, 
+Newnes, 
+2013.
+
+\bibitem{vision}
+Szeliski, R., 
+\textit{Computer Vision: Algorithms and Applications}, 
+Springer, 
+2010.
+
+\end{thebibliography}
+
+\end{frame}
+
+\end{document}

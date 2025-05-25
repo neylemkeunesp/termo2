@@ -1,0 +1,2368 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     82702,       2121]*)
+(*NotebookOutlinePosition[     83515,       2150]*)
+(*  CellTagsIndexPosition[     83426,       2144]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\( (*\ Sudoku\ *) \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(Conta[lis_] := 
+        Table[{i, Count[Flatten[lis], i]}, {i, 1, 9}];\)\n
+    \(Coluna[Inicial_]\)[col_] := 
+      Flatten[Table[
+          Inicial[\([\)\(i, Ceiling[\((col)\)/3], j, 
+            1 + Mod[col - 1, 3]\)\(]\)], {i, 1, 3}, {j, 1, 3}]]; \n
+    \(Linha[Inicial_]\)[col_] := 
+      Flatten[Inicial[\([\)\(Ceiling[\((col)\)/3], {1, 2, 3}, 
+          1 + Mod[col - 1, 3]\)\(]\)]]; \n
+    Testa[lis_] := 
+      If[Count[Conta[lis], {_, x_ /; x > 1}] > 0, True, False]; \n
+    \(estaErrado[Sol_] := 
+        Module[{Inicial}, \[IndentingNewLine]Inicial = 
+            Map[If[Length[#] > 1, X, #] &, 
+              Sol, {4}]; \[IndentingNewLine]\((Or\  @@ \ 
+                Table[Testa[\(Coluna[Inicial]\)[i]], {i, 1, 
+                    9}])\)\  || \ \((Or\  @@ \ 
+                Table[Testa[\(Linha[Inicial]\)[i]], {i, 1, 9}])\)\  || \ 
+            Or\  @@ \ Flatten[
+                Table[Testa[Inicial[\([\)\(1, 1\)\(]\)]], {i, 1, 3}, {j, 1, 
+                    3}]]];\)\n
+    \(liscomp = Table[i, {i, 1, 9}];\)\n
+    CortaPoss[lis_] := Select[lis, Length[#] > 1 &]\[IndentingNewLine]
+    \(\(Possiveis[Inicial_]\)[i_, j_, k_, l_] := 
+        Complement[liscomp, 
+          Union[Flatten[\ 
+              Inicial[\([i, 
+                  j]\)]], \[IndentingNewLine]\ \ \ \ \ \ \ \ \ \(Coluna[
+                Inicial]\)[\((j - 1)\)*3 + l], \(Linha[
+                Inicial]\)[\((i - 1)\)*3 + k]]];\)\n
+    step1[Sol_] := 
+      Module[{Inicial, Solint}, \[IndentingNewLine]Inicial = 
+          Sol; \[IndentingNewLine]Solint = 
+          Sol; \[IndentingNewLine]Do[\[IndentingNewLine]If[
+            Solint[\([i, j, k, l]\)] \[Equal] X\ , 
+            Solint[\([i, j, k, l]\)] = \(Possiveis[Inicial]\)[i, j, k, 
+                l]]; \[IndentingNewLine]If[
+            Length[Solint[\([i, j, k, l]\)]] \[Equal] 1, 
+            Solint[\([i, j, k, l]\)] = 
+              Solint[\([i, j, k, l, 1]\)]];\[IndentingNewLine] (*Print[i, j, 
+              k, l]*) \[IndentingNewLine], \[IndentingNewLine]{i, 1, 
+            3}, \[IndentingNewLine]{j, 1, 3}, \[IndentingNewLine]{k, 1, 
+            3}, \[IndentingNewLine]{l, 1, 3}\[IndentingNewLine]]; 
+        Solint]\[IndentingNewLine]
+    \(step2[Sol1_] := 
+        Module[{Sol}, 
+          Sol = step1[
+              Sol1]; \[IndentingNewLine]Do[\[IndentingNewLine]\(If[\
+\[IndentingNewLine]Length[Sol[\([\)\(i, j, k, l\)\(]\)]] > 
+                  1, \[IndentingNewLine]lis = 
+                  Sol[\([\)\(i, j, k, 
+                    l\)\(]\)]; \[IndentingNewLine]Do[\[IndentingNewLine]\(If[
+                      Count[Flatten[Sol[\([\)\(i, j\)\(]\)]], 
+                          lis[\([\)\(ii\)\(]\)]] \[Equal] 
+                        1, \[IndentingNewLine]Sol[\([\)\(i, j, k, l\)\(]\)] = 
+                        lis[\([ii]\)]; Break[]];\)\[IndentingNewLine], {ii, 
+                    1, Length[
+                      lis]}\[IndentingNewLine]]; \[IndentingNewLine]lis = 
+                  Sol[\([\)\(i, j, k, l\)\(]\)]; \[IndentingNewLine]\ 
+                Do[\[IndentingNewLine]\(If[
+                      Count[Flatten[\(Coluna[Sol]\)[\((j - 1)\)*3 + l]], 
+                          lis[\([\)\(ii\)\(]\)]\ ] \[Equal] 1, 
+                      Sol[\([\)\(i, j, k, l\)\(]\)] = lis[\([ii]\)]; 
+                      Break[]];\)\[IndentingNewLine], {ii, 1, 
+                    Length[lis]}\[IndentingNewLine]]; \[IndentingNewLine]lis \
+= Sol[\([\)\(i, j, k, 
+                    l\)\(]\)]; \[IndentingNewLine]Do[\[IndentingNewLine]\(If[
+                      Count[Flatten[\(Linha[Sol]\)[\((i - 1)\)*3 + k]], 
+                          lis[\([\)\(ii\)\(]\)]] \[Equal] 1, 
+                      Sol[\([\)\(i, j, k, l\)\(]\)] = 
+                        lis[\([\)\(ii\)\(]\)]\ ; 
+                      Break[]];\)\[IndentingNewLine], {ii, 1, 
+                    Length[lis]}]\[IndentingNewLine]];\)\ \
+\[IndentingNewLine], {i, 1, 3}, {j, 1, 3}, {k, 1, 3}, {l, 1, 
+              3}]; \[IndentingNewLine]Sol = 
+            Map[If[Length[#] > 1, X, #] &, 
+              Sol, {4}]; \[IndentingNewLine]Sol];\)\n
+    \(step3[Sol1_] := 
+        Module[{posDuplas, ipos, jpos, k1pos, k2pos, l1pos, l2pos, 
+            Sol}, \[IndentingNewLine]Sol = 
+            Sol1; \[IndentingNewLine]posDuplas = 
+            SelectDuplasBoas[Sol]; \[IndentingNewLine]If[
+            Length[posDuplas] > 
+              0, \[IndentingNewLine]\[IndentingNewLine]ipos = 
+              posDuplas[\([\)\(1, 1, 1\)\(]\)]; \[IndentingNewLine]jpos = 
+              posDuplas[\([\)\(1, 1, 2\)\(]\)]; \[IndentingNewLine]k1pos = 
+              posDuplas[\([\)\(1, 1, 3\)\(]\)]; \[IndentingNewLine]l1pos = 
+              posDuplas[\([\)\(1, 1, 4\)\(]\)]; \[IndentingNewLine]k2pos = 
+              posDuplas[\([\)\(1, 2, 3\)\(]\)]; \[IndentingNewLine]l2pos = 
+              posDuplas[\([\)\(1, 2, 4\)\(]\)]; \[IndentingNewLine]elem = 
+              Sol[\([\)\(ipos, jpos, k1pos, 
+                l1pos\)\(]\)]; \[IndentingNewLine]Do[\[IndentingNewLine]If[
+                  Length[Sol[\([\)\(ipos, jpos, k, l\)\(]\)]] > 1, 
+                  Sol[\([\)\(ipos, jpos, k, l\)\(]\)] = 
+                    Complement[Sol[\([\)\(ipos, jpos, k, l\)\(]\)], 
+                      elem]]\[IndentingNewLine], {k, 1, 3}, {l, 1, 
+                  3}]\[IndentingNewLine]\(Sol[\([\)\(ipos, jpos, k1pos, 
+                  l1pos\)\(]\)] = elem\); \[IndentingNewLine]Sol[\([\)\(ipos, 
+                jpos, k2pos, l2pos\)\(]\)] = elem; \[IndentingNewLine]Sol, 
+            Sol]\[IndentingNewLine]];\)\[IndentingNewLine]
+    step4[Sol1_] := 
+      Module[{lis, Sol}, \[IndentingNewLine]Sol = 
+          Sol1; \[IndentingNewLine]Do[\[IndentingNewLine]lis = 
+            Position[Sol[\([\)\(i, j\)\(]\)], 
+              num]; \[IndentingNewLine]numDiferentesLin = 
+            Length[Union[
+                Table[lis[\([\)\(i, 1\)\(]\)], {i, 1, 
+                    Length[lis]}]]]; \[IndentingNewLine]numDiferentesCol = 
+            Length[Union[
+                Flatten[
+                  Table[lis[\([\)\(i, 2\)\(]\)], {i, 1, 
+                      Length[lis]}]]]]; \[IndentingNewLine]If[
+            numDiferentesLin \[Equal] 1 && 
+              numDiferentesCol > 
+                1, \[IndentingNewLine]kpos = \(Union[
+                  Table[lis[\([\)\(i, 1\)\(]\)], {i, 1, 
+                      Length[lis]}]]\)[\([\)\(1\)\(]\)]; \
+\[IndentingNewLine]Do[
+              If[j \[NotEqual] jpos && 
+                  Length[Sol[\([\)\(i, jpos, kpos, l\)\(]\)]] > 
+                    1, \[IndentingNewLine]Sol[\([\)\(i, jpos, kpos, 
+                    l\)\(]\)] = 
+                  Complement[
+                    Sol[\([\)\(i, jpos, kpos, 
+                      l\)\(]\)], {num}]\[IndentingNewLine]]; \
+\[IndentingNewLine], {l, 1, 3}, {jpos, 1, 3}]]; \[IndentingNewLine]If[
+            numDiferentesCol \[Equal] 1 && 
+              numDiferentesLin > 
+                1, \[IndentingNewLine]lpos = \(Union[
+                  Flatten[
+                    Table[lis[\([\)\(i, 2\)\(]\)], {i, 1, 
+                        Length[
+                          lis]}]]]\)[\([\)\(1\)\(]\)]; \[IndentingNewLine]Do[
+              If[i \[NotEqual] ipos && 
+                  Length[Sol[\([\)\(ipos, j, k, lpos\)\(]\)]] > 
+                    1, \[IndentingNewLine]Sol[\([\)\(ipos, j, k, 
+                    lpos\)\(]\)] = 
+                  Complement[
+                    Sol[\([\)\(ipos, j, k, 
+                      lpos\)\(]\)], {num}]\[IndentingNewLine]]; \
+\[IndentingNewLine], {k, 1, 3}, {ipos, 1, 3}]]; \[IndentingNewLine], {i, 1, 
+            3}, {j, 1, 3}, {num, 1, 
+            9}]; \[IndentingNewLine]Sol]\[IndentingNewLine]
+    \(step5[Solext_] := 
+        Module[{Sol}, \[IndentingNewLine]Do[\[IndentingNewLine]Solprov = 
+              Solext; \[IndentingNewLine]If[
+              Length[Solext[\([i, j, k, l]\)]] \[Equal] 
+                2, \[IndentingNewLine]Solprov[\([\)\(i, j, k, l\)\(]\)] = 
+                Solext[\([i, j, k, l, 1]\)]; \[IndentingNewLine]Sol1 = 
+                FixedPoint[step, 
+                  Solprov]; \[IndentingNewLine]Solprov[\([\)\(i, j, k, 
+                  l\)\(]\)] = 
+                Solext[\([i, j, k, l, 2]\)]; \[IndentingNewLine]Sol2 = 
+                FixedPoint[step, Solprov]; \[IndentingNewLine]If[
+                estaErrado[Sol1] && \(! estaErrado[Sol2]\), 
+                Return[Sol2]]; \[IndentingNewLine]If[\(! estaErrado[Sol1]\) && 
+                  estaErrado[Sol2], 
+                Return[Sol1]];\[IndentingNewLine]]\[IndentingNewLine], {i, 1, 
+              3}, {j, 1, 3}, {k, 1, 3}, {l, 1, 3}]];\)\[IndentingNewLine]
+    \(step[Sol_] := 
+        step4[step3[step1[step2[step1[Sol]]]]];\)\[IndentingNewLine]
+    \(LocalizaDuplas[Sol_] := 
+        Select[Union[Flatten[Sol, 3]], Length[#] \[Equal] 2 &];\)\n
+    \(LocalizaDuplasDuplas[Sol_] := 
+        Module[{lis}, \[IndentingNewLine]lis = 
+            LocalizaDuplas[Sol]; \[IndentingNewLine]Select[
+            Table[Position[Sol, lis[\([\)\(i\)\(]\)]], {i, 1, Length[lis]}], 
+            Length[#] \[Equal] 2 &]];\)\n
+    \(SelectDuplasBoas[Sol_] := 
+        Module[{lis}, \[IndentingNewLine]lis = 
+            LocalizaDuplasDuplas[Sol]; \[IndentingNewLine]Union[
+            Cases[lis, {{i_, j_, k_, l1_}, {i_, j_, k_, l2_}}, 
+              Infinity], \[IndentingNewLine]Cases[
+              lis, {{i_, j_, k1_, l_}, {i_, j_, k2_, l_}}, 
+              Infinity]]\[IndentingNewLine]];\)\[IndentingNewLine]
+    \(ContaProb[Sol_] := 
+        Module[{}, \[IndentingNewLine]Faux[list_] := 
+            Select[list, Length[#] > 1 &]; \[IndentingNewLine]Length[
+            Flatten[Map[Faux, Sol, 3], 3]]];\)\n
+    \(MedeAvanco[Sol_] := Length[Flatten[Sol]];\)\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(\[IndentingNewLine]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\[IndentingNewLine]\)\(\(Inicial = {{{{6, 7, 
+                X}, {8, X, X}, {X, X, 
+                X}}, \[IndentingNewLine]\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+{{X, X, 8}, {X, X, 4}, {X, 1, 
+                X}}, \[IndentingNewLine]\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+{{X, X, X}, {9, X, 3}, {8, X, 
+                4}}}, \[IndentingNewLine]\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+{{{2, 1, X}, {X, X, 7}, {5, 8, 
+                X}}, \[IndentingNewLine]\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+{{X, 5, X}, {X, X, X}, {X, 6, 
+                X}}, \[IndentingNewLine]\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+{{X, 9, X}, {X, X, 5}, {1, X, 
+                X}}}, \[IndentingNewLine]\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+{\ {{X, X, X}, {1, X, 9}, {X, 6, 
+                5}}, \[IndentingNewLine]\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+{{X, 3, X}, {X, X, X}, {X, 7, 
+                X}}, \[IndentingNewLine]\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+{{5, 1, X}, {X, X, X}, {X, 8, 9}}}};\)\[IndentingNewLine]\[IndentingNewLine]
+    Inicial // TableForm\[IndentingNewLine]
+    \)\)\)], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[GridBox[{
+          {GridBox[{
+                {"6", "7", "X"},
+                {"8", "X", "X"},
+                {"X", "X", "X"}
+                },
+              RowSpacings->0.25,
+              ColumnSpacings->1,
+              RowAlignments->Baseline,
+              ColumnAlignments->{Left}], GridBox[{
+                {"X", "X", "8"},
+                {"X", "X", "4"},
+                {"X", "1", "X"}
+                },
+              RowSpacings->0.25,
+              ColumnSpacings->1,
+              RowAlignments->Baseline,
+              ColumnAlignments->{Left}], GridBox[{
+                {"X", "X", "X"},
+                {"9", "X", "3"},
+                {"8", "X", "4"}
+                },
+              RowSpacings->0.25,
+              ColumnSpacings->1,
+              RowAlignments->Baseline,
+              ColumnAlignments->{Left}]},
+          {GridBox[{
+                {"2", "1", "X"},
+                {"X", "X", "7"},
+                {"5", "8", "X"}
+                },
+              RowSpacings->0.25,
+              ColumnSpacings->1,
+              RowAlignments->Baseline,
+              ColumnAlignments->{Left}], GridBox[{
+                {"X", "5", "X"},
+                {"X", "X", "X"},
+                {"X", "6", "X"}
+                },
+              RowSpacings->0.25,
+              ColumnSpacings->1,
+              RowAlignments->Baseline,
+              ColumnAlignments->{Left}], GridBox[{
+                {"X", "9", "X"},
+                {"X", "X", "5"},
+                {"1", "X", "X"}
+                },
+              RowSpacings->0.25,
+              ColumnSpacings->1,
+              RowAlignments->Baseline,
+              ColumnAlignments->{Left}]},
+          {GridBox[{
+                {"X", "X", "X"},
+                {"1", "X", "9"},
+                {"X", "6", "5"}
+                },
+              RowSpacings->0.25,
+              ColumnSpacings->1,
+              RowAlignments->Baseline,
+              ColumnAlignments->{Left}], GridBox[{
+                {"X", "3", "X"},
+                {"X", "X", "X"},
+                {"X", "7", "X"}
+                },
+              RowSpacings->0.25,
+              ColumnSpacings->1,
+              RowAlignments->Baseline,
+              ColumnAlignments->{Left}], GridBox[{
+                {"5", "1", "X"},
+                {"X", "X", "X"},
+                {"X", "8", "9"}
+                },
+              RowSpacings->0.25,
+              ColumnSpacings->1,
+              RowAlignments->Baseline,
+              ColumnAlignments->{Left}]}
+          },
+        RowSpacings->1,
+        ColumnSpacings->3,
+        RowAlignments->Baseline,
+        ColumnAlignments->{Left}],
+      TableForm[ {{{{6, 7, X}, {8, X, X}, {X, X, X}}, {{X, X, 8}, {X, X, 4}, {
+        X, 1, X}}, {{X, X, X}, {9, X, 3}, {8, X, 4}}}, {{{2, 1, X}, {X, X, 
+        7}, {5, 8, X}}, {{X, 5, X}, {X, X, X}, {X, 6, X}}, {{X, 9, X}, {X, X, 
+        5}, {1, X, X}}}, {{{X, X, X}, {1, X, 9}, {X, 6, 5}}, {{X, 3, X}, {X, 
+        X, X}, {X, 7, X}}, {{5, 1, X}, {X, X, X}, {X, 8, 9}}}}]]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\((Sol = step[Inicial])\) // MatrixForm\), "\[IndentingNewLine]", 
+    \(MedeAvanco[Sol]\), "\[IndentingNewLine]", 
+    \(\((Sol = step[Sol])\) // MatrixForm\), "\n", 
+    \(MedeAvanco[Sol]\), "\[IndentingNewLine]", 
+    \(\((Sol = step[Sol])\) // MatrixForm\), "\n", 
+    \(MedeAvanco[Sol]\), "\[IndentingNewLine]", 
+    \(\((Sol = step[Sol])\) // MatrixForm\), "\n", 
+    \(MedeAvanco[Sol]\), "\[IndentingNewLine]", 
+    \(\((Sol = step[Sol])\) // MatrixForm\), "\n", 
+    \(MedeAvanco[Sol]\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\((Sol = FixedPoint[step, Sol])\) // 
+      MatrixForm\)\)\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"6", "7", "4"},
+                    {"8", "5", "1"},
+                    {"9", "3", "2"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "8"},
+                    {"7", "2", "4"},
+                    {"5", "1", "6"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "5", "1"},
+                    {"9", "6", "3"},
+                    {"8", "7", "4"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "1", "6"},
+                    {"4", "9", "7"},
+                    {"5", "8", "3"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"4", "5", "7"},
+                    {"1", "8", "3"},
+                    {"9", "6", "2"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "8"},
+                    {"6", "2", "5"},
+                    {"1", "4", "7"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"7", "4", "8"},
+                    {"1", "2", "9"},
+                    {"3", "6", "5"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"6", "3", "9"},
+                    {"8", "4", "5"},
+                    {"2", "7", "1"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"5", "1", "2"},
+                    {"7", "3", "6"},
+                    {"4", "8", "9"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(step4[
+        step3[step1[step2[step1[step2[step1[Inicial]]]]]]] // 
+      MatrixForm\)\)\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"6", "7", "4"},
+                    {"8", "5", "1"},
+                    {\({3, 9}\), \({3, 9}\), "2"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "8"},
+                    {\({6, 7}\), "2", "4"},
+                    {\({5, 6, 7}\), "1", \({5, 6, 7}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "5", "1"},
+                    {"9", \({6, 7}\), "3"},
+                    {"8", \({6, 7}\), "4"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "1", "6"},
+                    {\({4, 9}\), \({4, 9}\), "7"},
+                    {"5", "8", "3"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({4, 7}\), "5", \({3, 7}\)},
+                    {\({1, 2, 8}\), \({8}\), \({1, 2, 3}\)},
+                    {\({2, 4, 7, 9}\), "6", \({2, 7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({3, 4, 7}\), "9", "8"},
+                    {\({3, 6}\), \({2, 3}\), "5"},
+                    {"1", \({2, 4}\), \({2, 7}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"7", \({2, 4}\), "8"},
+                    {"1", \({2, 3, 4}\), "9"},
+                    {\({3, 4}\), "6", "5"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({2, 6, 9}\), "3", \({2, 6, 9}\)},
+                    {\({2, 5, 6, 8}\), \({4, 8}\), \({2, 5, 6}\)},
+                    {\({1, 2}\), "7", \({1, 2}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"5", "1", \({2, 6}\)},
+                    {\({3, 4, 6, 7}\), \({2, 3, 4}\), \({2, 6, 7}\)},
+                    {\({3, 4}\), "8", "9"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[""], "Input"],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\[IndentingNewLine]\)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(Sol = 
+        FixedPoint[step, Inicial];\)\[IndentingNewLine]
+    MedeAvanco[Sol]\[IndentingNewLine]
+    Sol // MatrixForm\[IndentingNewLine]
+    \(Sol = step5[Sol];\)\[IndentingNewLine]
+    Sol // MatrixForm\[IndentingNewLine]
+    estaErrado[Sol]\[IndentingNewLine]
+    MedeAvanco[Sol]\[IndentingNewLine]
+    \(Sol = step5[Sol];\)\n
+    Sol // MatrixForm\n
+    estaErrado[Sol]\n
+    MedeAvanco[Sol]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(81\)], "Output"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"6", "7", "4"},
+                    {"8", "5", "1"},
+                    {"9", "3", "2"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "8"},
+                    {"7", "2", "4"},
+                    {"5", "1", "6"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "5", "1"},
+                    {"9", "6", "3"},
+                    {"8", "7", "4"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "1", "6"},
+                    {"4", "9", "7"},
+                    {"5", "8", "3"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"4", "5", "7"},
+                    {"1", "8", "3"},
+                    {"9", "6", "2"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "8"},
+                    {"6", "2", "5"},
+                    {"1", "4", "7"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"7", "4", "8"},
+                    {"1", "2", "9"},
+                    {"3", "6", "5"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"6", "3", "9"},
+                    {"8", "4", "5"},
+                    {"2", "7", "1"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"5", "1", "2"},
+                    {"7", "3", "6"},
+                    {"4", "8", "9"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    TagBox["Null",
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partd"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(Null \[LeftDoubleBracket] \\(\\(1, 1, 1, 1\\)\\) \
+\[RightDoubleBracket]\\) is longer than depth of object. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partd"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(Null \[LeftDoubleBracket] \\(\\(1, 1, 2, 1\\)\\) \
+\[RightDoubleBracket]\\) is longer than depth of object. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partd"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(Null \[LeftDoubleBracket] \\(\\(1, 1, 3, 1\\)\\) \
+\[RightDoubleBracket]\\) is longer than depth of object. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Part :: \\\"partd\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \(True\)], "Output"],
+
+Cell[BoxData[
+    RowBox[{\(Flatten::"normal"\), \(\(:\)\(\ \)\), "\<\"Nonatomic expression \
+expected at position \\!\\(1\\) in \\!\\(Flatten[Null]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::normal\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \(1\)], "Output"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partd"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(Null \[LeftDoubleBracket] \\(\\(1, 1, 1, 1\\)\\) \
+\[RightDoubleBracket]\\) is longer than depth of object. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partd"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(Null \[LeftDoubleBracket] \\(\\(1, 1, 1, 2\\)\\) \
+\[RightDoubleBracket]\\) is longer than depth of object. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partd"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(Null \[LeftDoubleBracket] \\(\\(1, 1, 1, 3\\)\\) \
+\[RightDoubleBracket]\\) is longer than depth of object. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Part :: \\\"partd\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    TagBox["Null",
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partd"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(Null \[LeftDoubleBracket] \\(\\(1, 1, 1, 1\\)\\) \
+\[RightDoubleBracket]\\) is longer than depth of object. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partd"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(Null \[LeftDoubleBracket] \\(\\(1, 1, 2, 1\\)\\) \
+\[RightDoubleBracket]\\) is longer than depth of object. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partd"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(Null \[LeftDoubleBracket] \\(\\(1, 1, 3, 1\\)\\) \
+\[RightDoubleBracket]\\) is longer than depth of object. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Part :: \\\"partd\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \(True\)], "Output"],
+
+Cell[BoxData[
+    RowBox[{\(Flatten::"normal"\), \(\(:\)\(\ \)\), "\<\"Nonatomic expression \
+expected at position \\!\\(1\\) in \\!\\(Flatten[Null]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::normal\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \(1\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(Sol = Sol1;\)\(\[IndentingNewLine]\)
+    \)\)\)], "Input"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\[IndentingNewLine]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(Sol // MatrixForm\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(MedeAvanco[Sol]\), "\[IndentingNewLine]", 
+    \(Sol // MatrixForm\), "\[IndentingNewLine]", 
+    \(MedeAvanco[Sol]\), "\[IndentingNewLine]", 
+    \(estaErrado[Sol]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox["Null",
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    RowBox[{\(Flatten::"normal"\), \(\(:\)\(\ \)\), "\<\"Nonatomic expression \
+expected at position \\!\\(1\\) in \\!\\(Flatten[Null]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::normal\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \(1\)], "Output"],
+
+Cell[BoxData[
+    TagBox["Null",
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    RowBox[{\(Flatten::"normal"\), \(\(:\)\(\ \)\), "\<\"Nonatomic expression \
+expected at position \\!\\(1\\) in \\!\\(Flatten[Null]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::normal\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \(1\)], "Output"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partd"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(Null \[LeftDoubleBracket] \\(\\(1, 1, 1, 1\\)\\) \
+\[RightDoubleBracket]\\) is longer than depth of object. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partd"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(Null \[LeftDoubleBracket] \\(\\(1, 1, 2, 1\\)\\) \
+\[RightDoubleBracket]\\) is longer than depth of object. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partd"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(Null \[LeftDoubleBracket] \\(\\(1, 1, 3, 1\\)\\) \
+\[RightDoubleBracket]\\) is longer than depth of object. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Part :: \\\"partd\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(FixedPoint[Sol, est]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \($Aborted\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[""], "Input"],
+
+Cell[BoxData[
+    \({{1, 2}, {1, 3}, {1, 4}, {1, 8}, {1, 9}, {2, 4}, {2, 5}, {2, 6}, {2, 
+        9}, {3, 4}, {3, 9}, {4, 7}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Sol // MatrixForm\)\)\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"4", "5", "6"},
+                    {"2", "8", \({3, 9}\)},
+                    {\({1, 7, 9}\), \({1, 3}\), \({1, 3, 7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"1", "7", "8"},
+                    {"6", \({3, 9}\), "4"},
+                    {"5", \({2, 3, 9}\), \({2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"9", "2", "3"},
+                    {"5", "1", "7"},
+                    {"4", "6", "8"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({1, 8}\), "7", \({1, 3}\)},
+                    {\({1, 9}\), \({1, 2, 3, 4}\), "5"},
+                    {\({1, 6, 8, 9}\), \({1, 2, 4, 6}\), \({1, 2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({3, 4}\), \({1, 5, 8}\), "6"},
+                    {\({2, 3, 4}\), \({1, 2, 9}\), "7"},
+                    {\({2, 4}\), \({1, 2, 5, 8, 9}\), \({1, 2, 5, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "9", \({1, 4, 5}\)},
+                    {"6", "8", \({1, 4}\)},
+                    {"7", "3", \({1, 4, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "4"},
+                    {\({5, 6, 7}\), \({2, 6}\), "8"},
+                    {\({1, 5, 6, 7}\), \({1, 2, 6}\), \({1, 2, 7}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"7", \({1, 2, 6}\), \({1, 2}\)},
+                    {"9", \({2, 4, 5, 6}\), "3"},
+                    {"8", \({2, 4, 5, 6}\), \({2, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"8", "5", \({2, 6}\)},
+                    {"1", \({4, 7}\), \({2, 6}\)},
+                    {"3", \({4, 7}\), "9"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(?Nest\)\)\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{"\<\"Nest[f, expr, n] gives an expression with f applied n times \
+to expr.\"\>", " ", 
+      ButtonBox[
+        StyleBox["More\[Ellipsis]",
+          "SR"],
+        ButtonData:>"Nest",
+        Active->True,
+        ButtonStyle->"RefGuideLink"]}]], "Print",
+  CellTags->"Info3376668098-5018609"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\[IndentingNewLine]\)], "Input"],
+
+Cell[BoxData[
+    \(174\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(Sol = step1[Inicial];\)\), "\n", 
+    \(ContaProb[Sol]\), "\n", 
+    \(MedeAvanco[Sol]\), "\n", 
+    \(Sol = step1[step2[step1[Sol]]]; \), "\n", 
+    \(ContaProb[Sol]\), "\n", 
+    \(MedeAvanco[Sol]\), "\[IndentingNewLine]", 
+    \(Sol // MatrixForm\), "\[IndentingNewLine]", 
+    \(\(Sol[\([2, 1, 1, 1]\)] = 1;\)\), "\[IndentingNewLine]", 
+    \(\(Sol = step4[step3[step1[step2[step1[Sol]]]]];\)\), "\n", 
+    \(MedeAvanco[Sol]\), "\[IndentingNewLine]", 
+    \(\(Sol = step3[Sol];\)\), "\[IndentingNewLine]", 
+    \(MedeAvanco[Sol]\), "\[IndentingNewLine]", 
+    \(\(Sol = 
+        step4[step3[step1[step2[step1[Sol]]]]];\)\), "\[IndentingNewLine]", 
+    \(MedeAvanco[Sol]\), "\[IndentingNewLine]", 
+    \(\(Sol = step4[Sol];\)\), "\[IndentingNewLine]", 
+    \(Sol // MatrixForm\), "\[IndentingNewLine]", 
+    \(estaErrado[Sol]\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(\)}], "Input"],
+
+Cell[BoxData[
+    \(41\)], "Output"],
+
+Cell[BoxData[
+    \(215\)], "Output"],
+
+Cell[BoxData[
+    \(24\)], "Output"],
+
+Cell[BoxData[
+    \(182\)], "Output"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"4", "5", \({6, 7}\)},
+                    {"2", "8", \({3, 9}\)},
+                    {\({1, 7, 9}\), \({1, 3}\), \({1, 3, 7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"1", "7", "8"},
+                    {"6", \({3, 9}\), "4"},
+                    {"5", \({2, 3, 7, 9}\), \({2, 7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"9", "2", "3"},
+                    {"5", "1", "7"},
+                    {"4", "6", "8"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({1, 8}\), "7", \({1, 3}\)},
+                    {\({1, 9}\), \({1, 2, 3, 4}\), "5"},
+                    {\({1, 6, 8, 9}\), \({1, 2, 4, 6}\), \({1, 2, 6, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({3, 4}\), \({1, 3, 4, 5, 8}\), "6"},
+                    {\({2, 3, 4}\), \({1, 2, 3, 4, 7, 9}\), \({1, 2, 7, 
+                        9}\)},
+                    {\({2, 4}\), \({1, 2, 4, 5, 7, 8, 9}\), \({1, 2, 5, 7, 
+                        9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "9", \({1, 4, 5}\)},
+                    {"6", "8", \({1, 4}\)},
+                    {\({1, 7}\), "3", \({1, 4, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "4"},
+                    {\({1, 5, 6, 7}\), \({1, 2, 6}\), "8"},
+                    {\({1, 5, 6, 7}\), \({1, 2, 6}\), \({1, 2, 6, 7}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"7", \({1, 2, 5, 6}\), \({1, 2, 5}\)},
+                    {"9", \({1, 2, 4, 5, 6}\), "3"},
+                    {"8", \({1, 2, 4, 5, 6}\), \({1, 2, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"8", "5", \({1, 2, 5, 6}\)},
+                    {\({1, 7}\), \({4, 5, 7}\), \({1, 2, 4, 5, 6}\)},
+                    {"3", \({4, 5, 7}\), "9"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    \(136\)], "Output"],
+
+Cell[BoxData[
+    \(136\)], "Output"],
+
+Cell[BoxData[
+    \(113\)], "Output"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"4", "5", "6"},
+                    {"2", "8", "9"},
+                    {"7", \({1, 3}\), \({1, 7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"1", "7", "8"},
+                    {"6", \({3, 9}\), "4"},
+                    {"5", \({2, 3, 9}\), \({2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"9", "2", "3"},
+                    {"5", "1", "7"},
+                    {"4", "6", "8"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"1", "7", "3"},
+                    {"9", \({2, 4}\), "5"},
+                    {"8", "6", \({}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"4", "8", "6"},
+                    {"3", "1", "7"},
+                    {"2", \({1, 5, 9}\), \({1, 5, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "9", "5"},
+                    {"6", "8", "1"},
+                    {"7", "3", "4"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "4"},
+                    {\({5, 6, 7}\), "2", "8"},
+                    {\({5, 6, 7}\), \({1, 2}\), \({1, 2, 7}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"7", \({1, 2, 6}\), \({1, 2}\)},
+                    {"9", \({2, 4, 5, 6}\), "3"},
+                    {"8", \({2, 4, 5, 6}\), \({2, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"8", "5", \({2, 6}\)},
+                    {"1", \({4, 7}\), \({2, 6}\)},
+                    {"3", \({4, 7}\), "9"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\[IndentingNewLine]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Sol // MatrixForm\)\)\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"4", "5", "6"},
+                    {"2", "8", \({3, 9}\)},
+                    {\({1, 7, 9}\), "1", \({1, 3, 7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"1", "7", "8"},
+                    {"6", \({3, 9}\), "4"},
+                    {"5", \({2, 3, 9}\), \({2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"9", "2", "3"},
+                    {"5", "1", "7"},
+                    {"4", "6", "8"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"8", "7", \({1, 3}\)},
+                    {\({1, 9}\), \({1, 2, 3, 4}\), "5"},
+                    {\({1, 6, 8, 9}\), \({1, 2, 4, 6}\), \({1, 2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({3, 4}\), \({1, 5, 8}\), "6"},
+                    {\({2, 3, 4}\), \({1, 2, 9}\), "7"},
+                    {\({2, 4}\), \({1, 2, 5, 8, 9}\), \({1, 2, 5, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "9", \({1, 4, 5}\)},
+                    {"6", "8", \({1, 4}\)},
+                    {"7", "3", \({1, 4, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "4"},
+                    {\({5, 6, 7}\), \({2, 6}\), "8"},
+                    {\({1, 5, 6, 7}\), \({1, 2, 6}\), \({1, 2, 7}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"7", \({1, 2, 6}\), \({1, 2}\)},
+                    {"9", \({2, 4, 5, 6}\), "3"},
+                    {"8", \({2, 4, 5, 6}\), \({2, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"8", "5", \({2, 6}\)},
+                    {"1", \({4, 7}\), \({2, 6}\)},
+                    {"3", \({4, 7}\), "9"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Sol\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({{{{4, 5, 6}, {2, 8, 9}, {7, 1, 9}}, {{1, 7, 8}, {6, 9, 4}, {5, 3, 
+            2}}, {{9, 2, 3}, {5, 1, 7}, {4, 6, 8}}}, {{{8, 7, 1}, {9, 3, 
+            5}, {6, 4, 2}}, {{3, 5, 6}, {2, 1, 7}, {{}, 8, 9}}, {{2, 9, 
+            5}, {6, 8, 4}, {7, 3, 1}}}, {{{3, 9, 4}, {5, {2, 6}, 
+            8}, {1, {2, 6}, 7}}, {{7, {2, 6}, 1}, {9, 4, 3}, {8, {2, 6}, 
+            5}}, {{8, 5, {2, 6}}, {1, 7, {2, 6}}, {3, 4, 9}}}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(estaErrado[Sol]\)], "Input"],
+
+Cell[BoxData[
+    \(False\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(step4[Sol] // MatrixForm\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"4", "5", "6"},
+                    {"2", "8", \({3, 9}\)},
+                    {\({1, 7, 9}\), \({1, 3}\), \({1, 3, 7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"1", "7", "8"},
+                    {"6", \({3, 9}\), "4"},
+                    {"5", \({2, 3, 9}\), \({2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"9", "2", "3"},
+                    {"5", "1", "7"},
+                    {"4", "6", "8"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({1, 8}\), "7", \({1, 3}\)},
+                    {\({1, 9}\), \({1, 2, 3, 4}\), "5"},
+                    {\({1, 6, 8, 9}\), \({1, 2, 4, 6}\), \({1, 2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({3, 4}\), \({1, 5, 8}\), "6"},
+                    {\({2, 3, 4}\), \({1, 2, 9}\), "7"},
+                    {\({2, 4}\), \({1, 2, 5, 8, 9}\), \({1, 2, 5, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "9", \({1, 4, 5}\)},
+                    {"6", "8", \({1, 4}\)},
+                    {"7", "3", \({1, 4, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "4"},
+                    {\({5, 6, 7}\), \({2, 6}\), "8"},
+                    {\({1, 5, 6, 7}\), \({1, 2, 6}\), \({1, 2, 7}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"7", \({1, 2, 6}\), \({1, 2}\)},
+                    {"9", \({2, 4, 5, 6}\), "3"},
+                    {"8", \({2, 4, 5, 6}\), \({2, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"8", "5", \({2, 6}\)},
+                    {"1", \({4, 7}\), \({2, 6}\)},
+                    {"3", \({4, 7}\), "9"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Conta[Sol]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({{1, 25}, {2, 23}, {3, 14}, {4, 16}, {5, 15}, {6, 16}, {7, 13}, {8, 
+        11}, {9, 17}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(estaErrado[step2[Sol]]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(False\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\[IndentingNewLine]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Sol // MatrixForm\)\)\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"4", "5", "6"},
+                    {"2", "8", \({3, 9}\)},
+                    {\({1, 7, 9}\), \({1, 3}\), \({1, 3, 7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"1", "7", "8"},
+                    {"6", \({3, 9}\), "4"},
+                    {"5", \({2, 3, 9}\), \({2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"9", "2", "3"},
+                    {"5", "1", "7"},
+                    {"4", "6", "8"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({1, 8}\), "7", \({1, 3}\)},
+                    {\({1, 9}\), \({1, 2, 3, 4}\), "5"},
+                    {\({1, 6, 8, 9}\), \({1, 2, 4, 6}\), \({1, 2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({3, 4}\), \({1, 5, 8}\), "6"},
+                    {\({2, 3, 4}\), \({1, 2, 9}\), "7"},
+                    {\({2, 4}\), \({1, 2, 5, 8, 9}\), \({1, 2, 5, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "9", \({1, 4, 5}\)},
+                    {"6", "8", \({1, 4}\)},
+                    {"7", "3", \({1, 4, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "4"},
+                    {\({5, 6, 7}\), \({2, 6}\), "8"},
+                    {\({1, 5, 6, 7}\), \({1, 2, 6}\), \({1, 2, 7}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"7", \({1, 2, 6}\), \({1, 2}\)},
+                    {"9", \({2, 4, 5, 6}\), "3"},
+                    {"8", \({2, 4, 5, 6}\), \({2, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"8", "5", \({2, 6}\)},
+                    {"1", \({4, 7}\), \({2, 6}\)},
+                    {"3", \({4, 7}\), "9"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(i = 1;\)\[IndentingNewLine]
+    \(j = 1;\)\[IndentingNewLine]
+    \(num = 2;\)\[IndentingNewLine]
+    Sol[\([1, 1]\)]\[IndentingNewLine]
+    lis = Position[Sol[\([\)\(i, j\)\(]\)], num]\[IndentingNewLine]
+    Flatten[
+      Table[lis[\([\)\(i, 2\)\(]\)], {i, 1, Length[lis]}]]\[IndentingNewLine]
+    Length[
+      Union[Flatten[
+          Table[lis[\([\)\(i, 2\)\(]\)], {i, 1, 
+              Length[lis]}]]]]\[IndentingNewLine]
+    \(Union[
+        Flatten[Table[
+            lis[\([\)\(i, 2\)\(]\)], {i, 1, 
+              Length[lis]}]]]\)[\([\)\(1\)\(]\)]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({{4, 5, 6}, {2, 
+        8, {3, 9}}, {{1, 7, 9}, {1, 3}, {1, 3, 7, 9}}}\)], "Output"],
+
+Cell[BoxData[
+    \({{2, 1}}\)], "Output"],
+
+Cell[BoxData[
+    \({1}\)], "Output"],
+
+Cell[BoxData[
+    \(1\)], "Output"],
+
+Cell[BoxData[
+    \(1\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Sol[\([1, 1]\)]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({{4, 5, 6}, {2, 
+        8, {3, 9}}, {{1, 7, 9}, {1, 3}, {1, 3, 7, 9}}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Sol // MatrixForm\)\)\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"4", "5", "6"},
+                    {"2", "8", \({3, 9}\)},
+                    {\({1, 7, 9}\), \({1, 3}\), \({1, 3, 7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"1", "7", "8"},
+                    {"6", \({3, 9}\), "4"},
+                    {"5", \({2, 3, 9}\), \({2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"9", "2", "3"},
+                    {"5", "1", "7"},
+                    {"4", "6", "8"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({1, 8}\), "7", \({1, 3}\)},
+                    {\({1, 9}\), \({1, 2, 3, 4}\), "5"},
+                    {\({1, 6, 8, 9}\), \({1, 2, 4, 6}\), \({1, 2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({3, 4}\), \({1, 3, 4, 5, 8}\), "6"},
+                    {\({2, 3, 4}\), \({1, 2, 3, 4, 9}\), "7"},
+                    {\({2, 4}\), \({1, 2, 4, 5, 8, 9}\), \({1, 2, 5, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "9", \({1, 4, 5}\)},
+                    {"6", "8", \({1, 4}\)},
+                    {"7", "3", \({1, 4, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "4"},
+                    {\({5, 6, 7}\), \({2, 6}\), "8"},
+                    {\({1, 5, 6, 7}\), \({1, 2, 6}\), \({1, 2, 7}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"7", \({1, 2, 6}\), \({1, 2}\)},
+                    {"9", \({2, 4, 5, 6}\), "3"},
+                    {"8", \({2, 4, 5, 6}\), \({2, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"8", "5", \({2, 6}\)},
+                    {"1", \({4, 7}\), \({2, 6}\)},
+                    {"3", \({4, 7}\), "9"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\[IndentingNewLine]\)], "Input"],
+
+Cell[BoxData[
+    \({{2, 1}}\)], "Output"],
+
+Cell[BoxData[
+    \({1}\)], "Output"],
+
+Cell[BoxData[
+    \(1\)], "Output"],
+
+Cell[BoxData[
+    \(1\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Sol // MatrixForm\[IndentingNewLine]
+    MedeAvanco[Sol]\)\)\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"4", "5", "6"},
+                    {"2", "8", \({3, 9}\)},
+                    {\({1, 7, 9}\), \({1, 3}\), \({1, 3, 7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"1", "7", "8"},
+                    {"6", \({3, 9}\), "4"},
+                    {"5", \({2, 3, 9}\), \({2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"9", "2", "3"},
+                    {"5", "1", "7"},
+                    {"4", "6", "8"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({1, 8}\), "7", \({1, 3}\)},
+                    {\({1, 9}\), \({1, 2, 3, 4}\), "5"},
+                    {\({1, 6, 8, 9}\), \({1, 2, 4, 6}\), \({1, 2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({3, 4}\), \({1, 3, 4, 5, 8}\), "6"},
+                    {\({2, 3, 4}\), \({1, 2, 3, 4, 9}\), "7"},
+                    {\({2, 4}\), \({1, 2, 4, 5, 8, 9}\), \({1, 2, 5, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "9", \({1, 4, 5}\)},
+                    {"6", "8", \({1, 4}\)},
+                    {"7", "3", \({1, 4, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "4"},
+                    {\({5, 6, 7}\), \({2, 6}\), "8"},
+                    {\({1, 5, 6, 7}\), \({1, 2, 6}\), \({1, 2, 7}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"7", \({1, 2, 6}\), \({1, 2}\)},
+                    {"9", \({2, 4, 5, 6}\), "3"},
+                    {"8", \({2, 4, 5, 6}\), \({2, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"8", "5", \({2, 6}\)},
+                    {"1", \({4, 7}\), \({2, 6}\)},
+                    {"3", \({4, 7}\), "9"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    \(155\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(SelectDuplasBoas[Sol]\)], "Input"],
+
+Cell[BoxData[
+    \({{{3, 3, 2, 2}, {3, 3, 3, 2}}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(step3[Sol] // MatrixForm\)\)\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"4", "5", "6"},
+                    {"2", "8", \({3, 9}\)},
+                    {\({1, 7, 9}\), \({1, 3}\), \({1, 3, 7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"1", "7", "8"},
+                    {"6", \({3, 9}\), "4"},
+                    {"5", \({2, 3, 9}\), \({2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"9", "2", "3"},
+                    {"5", "1", "7"},
+                    {"4", "6", "8"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({1, 8}\), "7", \({1, 3}\)},
+                    {\({1, 9}\), \({1, 2, 3, 4}\), "5"},
+                    {\({1, 6, 8, 9}\), \({1, 2, 4, 6}\), \({1, 2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({3, 4}\), \({1, 3, 4, 5, 8}\), "6"},
+                    {\({2, 3, 4}\), \({1, 2, 3, 4, 9}\), "7"},
+                    {\({2, 4}\), \({1, 2, 4, 5, 8, 9}\), \({1, 2, 5, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "9", \({1, 4, 5}\)},
+                    {"6", "8", \({1, 4}\)},
+                    {"7", "3", \({1, 4, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "4"},
+                    {\({5, 6, 7}\), \({2, 6}\), "8"},
+                    {\({1, 5, 6, 7}\), \({1, 2, 6}\), \({1, 2, 7}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"7", \({1, 2, 6}\), \({1, 2}\)},
+                    {"9", \({2, 4, 5, 6}\), "3"},
+                    {"8", \({1, 2, 4, 5, 6}\), \({1, 2, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"8", "5", \({2, 6}\)},
+                    {"1", \({4, 7}\), \({2, 4, 6}\)},
+                    {"3", \({4, 7}\), "9"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(step1[Sol]\)\)\)], "Input"],
+
+Cell[BoxData[
+    \({{{{4, {5, 6}, {6, 7}}, {2, {3, 6, 8}, {3, 6, 9}}, {{1, 7, 9}, {1, 
+              3}, {1, 3, 7, 9}}}, {{1, {6, 7}, 8}, {{3, 6}, {3, 6, 9}, 
+            4}, {5, {2, 3, 7, 9}, {2, 7, 9}}}, {{9, 2, 3}, {5, 1, 7}, {4, 6, 
+            8}}}, {{{{1, 8}, 7, {1, 3}}, {{1, 9}, {1, 2, 3, 4}, 
+            5}, {{1, 6, 8, 9}, {1, 2, 3, 4, 6, 8}, {1, 2, 3, 6, 9}}}, {{{3, 
+              4}, {1, 3, 4, 5, 8}, 
+            6}, {{2, 3, 4}, {1, 2, 3, 4, 7, 9}, {1, 2, 7, 9}}, {{2, 3, 
+              4}, {1, 2, 3, 4, 5, 7, 8, 9}, {1, 2, 5, 7, 9}}}, {{2, 
+            9, {1, 4, 5}}, {6, 
+            8, {1, 4}}, {{1, 7}, {3, 4, 7}, {1, 4, 5}}}}, {{{3, 9, 
+            4}, {{1, 5, 6, 7}, {1, 2, 5, 6}, 
+            8}, {{1, 5, 6, 7}, {1, 2, 5, 6}, {1, 2, 6, 7}}}, {{7, {1, 2, 
+              6}, {1, 2}}, {9, {1, 2, 4, 5, 6}, 
+            3}, {8, {1, 2, 4, 5, 6}, {1, 2, 5}}}, {{{1, 8}, 
+            5, {1, 2, 6}}, {{1, 7}, {4, 7}, {1, 2, 4, 6}}, {3, {4, 7}, 
+            9}}}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Sol = 
+        step1[step2[step1[Sol]]];\)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Sol // MatrixForm\)\)\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"4", "5", "6"},
+                    {"2", "8", \({3, 9}\)},
+                    {\({1, 7, 9}\), \({1, 3}\), \({1, 3, 7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"1", "7", "8"},
+                    {"6", \({3, 9}\), "4"},
+                    {"5", \({2, 3, 9}\), \({2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"9", "2", "3"},
+                    {"5", "1", "7"},
+                    {"4", "6", "8"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({1, 8}\), "7", \({1, 3}\)},
+                    {\({1, 9}\), \({1, 2, 3, 4}\), "5"},
+                    {\({1, 6, 8, 9}\), \({1, 2, 4, 6}\), \({1, 2, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({3, 4}\), \({1, 3, 4, 5, 8}\), "6"},
+                    {\({2, 3, 4}\), \({1, 2, 3, 4, 9}\), "7"},
+                    {\({2, 4}\), \({1, 2, 4, 5, 8, 9}\), \({1, 2, 5, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "9", \({1, 4, 5}\)},
+                    {"6", "8", \({1, 4}\)},
+                    {"7", "3", \({1, 4, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "4"},
+                    {\({5, 6, 7}\), \({2, 6}\), "8"},
+                    {\({1, 5, 6, 7}\), \({1, 2, 6}\), \({1, 2, 7}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"7", \({1, 2, 6}\), \({1, 2}\)},
+                    {"9", \({2, 4, 5, 6}\), "3"},
+                    {"8", \({1, 2, 4, 5, 6}\), \({1, 2, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"8", "5", \({2, 6}\)},
+                    {"1", \({4, 7}\), \({2, 4, 6}\)},
+                    {"3", \({4, 7}\), "9"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Sol // MatrixForm\)\)\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"4", \({5, 6}\), \({6, 7}\)},
+                    {"2", \({3, 6, 8}\), \({3, 6, 9}\)},
+                    {\({1, 7, 9}\), \({1, 3}\), \({1, 3, 7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"1", \({6, 7}\), "8"},
+                    {\({3, 6}\), \({3, 6, 9}\), "4"},
+                    {"5", \({2, 3, 7, 9}\), \({2, 7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"9", "2", "3"},
+                    {"5", "1", "7"},
+                    {"4", "6", "8"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({1, 8}\), "7", \({1, 3}\)},
+                    {\({1, 9}\), \({1, 2, 3, 4}\), "5"},
+                    {\({1, 6, 8, 9}\), \({1, 2, 3, 4, 6, 8}\), \({1, 2, 3, 6, 
+                        9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({3, 4}\), \({1, 3, 4, 5, 8}\), "6"},
+                    {\({2, 3, 4}\), \({1, 2, 3, 4, 7, 9}\), \({1, 2, 7, 
+                        9}\)},
+                    {\({2, 3, 4}\), \({1, 2, 3, 4, 5, 7, 8, 9}\), \({1, 2, 5, 
+                        7, 9}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"2", "9", \({1, 4, 5}\)},
+                    {"6", "8", \({1, 4}\)},
+                    {\({1, 7}\), \({3, 4, 7}\), \({1, 4, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]},
+            {
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"3", "9", "4"},
+                    {\({1, 5, 6, 7}\), \({1, 2, 5, 6}\), "8"},
+                    {\({1, 5, 6, 7}\), \({1, 2, 5, 6}\), \({1, 2, 6, 7}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"7", \({1, 2, 6}\), \({1, 2}\)},
+                    {"9", \({1, 2, 4, 5, 6}\), "3"},
+                    {"8", \({1, 2, 4, 5, 6}\), \({1, 2, 5}\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}], 
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\({1, 8}\), "5", \({1, 2, 6}\)},
+                    {\({1, 7}\), \({4, 7}\), \({1, 2, 4, 6}\)},
+                    {"3", \({4, 7}\), "9"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[""], "Input"],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\[IndentingNewLine]\)\)\)], "Input"],
+
+Cell[BoxData[""], "Input"]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 1024}, {0, 768}},
+WindowSize->{1024, 688},
+WindowMargins->{{0, Automatic}, {Automatic, 25}},
+ShowSelection->True
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{
+  "Info3376668098-5018609"->{
+    Cell[39825, 989, 321, 9, 28, "Print",
+      CellTags->"Info3376668098-5018609"]}
+  }
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{
+  {"Info3376668098-5018609", 83315, 2137}
+  }
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 80, 1, 55, "Input"],
+Cell[1837, 54, 9752, 180, 2838, "Input"],
+Cell[11592, 236, 52, 1, 55, "Input"],
+
+Cell[CellGroupData[{
+Cell[11669, 241, 1121, 20, 331, "Input"],
+Cell[12793, 263, 3058, 86, 200, "Output"]
+}, Open  ]],
+Cell[15866, 352, 527, 10, 239, "Input"],
+
+Cell[CellGroupData[{
+Cell[16418, 366, 118, 2, 55, "Input"],
+Cell[16539, 370, 3210, 83, 236, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[19786, 458, 150, 3, 55, "Input"],
+Cell[19939, 463, 3513, 83, 236, "Output"]
+}, Open  ]],
+Cell[23467, 549, 26, 0, 32, "Input"],
+Cell[23496, 551, 83, 1, 78, "Input"],
+
+Cell[CellGroupData[{
+Cell[23604, 556, 466, 12, 285, "Input"],
+Cell[24073, 570, 36, 1, 32, "Output"],
+Cell[24112, 573, 3210, 83, 236, "Output"],
+Cell[27325, 658, 107, 3, 45, "Output"],
+Cell[27435, 663, 368, 6, 20, "Message"],
+Cell[27806, 671, 368, 6, 20, "Message"],
+Cell[28177, 679, 368, 6, 20, "Message"],
+Cell[28548, 687, 329, 5, 20, "Message"],
+Cell[28880, 694, 38, 1, 32, "Output"],
+Cell[28921, 697, 320, 5, 20, "Message"],
+Cell[29244, 704, 35, 1, 32, "Output"],
+Cell[29282, 707, 368, 6, 20, "Message"],
+Cell[29653, 715, 368, 6, 20, "Message"],
+Cell[30024, 723, 368, 6, 20, "Message"],
+Cell[30395, 731, 329, 5, 20, "Message"],
+Cell[30727, 738, 107, 3, 45, "Output"],
+Cell[30837, 743, 368, 6, 20, "Message"],
+Cell[31208, 751, 368, 6, 20, "Message"],
+Cell[31579, 759, 368, 6, 20, "Message"],
+Cell[31950, 767, 329, 5, 20, "Message"],
+Cell[32282, 774, 38, 1, 32, "Output"],
+Cell[32323, 777, 320, 5, 20, "Message"],
+Cell[32646, 784, 35, 1, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[32718, 790, 107, 2, 78, "Input"],
+Cell[32828, 794, 38, 1, 32, "Output"]
+}, Open  ]],
+Cell[32881, 798, 52, 1, 55, "Input"],
+
+Cell[CellGroupData[{
+Cell[32958, 803, 269, 5, 147, "Input"],
+Cell[33230, 810, 107, 3, 45, "Output"],
+Cell[33340, 815, 320, 5, 20, "Message"],
+Cell[33663, 822, 35, 1, 32, "Output"],
+Cell[33701, 825, 107, 3, 45, "Output"],
+Cell[33811, 830, 320, 5, 20, "Message"],
+Cell[34134, 837, 35, 1, 32, "Output"],
+Cell[34172, 840, 368, 6, 20, "Message"],
+Cell[34543, 848, 368, 6, 20, "Message"],
+Cell[34914, 856, 368, 6, 20, "Message"],
+Cell[35285, 864, 329, 5, 20, "Message"],
+Cell[35617, 871, 38, 1, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[35692, 877, 84, 1, 55, "Input"],
+Cell[35779, 880, 42, 1, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[35858, 886, 26, 0, 32, "Input"],
+Cell[35887, 888, 139, 2, 55, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[36063, 895, 81, 1, 55, "Input"],
+Cell[36147, 898, 3569, 83, 236, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[39753, 986, 69, 1, 55, "Input"],
+Cell[39825, 989, 321, 9, 28, "Print",
+  CellTags->"Info3376668098-5018609"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[40183, 1003, 52, 1, 55, "Input"],
+Cell[40238, 1006, 37, 1, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[40312, 1012, 918, 19, 446, "Input"],
+Cell[41233, 1033, 36, 1, 32, "Output"],
+Cell[41272, 1036, 37, 1, 32, "Output"],
+Cell[41312, 1039, 36, 1, 32, "Output"],
+Cell[41351, 1042, 37, 1, 32, "Output"],
+Cell[41391, 1045, 3731, 85, 236, "Output"],
+Cell[45125, 1132, 37, 1, 32, "Output"],
+Cell[45165, 1135, 37, 1, 32, "Output"],
+Cell[45205, 1138, 37, 1, 32, "Output"],
+Cell[45245, 1141, 3396, 83, 236, "Output"],
+Cell[48644, 1226, 38, 1, 32, "Output"]
+}, Open  ]],
+Cell[48697, 1230, 52, 1, 55, "Input"],
+
+Cell[CellGroupData[{
+Cell[48774, 1235, 81, 1, 55, "Input"],
+Cell[48858, 1238, 3555, 83, 236, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[52450, 1326, 67, 1, 55, "Input"],
+Cell[52520, 1329, 451, 6, 124, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[53008, 1340, 48, 1, 32, "Input"],
+Cell[53059, 1343, 39, 1, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[53135, 1349, 57, 1, 32, "Input"],
+Cell[53195, 1352, 3569, 83, 236, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[56801, 1440, 74, 1, 55, "Input"],
+Cell[56878, 1443, 124, 2, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[57039, 1450, 86, 1, 55, "Input"],
+Cell[57128, 1453, 39, 1, 32, "Output"]
+}, Open  ]],
+Cell[57182, 1457, 52, 1, 55, "Input"],
+
+Cell[CellGroupData[{
+Cell[57259, 1462, 81, 1, 55, "Input"],
+Cell[57343, 1465, 3569, 83, 236, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[60949, 1553, 623, 15, 216, "Input"],
+Cell[61575, 1570, 105, 2, 32, "Output"],
+Cell[61683, 1574, 42, 1, 32, "Output"],
+Cell[61728, 1577, 37, 1, 32, "Output"],
+Cell[61768, 1580, 35, 1, 32, "Output"],
+Cell[61806, 1583, 35, 1, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[61878, 1589, 79, 1, 55, "Input"],
+Cell[61960, 1592, 105, 2, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[62102, 1599, 81, 1, 55, "Input"],
+Cell[62186, 1602, 3584, 83, 236, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[65807, 1690, 52, 1, 55, "Input"],
+Cell[65862, 1693, 42, 1, 32, "Output"],
+Cell[65907, 1696, 37, 1, 32, "Output"],
+Cell[65947, 1699, 35, 1, 32, "Output"],
+Cell[65985, 1702, 35, 1, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[66057, 1708, 120, 2, 78, "Input"],
+Cell[66180, 1712, 3584, 83, 236, "Output"],
+Cell[69767, 1797, 37, 1, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[69841, 1803, 54, 1, 32, "Input"],
+Cell[69898, 1806, 64, 1, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[69999, 1812, 88, 1, 55, "Input"],
+Cell[70090, 1815, 3593, 83, 236, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[73720, 1903, 74, 1, 55, "Input"],
+Cell[73797, 1906, 990, 16, 239, "Output"]
+}, Open  ]],
+Cell[74802, 1925, 104, 2, 55, "Input"],
+
+Cell[CellGroupData[{
+Cell[74931, 1931, 81, 1, 55, "Input"],
+Cell[75015, 1934, 3593, 83, 236, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[78645, 2022, 81, 1, 55, "Input"],
+Cell[78729, 2025, 3813, 86, 236, "Output"]
+}, Open  ]],
+Cell[82557, 2114, 26, 0, 32, "Input"],
+Cell[82586, 2116, 83, 1, 78, "Input"],
+Cell[82672, 2119, 26, 0, 32, "Input"]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

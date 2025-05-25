@@ -1,0 +1,9 @@
+torch==1.10.2+cpu          # ⚠️ escolha a variante +cu117 se usar GPU
+torchvision==0.11.3+cpu
+
+# Detectron2 wheel deve casar com a versão Torch+CUDA
+detectron2 @ https://dl.fbaipublicfiles.com/detectron2/wheels/cpu/torch1.10/detectron2-0.6%2Bcpu-cp310-cp310-linux_x86_64.whl
+
+layoutparser[layoutmodels]==0.3.4
+opencv-python>=4.8
+pillow<10                  # 9.5.0 é a última sem o Image.LINEAR removido

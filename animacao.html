@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplos de Animações em Frames</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        h1, h2 {
+            color: #333;
+        }
+        
+        .container {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        iframe {
+            border: 1px solid #ddd;
+            max-width: 100%;
+        }
+        
+        .animation-box {
+            width: 100px;
+            height: 100px;
+            background-color: #3498db;
+            position: relative;
+            animation: move 3s infinite alternate;
+        }
+        
+        @keyframes move {
+            0% { left: 0; background-color: #3498db; transform: rotate(0deg); }
+            100% { left: calc(100% - 100px); background-color: #e74c3c; transform: rotate(360deg); }
+        }
+        
+        canvas {
+            border: 1px solid #ddd;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Exemplos de Animações em Frames</h1>
+    
+    <div class="container">
+        <h2>1. Iframe com GIF animado</h2>
+        <p>Este exemplo usa um iframe para exibir um GIF animado de um site externo:</p>
+        <iframe src="https://giphy.com/embed/3o7ZetIsjtbkgNE1I4" width="480" height="270" frameBorder="0" allowFullScreen></iframe>
+    </div>
+    
+    <div class="container">
+        <h2>2. Animação CSS</h2>
+        <p>Este exemplo usa CSS para criar uma animação simples:</p>
+        <div class="animation-box"></div>
+    </div>
+    
+    <div class="container">
+        <h2>3. Animação com Canvas e JavaScript</h2>
+        <p>Este exemplo usa Canvas e JavaScript para criar uma animação:</p>
+        <canvas id="myCanvas" width="480" height="270"></canvas>
+        <script>
+            const canvas = document.getElementById('myCanvas');
+            const ctx = canvas.getContext('2d');
+            let x = 50;
+            let y = 50;
+            let dx = 2;
+            let dy = 2;
+            const radius = 20;
+            
+            function drawBall() {
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#e74c3c';
+                ctx.fill();
+                ctx.closePath();
+            }
+            
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawBall();
+                
+                if (x + dx > canvas.width - radius || x + dx < radius) {
+                    dx = -dx;
+                }
+                
+                if (y + dy > canvas.height - radius || y + dy < radius) {
+                    dy = -dy;
+                }
+                
+                x += dx;
+                y += dy;
+                
+                requestAnimationFrame(draw);
+            }
+            
+            draw();
+        </script>
+    </div>
+    
+    <div class="container">
+        <h2>4. Iframe com Vídeo do YouTube</h2>
+        <p>Este exemplo usa um iframe para incorporar um vídeo do YouTube:</p>
+        <iframe width="480" height="270" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    
+    <div class="container">
+        <h2>5. Iframe com Página HTML Interna</h2>
+        <p>Se você tiver uma animação em um arquivo HTML separado, pode incorporá-la assim:</p>
+        <iframe src="animacao-interna.html" width="480" height="270" frameborder="0"></iframe>
+    </div>
+</body>
+</html>
