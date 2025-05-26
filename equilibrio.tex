@@ -96,8 +96,8 @@
 \begin{frame}{Energia e Densidade de Estados}
         \begin{figure}
         \centering
-        % Conceptual representation of Figure 13.1
-        %\includegraphics[width=0.6\textwidth]{placeholder_energylevels.png}
+         Conceptual representation of Figure 13.1
+        \includegraphics[width=0.6\textwidth]{figs/energylevels.png}
         \caption{Escadas de energia hipotéticas para o equilíbrio A $\leftrightarrow$ B. A pode ter o estado fundamental de menor energia, mas B pode ter maior densidade de estados.}
         \end{figure}
         Se os espaçamentos dos níveis de energia são menores para B do que para A, B pode ser a espécie com maior população total.
@@ -139,13 +139,17 @@
 \begin{frame}{Energia Vibracional e Energia de Ponto Zero}
         Energias vibracionais: $\epsilon_v = (v + 1/2)h\nu$. O nível de energia mais baixo acessível é $\epsilon_0 = (1/2)h\nu$ (energia de ponto zero). 
         Mudamos a referência para o ponto zero em vez do fundo do poço.
-        A energia de dissociação $D$ é definida em relação ao fundo do poço ou ao ponto zero. O texto adota $D = -\epsilon_{0,\text{poço}} - (1/2)h\nu$, onde $\epsilon_{0,\text{poço}}$ é a energia no fundo do poço. (Veja Figura 13.2 ).
+        A energia de dissociação $D$ é definida em relação ao fundo do poço ou ao ponto zero. O texto adota $D = -\epsilon_{0,\text{poço}} - (1/2)h\nu$, onde $\epsilon_{0,\text{poço}}$ é a energia no fundo do poço. 
         A função de partição vibracional (referência no ponto zero) é:
         $$ q_{vZ} = \frac{1}{1 - e^{-h\nu/kT}} $$
          
 \end{frame}
 
+
 \begin{frame}{Energia Vibracional e Energia de Ponto Zero}
+\includegraphics[width=0.6\textwidth]{figs/poco.png}
+\end{frame}
+    \begin{frame}{Energia Vibracional e Energia de Ponto Zero}
         O termo $q_{vibration} e^{-\epsilon_0/kT}$ (onde $\epsilon_0$ é a energia do fundo do poço) é substituído por $q_{vZ} e^{D/kT}$ (onde D é a energia de dissociação do estado de ponto zero ao dissociado).
         Assim, a constante de equilíbrio usa energias de dissociação $\Delta D_0$:
         $$ K = \left(\frac{q_C^c}{q_A^a q_B^b}\right) e^{\Delta D_0/kT} $$
@@ -159,7 +163,7 @@
     $$ K = \left(\frac{q_{HD}^2}{q_{H_2}q_{D_2}}\right) e^{\Delta D/RT} $$
     
     onde $\Delta D = 2D_{HD} - D_{H_2} - D_{D_2}$. 
-    Dissociation energies (D, a partir do ponto zero): $D_{H_2} = 431.8 \text{ kJ mol}^{-1}$, $D_{D_2} = 439.2 \text{ kJ mol}^{-1}$, $D_{HD} = 435.2 \text{ kJ mol}^{-1}$.
+    Energia de dissociação(D, a partir do ponto zero): $D_{H_2} = 431.8 \text{ kJ mol}^{-1}$, $D_{D_2} = 439.2 \text{ kJ mol}^{-1}$, $D_{HD} = 435.2 \text{ kJ mol}^{-1}$.
     $$ \Delta D = 2(435.2) - 431.8 - 439.2 = -0.6 \text{ kJ mol}^{-1} $$
     
 \end{frame}
@@ -226,7 +230,9 @@
     $K_p = (1.363 \times 10^{-25})(1.66 \times 10^{-8}) \left(\frac{1}{9310}\right) \left(\frac{1}{3.77}\right) (16) (3.01 \times 10^{33}) = 3.1 \times 10^{-3} \text{ atm}$.
     Este resultado concorda bem com os dados experimentais. A dependência da temperatura é forte, principalmente devido ao fator de Boltzmann $e^{\Delta D/RT}$.
 \end{frame}
-
+\begin{frame}
+    \includegraphics[width=0.6\textwidth]{figs/iodo.png}
+\end{frame}
 \begin{frame}{Resposta a Perturbações}
         Qualquer perturbação de um estado de equilíbrio estável deve aumentar a energia livre do sistema. O sistema responderá movendo-se de volta ao estado de equilíbrio.
         
@@ -247,7 +253,7 @@
         \begin{figure}
         \centering
         % Conceptual representation of Figure 13.4
-        %\includegraphics[width=0.6\textwidth]{placeholder_lechatelier.png}
+        \includegraphics[width=0.6\textwidth]{figs/lechatelier.png}
         \caption{Para a reação $A \rightarrow B$, uma flutuação que aumenta B (aumentando $\xi$) leva o sistema a retornar ao equilíbrio reduzindo a quantidade de B.}
         \end{figure}
 \end{frame}
@@ -280,21 +286,26 @@
     \begin{figure}
     \centering
     % Conceptual representation of Figure 13.5
-    %\includegraphics[width=0.7\textwidth]{placeholder_vanthoff.png}
+    \includegraphics[width=0.7\textwidth]{figs/hoff.png}
     \caption{Gráfico de van 't Hoff para a dissociação da água. A linearidade sugere que $\Delta h^{\circ}$ é aproximadamente constante na faixa de temperatura.}
     \end{figure}
     
+\end{frame}
+
+\begin{frame}{Gráfico de van 't Hoff e Integração}
     Se $\Delta h^{\circ}$ é independente da temperatura, a integração da equação de van 't Hoff resulta em:
     $$ \ln\left(\frac{K_p(T_2)}{K_p(T_1)}\right) = -\frac{\Delta h^{\circ}}{k}\left(\frac{1}{T_2} - \frac{1}{T_1}\right) $$
      
-    \begin{exampleblock}{Obtendo $\Delta h^{\circ}$ de um gráfico de van 't Hoff (Exemplo 13.4 )}
+\end{frame}
+
+\begin{frame}{Gráfico de van 't Hoff e Integração}
+    Obtendo $\Delta h^{\circ}$ de um gráfico de van 't Hoff 
         Para a dissociação da água, usando dois pontos de Fig. 13.5:
         $(1/T_1, \ln K_{p1}) = (6.66 \times 10^{-4} K^{-1}, -13.147)$ ($T_1=1500K$)
         $(1/T_2, \ln K_{p2}) = (4.43 \times 10^{-4} K^{-1}, -6.4)$ ($T_2=2257K$)
         $$ \Delta h^{\circ} = \frac{-R[\ln K_p(T_2) - \ln K_p(T_1)]}{(1/T_2) - (1/T_1)} = 249 \text{ kJ mol}^{-1} $$
         
         Também se pode obter $\Delta\mu^{\circ}$ e $\Delta s^{\circ}$.
-    \end{exampleblock}
 \end{frame}
 
 \begin{frame}{Equação de Gibbs-Helmholtz}
@@ -342,17 +353,16 @@
 \end{frame}
 
 \begin{frame}{Halotano: Água $\rightleftharpoons$ Membrana Lipídica (Exemplo 13.6 )}
-    \begin{exampleblock}{Halotano: Água $\rightleftharpoons$ Membrana Lipídica (Exemplo 13.6 )}
+    Halotano: Água $\rightleftharpoons$ Membrana Lipídica 
         O anestésico halotano particiona entre água (estado A) e membranas de bicamada lipídica (estado B).
         A Figura 13.6 mostra como o equilíbrio de partição $K$ (coeficiente de partição da água para a bicamada ) depende da pressão.
-    \end{exampleblock}
 \end{frame}
 
 \begin{frame}{Halotano: Água $\rightleftharpoons$ Membrana Lipídica (Exemplo 13.6 )}
         \begin{figure}
         \centering
         % Conceptual representation of Figure 13.6
-        %\includegraphics[width=0.6\textwidth]{placeholder_pressure_K.png}
+        \includegraphics[width=0.6\textwidth]{figs/pressure_K.png}
         \caption{Aplicar pressão desloca moléculas de anestésico para a água a partir de membranas de bicamada lipídica.}
         \end{figure}
         
