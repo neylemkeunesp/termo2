@@ -1,0 +1,384 @@
+\documentclass[fleqn,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[portuges]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+
+\newcommand{\D}{\displaystyle}
+
+% Para evitar orfaos em fim de pagina
+\widowpenalty=10000
+\clubpenalty=10000
+\raggedbottom
+
+\title{Gabarito - Segunda Verificação}
+\author{Mecânica Estatística}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Questão 1}
+Considere uma molécula diatômica com energia vibracional dada por $\epsilon_v = h\nu(v+\frac{1}{2})$, onde $v = 0, 1, 2, \ldots$ e $\nu$ é a frequência de vibração.
+
+\subsection*{(a) Derive a expressão para a função de partição vibracional $q_{vib}$.}
+
+\textbf{Solução:}
+A função de partição vibracional é dada pela soma sobre todos os estados vibracionais possíveis:
+
+\begin{align}
+q_{vib} &= \sum_{v=0}^{\infty} e^{-\beta \epsilon_v} \\
+&= \sum_{v=0}^{\infty} e^{-\beta h\nu(v+1/2)} \\
+&= e^{-\beta h\nu/2} \sum_{v=0}^{\infty} e^{-\beta h\nu v} \\
+&= e^{-\beta h\nu/2} \sum_{v=0}^{\infty} (e^{-\beta h\nu})^v
+\end{align}
+
+Reconhecemos que a soma é uma série geométrica com razão $r = e^{-\beta h\nu}$. Para $|r| < 1$ (o que é sempre verdadeiro para $\beta > 0$), a soma da série geométrica é $\sum_{v=0}^{\infty} r^v = \frac{1}{1-r}$. Portanto:
+
+\begin{align}
+q_{vib} &= e^{-\beta h\nu/2} \frac{1}{1-e^{-\beta h\nu}} \\
+&= \frac{e^{-\beta h\nu/2}}{1-e^{-\beta h\nu}}
+\end{align}
+
+Onde $\beta = \frac{1}{k_B T}$.
+
+\subsection*{(b) Para uma molécula de CO, a frequência vibracional é $\nu = 6.42 \times 10^{13}$ Hz. Calcule a função de partição vibracional a $T = 300$ K e a $T = 1000$ K. Considere $h = 6.626 \times 10^{-34}$ J·s e $k_B = 1.381 \times 10^{-23}$ J/K.}
+
+\textbf{Solução:}
+Primeiro, calculamos o valor de $\beta h\nu$ para cada temperatura:
+
+Para $T = 300$ K:
+\begin{align}
+\beta h\nu &= \frac{h\nu}{k_B T} \\
+&= \frac{6.626 \times 10^{-34} \text{ J·s} \times 6.42 \times 10^{13} \text{ Hz}}{1.381 \times 10^{-23} \text{ J/K} \times 300 \text{ K}} \\
+&= \frac{4.254 \times 10^{-20} \text{ J}}{4.143 \times 10^{-21} \text{ J}} \\
+&= 10.27
+\end{align}
+
+Para $T = 1000$ K:
+\begin{align}
+\beta h\nu &= \frac{h\nu}{k_B T} \\
+&= \frac{6.626 \times 10^{-34} \text{ J·s} \times 6.42 \times 10^{13} \text{ Hz}}{1.381 \times 10^{-23} \text{ J/K} \times 1000 \text{ K}} \\
+&= \frac{4.254 \times 10^{-20} \text{ J}}{1.381 \times 10^{-20} \text{ J}} \\
+&= 3.08
+\end{align}
+
+Agora, calculamos a função de partição vibracional para cada temperatura:
+
+Para $T = 300$ K:
+\begin{align}
+q_{vib} &= \frac{e^{-\beta h\nu/2}}{1-e^{-\beta h\nu}} \\
+&= \frac{e^{-10.27/2}}{1-e^{-10.27}} \\
+&= \frac{e^{-5.135}}{1-e^{-10.27}} \\
+&= \frac{0.00588}{1-0.00003} \\
+&= \frac{0.00588}{0.99997} \\
+&\approx 0.00588
+\end{align}
+
+Para $T = 1000$ K:
+\begin{align}
+q_{vib} &= \frac{e^{-\beta h\nu/2}}{1-e^{-\beta h\nu}} \\
+&= \frac{e^{-3.08/2}}{1-e^{-3.08}} \\
+&= \frac{e^{-1.54}}{1-e^{-3.08}} \\
+&= \frac{0.2146}{1-0.0460} \\
+&= \frac{0.2146}{0.9540} \\
+&\approx 0.2249
+\end{align}
+
+Portanto, $q_{vib}(300 \text{ K}) \approx 0.00588$ e $q_{vib}(1000 \text{ K}) \approx 0.2249$.
+
+\subsection*{(c) Explique por que a contribuição vibracional para a capacidade térmica é desprezível a baixas temperaturas, mas se torna significativa a altas temperaturas.}
+
+\textbf{Solução:}
+A contribuição vibracional para a capacidade térmica pode ser derivada da energia média vibracional:
+
+\begin{align}
+U_{vib} &= -\frac{\partial \ln q_{vib}}{\partial \beta} \\
+&= -\frac{\partial}{\partial \beta} \ln \left(\frac{e^{-\beta h\nu/2}}{1-e^{-\beta h\nu}}\right) \\
+&= -\frac{\partial}{\partial \beta} \left[-\frac{\beta h\nu}{2} - \ln(1-e^{-\beta h\nu})\right] \\
+&= \frac{h\nu}{2} + \frac{h\nu e^{-\beta h\nu}}{1-e^{-\beta h\nu}}
+\end{align}
+
+A capacidade térmica vibracional é então:
+
+\begin{align}
+C_{V,vib} &= \frac{\partial U_{vib}}{\partial T} \\
+&= \frac{\partial}{\partial T} \left[\frac{h\nu}{2} + \frac{h\nu e^{-\beta h\nu}}{1-e^{-\beta h\nu}}\right] \\
+&= k_B \left(\frac{h\nu}{k_B T}\right)^2 \frac{e^{-h\nu/k_B T}}{(1-e^{-h\nu/k_B T})^2}
+\end{align}
+
+A razão pela qual a contribuição vibracional para a capacidade térmica é desprezível a baixas temperaturas, mas se torna significativa a altas temperaturas, pode ser entendida analisando o comportamento da expressão acima:
+
+1. A baixas temperaturas ($T \ll \frac{h\nu}{k_B}$), o termo $e^{-h\nu/k_B T}$ é muito pequeno, aproximando-se de zero. Isso ocorre porque a energia térmica disponível ($k_B T$) é muito menor que a energia necessária para excitar o modo vibracional ($h\nu$). Consequentemente, quase todas as moléculas estão no estado fundamental vibracional, e a capacidade térmica vibracional é praticamente zero.
+
+2. À medida que a temperatura aumenta, mais moléculas têm energia suficiente para ocupar estados vibracionais excitados. Quando $k_B T$ se torna comparável a $h\nu$, a população dos estados excitados aumenta significativamente, e a capacidade térmica vibracional começa a contribuir.
+
+3. A altas temperaturas ($T \gg \frac{h\nu}{k_B}$), muitos estados vibracionais estão ocupados, e a capacidade térmica vibracional se aproxima do valor clássico de $k_B$ por modo vibracional (princípio da equipartição de energia).
+
+Este comportamento é consistente com o modelo de Einstein para sólidos e explica por que os calores específicos dos gases diatômicos aumentam com a temperatura: primeiro, apenas os graus de liberdade translacionais contribuem; em seguida, os rotacionais são ativados; e finalmente, a altas temperaturas, os modos vibracionais também contribuem.
+
+\section*{Questão 2}
+O calor específico está relacionado às flutuações de energia em um sistema em contato com um banho térmico.
+
+\subsection*{(a) Derive a relação entre o calor específico a volume constante $C_V$ e as flutuações quadráticas médias de energia $\langle(E-U)^2\rangle$, onde $U = \langle E \rangle$ é a energia média.}
+
+\textbf{Solução:}
+Para um sistema em contato com um banho térmico a temperatura $T$, a probabilidade de encontrar o sistema com energia $E$ é dada pela distribuição de Boltzmann:
+
+\begin{align}
+p(E) = \frac{W(E)e^{-\beta E}}{Z}
+\end{align}
+
+Onde $W(E)$ é a densidade de estados (número de microestados com energia $E$), $\beta = 1/k_B T$, e $Z$ é a função de partição.
+
+Podemos escrever o logaritmo desta probabilidade como:
+
+\begin{align}
+\ln p(E) = \ln W(E) - \beta E - \ln Z
+\end{align}
+
+Próximo ao valor médio da energia $U = \langle E \rangle$, podemos expandir $\ln p(E)$ em série de Taylor:
+
+\begin{align}
+\ln p(E) &\approx \ln p(U) + (E-U)\left.\frac{d\ln p(E)}{dE}\right|_{E=U} + \frac{1}{2}(E-U)^2\left.\frac{d^2\ln p(E)}{dE^2}\right|_{E=U} + \ldots
+\end{align}
+
+No máximo da distribuição (que corresponde à energia média $U$), a primeira derivada é zero:
+
+\begin{align}
+\left.\frac{d\ln p(E)}{dE}\right|_{E=U} = 0
+\end{align}
+
+Portanto:
+
+\begin{align}
+\ln p(E) &\approx \ln p(U) + \frac{1}{2}(E-U)^2\left.\frac{d^2\ln p(E)}{dE^2}\right|_{E=U}
+\end{align}
+
+A segunda derivada é:
+
+\begin{align}
+\frac{d^2\ln p(E)}{dE^2} &= \frac{d^2\ln W(E)}{dE^2} - \frac{d^2(\beta E)}{dE^2} \\
+&= \frac{d^2\ln W(E)}{dE^2} - \frac{d\beta}{dE}
+\end{align}
+
+Como $\beta$ não depende de $E$, o segundo termo é zero. Além disso, sabemos que $\ln W(E) = S(E)/k_B$, onde $S(E)$ é a entropia como função da energia. Portanto:
+
+\begin{align}
+\frac{d^2\ln p(E)}{dE^2} &= \frac{1}{k_B}\frac{d^2 S(E)}{dE^2}
+\end{align}
+
+Da termodinâmica, sabemos que $\frac{dS}{dE} = \frac{1}{T}$, ou $\frac{dS}{dE} = \frac{k_B}{k_B T} = \beta$. Diferenciando novamente:
+
+\begin{align}
+\frac{d^2 S}{dE^2} &= \frac{d\beta}{dE} = \frac{d\beta}{dT}\frac{dT}{dE} \\
+&= -\frac{1}{k_B T^2}\frac{dT}{dE}
+\end{align}
+
+O calor específico a volume constante é definido como $C_V = \frac{dU}{dT}$. Como $U = \langle E \rangle$, temos $\frac{dE}{dT} = C_V$, ou $\frac{dT}{dE} = \frac{1}{C_V}$. Substituindo:
+
+\begin{align}
+\frac{d^2 S}{dE^2} &= -\frac{1}{k_B T^2}\frac{1}{C_V} = -\frac{1}{k_B T^2 C_V}
+\end{align}
+
+Portanto:
+
+\begin{align}
+\frac{d^2\ln p(E)}{dE^2} &= \frac{1}{k_B}\frac{d^2 S(E)}{dE^2} \\
+&= \frac{1}{k_B} \left(-\frac{1}{k_B T^2 C_V}\right) \\
+&= -\frac{1}{k_B^2 T^2 C_V}
+\end{align}
+
+Substituindo na expansão de $\ln p(E)$:
+
+\begin{align}
+\ln p(E) &\approx \ln p(U) - \frac{1}{2}(E-U)^2\frac{1}{k_B^2 T^2 C_V} \\
+\end{align}
+
+Isso implica que $p(E)$ é aproximadamente uma distribuição gaussiana:
+
+\begin{align}
+p(E) &\approx p(U) \exp\left(-\frac{(E-U)^2}{2k_B^2 T^2 C_V}\right)
+\end{align}
+
+Para uma distribuição gaussiana, a variância é o inverso do coeficiente de $(E-U)^2$ no expoente. Portanto:
+
+\begin{align}
+\langle(E-U)^2\rangle &= k_B^2 T^2 C_V \\
+\end{align}
+
+Ou, rearranjando:
+
+\begin{align}
+C_V &= \frac{\langle(E-U)^2\rangle}{k_B T^2}
+\end{align}
+
+Esta é a relação entre o calor específico a volume constante e as flutuações quadráticas médias de energia. É uma manifestação do teorema da flutuação-dissipação, que relaciona as flutuações de equilíbrio de um sistema às suas propriedades de resposta.
+
+\subsection*{(b) Explique por que, no limite termodinâmico ($N \to \infty$), as flutuações relativas de energia $\sigma/U$ se tornam desprezíveis. Qual é a dependência dessas flutuações relativas com o número de partículas $N$?}
+
+\textbf{Solução:}
+As flutuações relativas de energia são dadas por $\sigma/U$, onde $\sigma = \sqrt{\langle(E-U)^2\rangle}$ é o desvio padrão da energia e $U = \langle E \rangle$ é a energia média.
+
+Da parte (a), sabemos que:
+
+\begin{align}
+\langle(E-U)^2\rangle &= k_B T^2 C_V \\
+\sigma^2 &= k_B T^2 C_V
+\end{align}
+
+Para sistemas extensivos, tanto o calor específico $C_V$ quanto a energia média $U$ são proporcionais ao número de partículas $N$:
+
+\begin{align}
+C_V &\propto N \\
+U &\propto N
+\end{align}
+
+Portanto:
+
+\begin{align}
+\sigma^2 &= k_B T^2 C_V \\
+&\propto N
+\end{align}
+
+Isso significa que o desvio padrão $\sigma$ é proporcional a $\sqrt{N}$:
+
+\begin{align}
+\sigma &\propto \sqrt{N}
+\end{align}
+
+As flutuações relativas são então:
+
+\begin{align}
+\frac{\sigma}{U} &\propto \frac{\sqrt{N}}{N} \\
+&\propto \frac{1}{\sqrt{N}}
+\end{align}
+
+Portanto, as flutuações relativas de energia são proporcionais a $1/\sqrt{N}$.
+
+No limite termodinâmico, quando $N \to \infty$, temos:
+
+\begin{align}
+\lim_{N \to \infty} \frac{\sigma}{U} &\propto \lim_{N \to \infty} \frac{1}{\sqrt{N}} \\
+&= 0
+\end{align}
+
+Isso explica por que, no limite termodinâmico, as flutuações relativas de energia se tornam desprezíveis. Para sistemas macroscópicos, onde $N \sim 10^{23}$ (número de Avogadro), as flutuações relativas são da ordem de $10^{-11}$, o que é extremamente pequeno e indetectável experimentalmente.
+
+Este resultado é fundamental para a termodinâmica: ele justifica por que podemos tratar variáveis termodinâmicas como determinísticas, apesar de serem resultado de processos microscópicos estocásticos. As flutuações são tão pequenas em sistemas macroscópicos que não afetam as medidas experimentais.
+
+\section*{Questão 3}
+O princípio da equipartição de energia é fundamental para entender o comportamento térmico de sistemas clássicos.
+
+\subsection*{(a) Enuncie o princípio da equipartição de energia e explique por que ele não é válido para modos vibracionais em baixas temperaturas.}
+
+\textbf{Solução:}
+O princípio da equipartição de energia estabelece que, em um sistema em equilíbrio térmico à temperatura $T$, cada grau de liberdade quadrático na energia (ou seja, cada termo na forma $ax^2$ na expressão da energia) contribui com uma energia média de $\frac{1}{2}k_B T$.
+
+Formalmente, para um sistema clássico com energia $\epsilon(x)$, a energia média associada a uma coordenada $x$ é:
+
+\begin{align}
+\langle \epsilon \rangle = \frac{\int_{-\infty}^{\infty} \epsilon(x) e^{-\epsilon(x)/k_B T} dx}{\int_{-\infty}^{\infty} e^{-\epsilon(x)/k_B T} dx}
+\end{align}
+
+Para o caso em que $\epsilon(x) = cx^2$ (um termo quadrático), pode-se mostrar que:
+
+\begin{align}
+\langle \epsilon \rangle = \frac{1}{2}k_B T
+\end{align}
+
+Isso significa que, para sistemas clássicos:
+- Cada grau de liberdade translacional contribui com $\frac{1}{2}k_B T$ para a energia média.
+- Cada grau de liberdade rotacional contribui com $\frac{1}{2}k_B T$ para a energia média.
+- Cada grau de liberdade vibracional contribui com $k_B T$ para a energia média (sendo $\frac{1}{2}k_B T$ da energia cinética e $\frac{1}{2}k_B T$ da energia potencial).
+
+No entanto, o princípio da equipartição de energia não é válido para modos vibracionais em baixas temperaturas devido a efeitos quânticos. A razão para isso é que, em um tratamento quântico, a energia vibracional é quantizada em níveis discretos:
+
+\begin{align}
+\epsilon_v = h\nu(v+\frac{1}{2}), \quad v = 0, 1, 2, \ldots
+\end{align}
+
+A energia média vibracional é então:
+
+\begin{align}
+\langle \epsilon \rangle = \frac{\sum_{v=0}^{\infty} h\nu(v+\frac{1}{2}) e^{-h\nu(v+1/2)/k_B T}}{\sum_{v=0}^{\infty} e^{-h\nu(v+1/2)/k_B T}}
+\end{align}
+
+Que pode ser calculada como:
+
+\begin{align}
+\langle \epsilon \rangle = \frac{h\nu}{2} + \frac{h\nu}{e^{h\nu/k_B T} - 1}
+\end{align}
+
+A baixas temperaturas, quando $k_B T \ll h\nu$, o segundo termo se aproxima de zero, e a energia média se aproxima apenas da energia de ponto zero $\frac{h\nu}{2}$. Isso significa que não há energia térmica suficiente para excitar os modos vibracionais para níveis mais altos.
+
+Apenas a altas temperaturas, quando $k_B T \gg h\nu$, podemos expandir a exponencial e obter:
+
+\begin{align}
+\langle \epsilon \rangle \approx \frac{h\nu}{2} + k_B T
+\end{align}
+
+Que se aproxima do resultado clássico da equipartição ($k_B T$ para o modo vibracional, além da energia de ponto zero).
+
+Portanto, o princípio da equipartição de energia falha para modos vibracionais em baixas temperaturas porque a quantização da energia se torna importante, e a distribuição de Boltzmann não popula significativamente os estados excitados.
+
+\subsection*{(b) Calcule o calor específico molar a volume constante ($C_V$) para: (i) um gás monoatômico ideal, (ii) um gás diatômico considerando apenas os graus de liberdade translacionais e rotacionais (sem contribuição vibracional). Explique a diferença entre os resultados.}
+
+\textbf{Solução:}
+(i) Gás monoatômico ideal:
+
+Para um gás monoatômico ideal, cada átomo possui 3 graus de liberdade translacionais (movimento nas direções $x$, $y$ e $z$). Pelo princípio da equipartição de energia, cada grau de liberdade contribui com $\frac{1}{2}k_B T$ para a energia média por átomo.
+
+Portanto, a energia interna molar é:
+
+\begin{align}
+U &= N_A \times 3 \times \frac{1}{2}k_B T \\
+&= \frac{3}{2}N_A k_B T \\
+&= \frac{3}{2}RT
+\end{align}
+
+Onde $N_A$ é o número de Avogadro e $R = N_A k_B$ é a constante universal dos gases.
+
+O calor específico molar a volume constante é a derivada da energia interna molar em relação à temperatura:
+
+\begin{align}
+C_V &= \left(\frac{\partial U}{\partial T}\right)_V \\
+&= \frac{3}{2}R
+\end{align}
+
+Portanto, $C_V = \frac{3}{2}R \approx 12.47$ J/(mol·K) para um gás monoatômico ideal.
+
+(ii) Gás diatômico (considerando apenas graus de liberdade translacionais e rotacionais):
+
+Para um gás diatômico, além dos 3 graus de liberdade translacionais, temos também graus de liberdade rotacionais. Uma molécula diatômica linear possui 2 graus de liberdade rotacionais (rotação em torno de dois eixos perpendiculares ao eixo da molécula).
+
+Pelo princípio da equipartição de energia, a energia interna molar é:
+
+\begin{align}
+U &= N_A \times (3 + 2) \times \frac{1}{2}k_B T \\
+&= \frac{5}{2}N_A k_B T \\
+&= \frac{5}{2}RT
+\end{align}
+
+O calor específico molar a volume constante é:
+
+\begin{align}
+C_V &= \left(\frac{\partial U}{\partial T}\right)_V \\
+&= \frac{5}{2}R
+\end{align}
+
+Portanto, $C_V = \frac{5}{2}R \approx 20.79$ J/(mol·K) para um gás diatômico considerando apenas os graus de liberdade translacionais e rotacionais.
+
+Explicação da diferença:
+
+A diferença entre os calores específicos dos gases monoatômico e diatômico é devida aos graus de liberdade rotacionais adicionais presentes nas moléculas diatômicas. Cada grau de liberdade rotacional contribui com $\frac{1}{2}R$ para o calor específico molar, resultando em um aumento de $R$ (de $\frac{3}{2}R$ para $\frac{5}{2}R$).
+
+Fisicamente, isso significa que, para a mesma quantidade de calor fornecida, a temperatura de um gás diatômico aumentará menos do que a de um gás monoatômico, pois parte da energia é usada para aumentar a energia rotacional das moléculas, não apenas a energia translacional.
+
+É importante notar que, a temperaturas muito baixas, os graus de liberdade rotacionais também podem ser "congelados" devido a efeitos quânticos, e o calor específico se aproximaria do valor para um gás monoatômico. A temperaturas muito altas, os modos vibracionais também seriam excitados, aumentando ainda mais o calor específico para $\frac{7}{2}R$ (para uma molécula diatômica com um modo vibracional).
+
+Experimentalmente, observa-se que o calor específico dos gases diatômicos aumenta com a temperatura, começando próximo a $\frac{3}{2}R$ a temperaturas muito baixas, aumentando para $\frac{5}{2}R$ à medida que os modos rotacionais são ativados, e finalmente se aproximando de $\frac{7}{2}R$ a temperaturas muito altas quando os modos vibracionais também contribuem.
+
+\end{document}

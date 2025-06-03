@@ -1,0 +1,251 @@
+\documentclass[fleqn,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[portuges]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+
+\newcommand{\D}{\displaystyle}
+
+% Para evitar orfaos em fim de pagina
+\widowpenalty=10000
+\clubpenalty=10000
+\raggedbottom
+
+\title{Resolução - Primeira Verificação}
+\author{Mecânica Estatística}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Questão 1}
+O núcleo de um átomo de hidrogênio (um próton) possui um momento magnético.
+Em um campo magnético, o próton possui dois estados de diferentes energias, spin para cima e spin para baixo. Esta é a base da ressonância magnética nuclear para prótons. As populações relativas são dadas pela distribuição de Boltzmann. A diferença de energia entre os dois estados é $\Delta\epsilon =g\mu_B$ onde $g=2.79$ e $\mu=5.05\times 10^{-24}$ J Tesla$^{-1}$. Para um instrumento de ressonância nuclear, $B$=7 Tesla. Considere $T=300$ K.
+
+\subsection*{(a) Calcule a função partição.}
+
+\textbf{Solução:}
+A função de partição para um sistema com dois estados é dada por:
+\begin{align}
+Z = \sum_i e^{-\beta \epsilon_i} = e^{-\beta \epsilon_+} + e^{-\beta \epsilon_-}
+\end{align}
+
+Onde $\beta = \frac{1}{k_B T}$, $k_B$ é a constante de Boltzmann ($k_B = 1.38 \times 10^{-23}$ J/K), e $\epsilon_+$ e $\epsilon_-$ são as energias dos estados de spin para cima e spin para baixo, respectivamente.
+
+Podemos definir a diferença de energia como $\Delta\epsilon = \epsilon_+ - \epsilon_- = g\mu B$. Se escolhermos $\epsilon_- = 0$ como referência, então $\epsilon_+ = \Delta\epsilon$.
+
+Calculando o valor de $\Delta\epsilon$:
+\begin{align}
+\Delta\epsilon &= g\mu B \\
+&= 2.79 \times 5.05 \times 10^{-24} \text{ J Tesla}^{-1} \times 7 \text{ Tesla} \\
+&= 2.79 \times 5.05 \times 7 \times 10^{-24} \text{ J} \\
+&= 98.73 \times 10^{-24} \text{ J} \\
+&\approx 9.87 \times 10^{-23} \text{ J}
+\end{align}
+
+Agora, calculamos $\beta$:
+\begin{align}
+\beta &= \frac{1}{k_B T} \\
+&= \frac{1}{1.38 \times 10^{-23} \text{ J/K} \times 300 \text{ K}} \\
+&= \frac{1}{4.14 \times 10^{-21} \text{ J}} \\
+&\approx 2.42 \times 10^{20} \text{ J}^{-1}
+\end{align}
+
+Portanto, a função de partição é:
+\begin{align}
+Z &= e^{-\beta \epsilon_+} + e^{-\beta \epsilon_-} \\
+&= e^{-\beta \Delta\epsilon} + e^{0} \\
+&= e^{-2.42 \times 10^{20} \text{ J}^{-1} \times 9.87 \times 10^{-23} \text{ J}} + 1 \\
+&= e^{-2.39 \times 10^{-2}} + 1 \\
+&= 0.9764 + 1 \\
+&= 1.9764
+\end{align}
+
+\subsection*{(b) Calcule a diferença populacional: $\frac{|N_+-N_-|}{N_++N_-}$}
+
+\textbf{Solução:}
+As populações relativas dos estados são dadas pela distribuição de Boltzmann:
+\begin{align}
+\frac{N_+}{N_-} = \frac{e^{-\beta \epsilon_+}}{e^{-\beta \epsilon_-}} = e^{-\beta \Delta\epsilon} = e^{-2.39 \times 10^{-2}} \approx 0.9764
+\end{align}
+
+Sabemos que $N_+ + N_- = N$ (número total de prótons). Podemos escrever:
+\begin{align}
+\frac{N_+}{N_-} &= 0.9764 \\
+\Rightarrow N_+ &= 0.9764 \times N_-
+\end{align}
+
+Também temos:
+\begin{align}
+N_+ + N_- &= N \\
+0.9764 \times N_- + N_- &= N \\
+N_-(0.9764 + 1) &= N \\
+N_- &= \frac{N}{1.9764} \\
+N_- &\approx 0.5060 \times N
+\end{align}
+
+E, consequentemente:
+\begin{align}
+N_+ &= 0.9764 \times N_- \\
+&= 0.9764 \times 0.5060 \times N \\
+&\approx 0.4940 \times N
+\end{align}
+
+Agora, calculamos a diferença populacional:
+\begin{align}
+\frac{|N_+ - N_-|}{N_+ + N_-} &= \frac{|0.4940N - 0.5060N|}{0.4940N + 0.5060N} \\
+&= \frac{0.0120N}{N} \\
+&= 0.0120 \\
+&\approx 0.012 \text{ ou } 1.2\%
+\end{align}
+
+\section*{Questão 2}
+Dois dados são lançados. Qual é a probabilidade condicional de que a soma seja par, dado que a soma é maior ou igual que 8? Justifique detalhadamente.
+
+\textbf{Solução:}
+Para resolver este problema, precisamos calcular a probabilidade condicional $P(A|B)$, onde:
+\begin{align}
+A &= \{\text{a soma dos dados é par}\} \\
+B &= \{\text{a soma dos dados é maior ou igual a 8}\}
+\end{align}
+
+A probabilidade condicional é dada por:
+\begin{align}
+P(A|B) = \frac{P(A \cap B)}{P(B)}
+\end{align}
+
+Primeiro, vamos listar todos os possíveis resultados ao lançar dois dados:
+\begin{align}
+\Omega = \{(1,1), (1,2), \ldots, (6,6)\}
+\end{align}
+
+Há um total de $6 \times 6 = 36$ resultados possíveis, todos com a mesma probabilidade de $\frac{1}{36}$.
+
+Agora, vamos identificar os eventos $A$, $B$ e $A \cap B$:
+
+Evento $A$ (soma par): $(1,1), (1,3), (1,5), (2,2), (2,4), (2,6), (3,1), (3,3), (3,5), (4,2), (4,4), (4,6), (5,1), (5,3), (5,5), (6,2), (6,4), (6,6)$
+
+Há 18 resultados com soma par, então $P(A) = \frac{18}{36} = \frac{1}{2}$.
+
+Evento $B$ (soma $\geq 8$): $(2,6), (3,5), (3,6), (4,4), (4,5), (4,6), (5,3), (5,4), (5,5), (5,6), (6,2), (6,3), (6,4), (6,5), (6,6)$
+
+Há 15 resultados com soma maior ou igual a 8, então $P(B) = \frac{15}{36} = \frac{5}{12}$.
+
+Evento $A \cap B$ (soma par e $\geq 8$): $(2,6), (3,5), (4,4), (4,6), (5,3), (5,5), (6,2), (6,4), (6,6)$
+
+Há 9 resultados com soma par e maior ou igual a 8, então $P(A \cap B) = \frac{9}{36} = \frac{1}{4}$.
+
+Portanto, a probabilidade condicional é:
+\begin{align}
+P(A|B) &= \frac{P(A \cap B)}{P(B)} \\
+&= \frac{\frac{1}{4}}{\frac{5}{12}} \\
+&= \frac{1}{4} \times \frac{12}{5} \\
+&= \frac{3}{5} \\
+&= 0.6 \text{ ou } 60\%
+\end{align}
+
+\section*{Questão 3}
+Quantos subconjuntos de 3 elementos podem ser formados a partir de um conjunto com 8 elementos? E quantas listas ordenadas de 3 elementos distintos podem ser formadas? Justifique.
+
+\textbf{Solução:}
+Para calcular o número de subconjuntos de 3 elementos que podem ser formados a partir de um conjunto com 8 elementos, usamos a fórmula de combinação:
+\begin{align}
+C(n,k) = \binom{n}{k} = \frac{n!}{k!(n-k)!}
+\end{align}
+
+Onde $n$ é o número total de elementos e $k$ é o tamanho do subconjunto.
+
+No nosso caso, $n = 8$ e $k = 3$:
+\begin{align}
+C(8,3) &= \binom{8}{3} = \frac{8!}{3!(8-3)!} = \frac{8!}{3!5!} \\
+&= \frac{8 \times 7 \times 6 \times 5!}{3 \times 2 \times 1 \times 5!} \\
+&= \frac{8 \times 7 \times 6}{3 \times 2 \times 1} \\
+&= \frac{336}{6} \\
+&= 56
+\end{align}
+
+Portanto, podem ser formados 56 subconjuntos de 3 elementos a partir de um conjunto com 8 elementos.
+
+Para calcular o número de listas ordenadas de 3 elementos distintos, usamos a fórmula de arranjo:
+\begin{align}
+A(n,k) = \frac{n!}{(n-k)!} = n \times (n-1) \times \cdots \times (n-k+1)
+\end{align}
+
+No nosso caso, $n = 8$ e $k = 3$:
+\begin{align}
+A(8,3) &= \frac{8!}{(8-3)!} = \frac{8!}{5!} \\
+&= 8 \times 7 \times 6 \times \frac{5!}{5!} \\
+&= 8 \times 7 \times 6 \\
+&= 336
+\end{align}
+
+Portanto, podem ser formadas 336 listas ordenadas de 3 elementos distintos a partir de um conjunto com 8 elementos.
+
+\section*{Questão 4}
+Um caminhante aleatório dá 10 passos, cada passo pode ser para a direita (probabilidade $p=0,6$) ou para a esquerda ($q=0,4$). Qual a probabilidade de ele dar exatamente 7 passos para a direita? Use a fórmula apropriada e calcule o valor.
+
+\textbf{Solução:}
+Este é um problema de distribuição binomial. A probabilidade de obter exatamente $k$ sucessos em $n$ tentativas independentes, onde a probabilidade de sucesso em cada tentativa é $p$, é dada por:
+\begin{align}
+P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}
+\end{align}
+
+No nosso caso, $n = 10$ (número total de passos), $k = 7$ (número de passos para a direita), $p = 0.6$ (probabilidade de um passo para a direita) e $q = 1 - p = 0.4$ (probabilidade de um passo para a esquerda).
+
+Calculando:
+\begin{align}
+P(X = 7) &= \binom{10}{7} (0.6)^7 (0.4)^{10-7} \\
+&= \binom{10}{7} (0.6)^7 (0.4)^3 \\
+&= \frac{10!}{7!(10-7)!} (0.6)^7 (0.4)^3 \\
+&= \frac{10!}{7!3!} (0.6)^7 (0.4)^3 \\
+&= \frac{10 \times 9 \times 8 \times 7!}{7! \times 3 \times 2 \times 1} (0.6)^7 (0.4)^3 \\
+&= \frac{10 \times 9 \times 8}{3 \times 2 \times 1} (0.6)^7 (0.4)^3 \\
+&= 120 \times (0.6)^7 \times (0.4)^3 \\
+&= 120 \times 0.0280 \times 0.064 \\
+&\approx 120 \times 0.00179 \\
+&\approx 0.215 \text{ ou } 21.5\%
+\end{align}
+
+Portanto, a probabilidade de o caminhante dar exatamente 7 passos para a direita em 10 passos é aproximadamente 0.215 ou 21.5\%.
+
+\section*{Questão 5}
+Determine a fórmula para determinar a entropia a partir da função de partição no caso do ensemble canônico.
+
+\textbf{Solução:}
+No ensemble canônico, a função de partição $Z$ é definida como:
+\begin{align}
+Z = \sum_i e^{-\beta \epsilon_i}
+\end{align}
+
+Onde $\beta = \frac{1}{k_B T}$, $k_B$ é a constante de Boltzmann, $T$ é a temperatura absoluta, e $\epsilon_i$ são os níveis de energia do sistema.
+
+A energia média (energia interna) $U$ pode ser obtida a partir da função de partição:
+\begin{align}
+U &= \langle E \rangle = \sum_i \epsilon_i p_i \\
+&= \sum_i \epsilon_i \frac{e^{-\beta \epsilon_i}}{Z} \\
+&= -\frac{1}{Z} \frac{\partial Z}{\partial \beta} \\
+&= -\frac{\partial \ln Z}{\partial \beta}
+\end{align}
+
+A entropia $S$ no ensemble canônico é dada por:
+\begin{align}
+S &= -k_B \sum_i p_i \ln p_i \\
+&= -k_B \sum_i \frac{e^{-\beta \epsilon_i}}{Z} \ln \frac{e^{-\beta \epsilon_i}}{Z} \\
+&= -k_B \sum_i \frac{e^{-\beta \epsilon_i}}{Z} [-\beta \epsilon_i - \ln Z] \\
+&= k_B \beta \sum_i \epsilon_i \frac{e^{-\beta \epsilon_i}}{Z} + k_B \ln Z \sum_i \frac{e^{-\beta \epsilon_i}}{Z} \\
+&= k_B \beta U + k_B \ln Z
+\end{align}
+
+Portanto, a fórmula para determinar a entropia a partir da função de partição no caso do ensemble canônico é:
+\begin{align}
+S = k_B \ln Z + k_B \beta U = k_B \ln Z + \frac{U}{T}
+\end{align}
+
+Ou, alternativamente:
+\begin{align}
+S = k_B \ln Z - \frac{\partial \ln Z}{\partial T}
+\end{align}
+
+\end{document}

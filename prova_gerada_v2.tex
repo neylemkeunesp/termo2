@@ -1,0 +1,72 @@
+\documentclass[fleqn,a4paper]{exam}
+\addtolength{\headheight}{1\baselineskip}
+\pointsinmargin
+\usepackage[utf8]{inputenc}
+\usepackage[portuges]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{theorem}
+\usepackage{float}
+\usepackage{graphicx}
+\widowpenalty=10000
+\clubpenalty=10000
+\raggedbottom
+\newtheorem{definition}{Def.}
+\theoremstyle{break} \newtheorem{exemplo}{Exemplo}
+\theoremstyle{break} \newtheorem{exercicio}{Exercício}
+\newcommand{\ao}{\~{a}o}
+\newcommand{\cao}{\c{c}\~{a}o}
+\newcommand{\coes}{\c{c}\~{o}es}
+\newcommand{\cc}{\c{c}}
+\newcommand{\ii}{\'{\i}}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\renewcommand{\subsectionmark}[1]{\markright{#1}}
+\lfoot{{\small  DISTRITO DE RUBIÃO JR. S/N C.P. 510 \\
+CEP  18618-000-BOTUCATU-SP }}
+\rfoot{}
+\cfoot{}
+\lhead{{\large UNIVERSIDADE JÚLIO DE MESQUITA FILHO-UNESP} \\
+INSTITUTO DE BIOCIÊNCIAS DE BOTUCATU \\
+DEPARTAMENTO DE FÍSICA E BIOFÍSICA 
+}
+\pagestyle{empty}
+\begin{document}
+
+\begin{center}
+{\large Segunda Verificação}
+
+{\large Mecânica Estatística}
+\end{center}
+\vspace{0.5cm} Nome:\rule{14cm}{0.01cm} \\
+
+\vspace{1 cm}
+{\bf Só serão aceitas respostas devidamente justificadas.}
+\vspace{1 cm}
+
+\begin{questions}
+
+% --- Questão sobre função partição e níveis de energia (baseada em gasessolidos.tex) ---
+\question[3.0] Considere uma molécula diatômica com energia vibracional dada por $\epsilon_v = h\nu(v+\frac{1}{2})$, onde $v = 0, 1, 2, \ldots$ e $\nu$ é a frequência de vibração.
+\begin{parts}
+  \item Derive a expressão para a função de partição vibracional $q_{vib}$.
+  \item Para uma molécula de CO, a frequência vibracional é $\nu = 6.42 \times 10^{13}$ Hz. Calcule a função de partição vibracional a $T = 300$ K e a $T = 1000$ K. Considere $h = 6.626 \times 10^{-34}$ J·s e $k_B = 1.381 \times 10^{-23}$ J/K.
+  \item Explique por que a contribuição vibracional para a capacidade térmica é desprezível a baixas temperaturas, mas se torna significativa a altas temperaturas.
+\end{parts}
+
+% --- Questão sobre calor específico e flutuações (baseada em caloresp.tex) ---
+\question[3.0] O calor específico está relacionado às flutuações de energia em um sistema em contato com um banho térmico.
+\begin{parts}
+  \item Derive a relação entre o calor específico a volume constante $C_V$ e as flutuações quadráticas médias de energia $\langle(E-U)^2\rangle$, onde $U = \langle E \rangle$ é a energia média.
+  \item Explique por que, no limite termodinâmico ($N \to \infty$), as flutuações relativas de energia $\sigma/U$ se tornam desprezíveis. Qual é a dependência dessas flutuações relativas com o número de partículas $N$?
+\end{parts}
+
+% --- Questão sobre equipartição de energia (baseada em gasessolidos.tex) ---
+\question[3.0] O princípio da equipartição de energia é fundamental para entender o comportamento térmico de sistemas termodinâmicos.
+\begin{parts}
+  \item Enuncie o princípio da equipartição de energia e explique por que ele não é válido para modos vibracionais em baixas temperaturas.
+  \item Calcule o calor específico molar a volume constante ($C_V$) para: (i) um gás monoatômico ideal, (ii) um gás diatômico considerando apenas os graus de liberdade translacionais e rotacionais (sem contribuição vibracional). Explique a diferença entre os resultados.
+\end{parts}
+
+\end{questions}
+
+\end{document}
